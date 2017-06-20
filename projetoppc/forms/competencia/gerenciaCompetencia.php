@@ -86,6 +86,36 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 			nova competência</a><br>
 		<?php
 		endif;
+	 elseif ($_GET ["opcao"] == "alterar") :
+		$competencia = buscarCompetenciaPorId ( $_GET ["compcod"] );
+		?>
+	<h2>Alteração de competência</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<label for="compdes">Competência: </label>
+				<textarea rows="3" cols="3" id="compdes" name="compdes"
+					class="form-control">
+					<?=$competencia["compdes"]; ?>
+					</textarea>
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" class="btn btn-success" value="alterar">
+			</div>
+			<br>
+		</form>
+		<?php
+		if (! array_key_exists ( "compdes", $_POST ))
+			return;
+		try {
+			if (atualizarCompetencia ( $_POST ["compdes"], $competencia ["compcod"] )) {
+				echo "<h1>Competência atualizada com êxito!</h1><br>";
+				echo "<a href= 'gerenciaCompetencia.php?opcao=consultar'>Clique aqui para consultar novamente as competências</a><br>";
+			}
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
+		}
 	endif;
 	?>
 	</div>
