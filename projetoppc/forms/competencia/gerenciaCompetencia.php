@@ -120,6 +120,46 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_GET ["opcao"] == "excluir") :
+		$competencia = buscarCompetenciaPorId ( $_GET ["compcod"] );
+		?>
+	<h2>Exclusão de competência</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<p>
+	Você está prestes a excluir a competência <?=$competencia["compdes"]; ?>. <br>Tem
+					certeza de que deseja executar esta operação?<br> Após a
+					confirmação, esta operação não poderá ser desfeita.
+				</p>
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" value="sim" name="escolha"
+					class="btn btn-success">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" value="não" name="escolha"
+					class="btn btn-success">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "escolha", $_POST ))
+			return;
+		if ($_POST ["escolha"] == "sim") {
+			try {
+				if (excluirCompetencia ( $competencia ["compcod"] )) {
+					echo "<h1>Competência excluída com êxito!</h1><br>";
+					echo "<a href= 'gerenciaCompetencia.php?opcao=consultar'>Voltar à tela de competências</a><br>";
+				}
+			} catch ( PDOException $e ) {
+				echo $e->getMessage ();
+			}
+		} elseif ($_POST ["escolha"] == "não") {
+			header ( "Location: gerenciaCompetencia.php?opcao=consultar");
+	}
 	endif;
 	?>
 	</div>
