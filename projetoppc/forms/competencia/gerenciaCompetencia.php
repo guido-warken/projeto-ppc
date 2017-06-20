@@ -45,8 +45,48 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_GET ["opcao"] == "consultar") :
+		$competencias = buscarCompetencias ();
+		?>
+		<h2>Consulta de competências</h2>
+		<br> <a href="gerenciaCompetencia.php?opcao=cadastrar">Nova
+			competência</a><br>
+		<?php
+		if (count ( $competencias ) > 0) :
+			?>
+		<h2>Número de competências encontradas: <?=count($competencias); ?></h2>
+		<br>
+		<table class="table table-bordered">
+			<thead>
+				<th>Competência</th>
+				<th colspan="2">Ação</th>
+			</thead>
+			<tbody>
+		<?php
+			foreach ( $competencias as $competencia ) :
+				?>
+				<td><?=$competencia["compdes"]; ?></td>
+				<td><a
+					href="gerenciaCompetencia.php?opcao=alterar&compcod=<?=$competencia['compcod']; ?>">alterar
+						dados</a></td>
+				<td><a
+					href="gerenciaCompetencia.php?opcao=excluir&compcod=<?=$competencia['compcod']; ?>">excluir</a>
+				</td>
+		<?php
+			endforeach
+			;
+			?>
+		</tbody>
+		</table>
+		<?php
+		else :
+			?>
+		<h2>Nenhuma competência cadastrada</h2>
+		<br> <a href="gerenciaCompetencia.php?opcao=cadastrar">Cadastrar uma
+			nova competência</a><br>
+		<?php
+		endif;
 	endif;
-	
 	?>
 	</div>
 </body>
