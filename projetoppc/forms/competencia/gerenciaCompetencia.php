@@ -58,20 +58,24 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 		<br>
 		<table class="table table-bordered">
 			<thead>
-				<th>Competência</th>
-				<th colspan="2">Ação</th>
+				<tr>
+					<th>Competência</th>
+					<th colspan="2">Ação</th>
+				</tr>
 			</thead>
 			<tbody>
 		<?php
 			foreach ( $competencias as $competencia ) :
 				?>
-				<td><?=$competencia["compdes"]; ?></td>
-				<td><a
-					href="gerenciaCompetencia.php?opcao=alterar&compcod=<?=$competencia['compcod']; ?>">alterar
-						dados</a></td>
-				<td><a
-					href="gerenciaCompetencia.php?opcao=excluir&compcod=<?=$competencia['compcod']; ?>">excluir</a>
-				</td>
+				<tr>
+					<td><?=$competencia["compdes"]; ?></td>
+					<td><a
+						href="gerenciaCompetencia.php?opcao=alterar&compcod=<?=$competencia['compcod']; ?>">alterar
+							dados</a></td>
+					<td><a
+						href="gerenciaCompetencia.php?opcao=excluir&compcod=<?=$competencia['compcod']; ?>">excluir</a>
+					</td>
+				</tr>
 		<?php
 			endforeach
 			;
