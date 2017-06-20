@@ -28,5 +28,42 @@ function excluirCompetencia(int $compcod, PDO &$conn = null): bool {
 	desconectarDoBanco ( $conn );
 	return $resultado;
 }
+function buscarCompetenciaPorId(int $compcod, PDO &$conn = null): array {
+	$informacoescomp = [ ];
+	if (is_null ( $conn ))
+		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
+	$consultacomp = $conn->prepare ( "select * from competencia where compcod = :compcod" );
+	$consultacomp->bindParam ( ":compcod", $compcod );
+	if (! $consultacomp->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoescomp;
+	} elseif ($consultacomp->execute () && $consultacomp->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoescomp;
+	} elseif ($consultacomp->execute () && $consultacomp->rowCount () == 1) {
+		$informacoescomp = $consultacomp->fetch ( PDO::FETCH_ASSOC );
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoescomp;
+}
+function buscarCompetencias(PDO &$conn = null): array {
+	$informacoescomp = [ ];
+	if (is_null ( $conn ))
+		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
+	$consultacomp = $conn->query ( "select * from competencia" );
+	if (! $consultacomp->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoescomp;
+	} elseif ($consultacomp->execute () && $consultacomp->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoescomp;
+	} elseif ($consultacomp->execute () && $consultacomp->rowCount () > 0) {
+		for($i = 0; $i < $consultacomp->rowCount (); $i ++) {
+			$informacoescomp [$i] = $consultacomp->fetch ( PDO::FETCH_ASSOC );
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoescomp;
+}
 
 ?>
