@@ -20,7 +20,9 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 	<?php
 	if ($_GET ["opcao"] == "cadastrar") :
 		?>
-	<form action="" method="post">
+		<h2>Cadastro de competências</h2>
+		<br>
+		<form action="" method="post">
 			<div class="form-group">
 				<label for="compdes">Competência: </label>
 				<textarea rows="3" cols="3" id="compdes" name="compdes"
