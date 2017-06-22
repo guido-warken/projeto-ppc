@@ -50,7 +50,7 @@ function buscarPpcPorId(int $ppccod, PDO &$conn = null): array {
 		$informacoesppc = $consultappc->fetch ( PDO::FETCH_ASSOC );
 	}
 	desconectarDoBanco ( $conn );
-	return $consultappc;
+	return $informacoesppc;
 }
 function atualizarPpc(int $curcod, string $ppcmodal, string $ppcobj, string $ppcdesc, string $ppcestagio, int $ppccod, int $ppcanoini, PDO &$conn = null): bool {
 	if (is_null ( $conn ))
