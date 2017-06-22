@@ -16,6 +16,18 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\ofertaDao.php';
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div class="container"></div>
+	<div class="container">
+	<?php
+	if ($_GET["opcao"] == "cadastrar"):
+	?>
+	<h2>Cadastro de oferta de curso</h2><br>
+	<form action="" method="post">
+	<div class="form-group">
+	<?php
+	$ppcs = buscarP
+	?>
+	</div>
+	</form>
+	</div>
 </body>
 </html>
