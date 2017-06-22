@@ -296,7 +296,7 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 			<div class="form-group">
 				<label for="ppcanoini">Ano de início de vigência do ppc: </label> <input
 					type="number" name="ppcanoini" id="ppcanoini"
-					value="<?=$row['ppcanoini']; ?>">
+					value="<?=$ppc['ppcanoini']; ?>">
 			</div>
 			<br>
 			<div class="form-group">
