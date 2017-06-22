@@ -1,6 +1,6 @@
 <?php
 require_once 'c:\xampp\htdocs\projetoppc\factory\connectionFactory.php';
-function inserirPpc(PDO &$conn, string $ppcmodal, string $ppcobj, string $ppcdesc, string $ppcestagio, int $curcod, int $ppcanoini): bool {
+function inserirPpc(string $ppcmodal, string $ppcobj, string $ppcdesc, string $ppcestagio, int $curcod, int $ppcanoini, PDO &$conn = null): bool {
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$insercaoppc = $conn->prepare ( "insert into ppc (curcod, ppcmodal, ppcobj, ppcdesc, ppcestagio, ppcanoini) values (:curcod, :ppcmodal, :ppcobj, :ppcdesc, :ppcestagio, :ppcanoini)" );
@@ -10,23 +10,49 @@ function inserirPpc(PDO &$conn, string $ppcmodal, string $ppcobj, string $ppcdes
 	$insercaoppc->bindParam ( ":ppcdesc", $ppcdesc );
 	$insercaoppc->bindParam ( ":ppcestagio", $ppcestagio );
 	$insercaoppc->bindParam ( ":ppcanoini", $ppcanoini );
-		return $insercaoppc->execute ();
+	$resultado = $insercaoppc->execute ();
+	desconectarDoBanco ( $conn );
+	return $resultado;
 }
-function buscarPpcsPorCurso(PDO &$conn, int $curcod): PDOStatement {
+function buscarPpcsPorCurso(int $curcod, PDO &$conn = null): array {
+	$informacoesppc = [ ];
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$consultappc = $conn->prepare ( "select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod where curso.curcod = :curcod" );
 	$consultappc->bindParam ( ":curcod", $curcod );
-	return $consultappc;
+	if (! $consultappc->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoesppc;
+	} elseif ($consultappc->execute () && $consultappc->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoesppc;
+	} elseif ($consultappc->execute () && $consultappc->rowCount () > 0) {
+		for($i = 0; $i < $consultappc->rowCount (); $i ++) {
+			$informacoesppc [$i] = $consultappc->fetch ( PDO::FETCH_ASSOC );
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoesppc;
 }
-function buscarPpcPorId(PDO &$conn, int $ppccod): PDOStatement {
+function buscarPpcPorId(int $ppccod, PDO &$conn = null): array {
+	$informacoesppc = [ ];
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$consultappc = $conn->prepare ( "select * from ppc where ppccod = :ppccod" );
-$consultappc->bindParam ( ":ppccod", $ppccod );
+	$consultappc->bindParam ( ":ppccod", $ppccod );
+	if (! $consultappc->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoesppc;
+	} elseif ($consultappc->execute () && $consultappc->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoesppc;
+	} elseif ($consultappc->execute () && $consultappc->rowCount () == 1) {
+		$informacoesppc = $consultappc->fetch ( PDO::FETCH_ASSOC );
+	}
+	desconectarDoBanco ( $conn );
 	return $consultappc;
-}		
-function atualizarPpc(PDO &$conn, int $curcod, string $ppcmodal, string $ppcobj, string $ppcdesc, string $ppcestagio, int $ppccod, int $ppcanoini): bool {
+}
+function atualizarPpc(int $curcod, string $ppcmodal, string $ppcobj, string $ppcdesc, string $ppcestagio, int $ppccod, int $ppcanoini, PDO &$conn = null): bool {
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$atualizacaoppc = $conn->prepare ( "update ppc set curcod = :curcod, ppcmodal = :ppcmodal, ppcobj = :ppcobj, ppcdesc = :ppcdesc, ppcestagio = :ppcestagio, ppcanoini = :ppcanoini where ppccod = :ppccod" );
@@ -35,16 +61,19 @@ function atualizarPpc(PDO &$conn, int $curcod, string $ppcmodal, string $ppcobj,
 	$atualizacaoppc->bindParam ( ":ppcobj", $ppcobj );
 	$atualizacaoppc->bindParam ( ":ppcdesc", $ppcdesc );
 	$atualizacaoppc->bindParam ( ":ppcestagio", $ppcestagio );
-	$atualizacaoppc->bindParam(":ppcanoini", $ppcanoini);
+	$atualizacaoppc->bindParam ( ":ppcanoini", $ppcanoini );
 	$atualizacaoppc->bindParam ( ":ppccod", $ppccod );
-	return $atualizacaoppc->execute ();
+	$resultado = $atualizacaoppc->execute ();
+	desconectarDoBanco ( $conn );
+	return $resultado;
 }
-function excluirPpc(PDO &$conn, int $ppccod): bool {
+function excluirPpc(int $ppccod, PDO &$conn = null): bool {
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$delppc = $conn->prepare ( "delete from ppc where ppccod = :ppccod" );
 	$delppc->bindParam ( ":ppccod", $ppccod );
-	return $delppc->execute ();
+	$resultado = $delppc->execute ();
+	return $resultado;
 }
 
 ?>
