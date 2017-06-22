@@ -15,7 +15,7 @@ function buscarCursosPorEixo(PDO &$conn): PDOStatement {
 	$consultacurso = $conn->query ( "select curso.curcod, curso.curnome, curso.curtit, eixotec.eixdesc from curso inner join eixotec on curso.eixcod = eixotec.eixcod" );
 	return $consultacurso;
 }
-function buscarCursoPorId(PDO &$conn, int $curcod): PDOStatement {
+function buscarCursoPorId(int $curcod, PDO &$conn = null): PDOStatement {
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$consultacurso = $conn->prepare ( "select * from curso where curcod = :curcod" );
@@ -53,11 +53,10 @@ function buscarCursoPorPpc(PDO &$conn): PDOStatement {
 }
 function buscarCursosExceto(PDO &$conn, int $curcod): PDOStatement {
 	if (is_null ( $conn ))
-		$conn = conectarAoBanco("localhost", "dbdep", "root", "");
-	$consultacurso = $conn->prepare("select * from curso where curcod <> :curcod");
-	$consultacurso->bindParam(":curcod", $curcod);
+		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
+	$consultacurso = $conn->prepare ( "select * from curso where curcod <> :curcod" );
+	$consultacurso->bindParam ( ":curcod", $curcod );
 	return $consultacurso;
 }
-
 
 ?>
