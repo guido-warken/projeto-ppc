@@ -255,7 +255,7 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 			<br>
 			<div class="form-group">
 			<?php
-		$curso = buscarCursoPorId ( $ppc ["ppccod"], $conn );
+		$curso = buscarCursoPorId ( $ppc ["curcod"], $conn );
 		?>
 				<label for="curcod">Selecione o curso vinculado ao PPC: </label> <select
 					class="form-control" name="curcod" id="curcod">
