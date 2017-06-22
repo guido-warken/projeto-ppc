@@ -344,7 +344,7 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 			return;
 		if ($_POST ["escolha"] == "sim") {
 			try {
-				if (excluirPpc ( $conn, $_GET ["ppccod"] )) {
+				if (excluirPpc ( $_GET ["ppccod"], $conn )) {
 					echo "<h1>Ppc excluído com êxito! </h1><br>";
 					echo "<a href= 'gerenciaPpc.php?opcao=consultar'>Clique aqui para voltar à consulta de ppcs</a><br>";
 				}
