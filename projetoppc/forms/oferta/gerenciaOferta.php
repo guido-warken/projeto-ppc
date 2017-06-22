@@ -18,16 +18,20 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\ofertaDao.php';
 <body>
 	<div class="container">
 	<?php
-	if ($_GET["opcao"] == "cadastrar"):
-	?>
-	<h2>Cadastro de oferta de curso</h2><br>
-	<form action="" method="post">
-	<div class="form-group">
+	if ($_GET ["opcao"] == "cadastrar") :
+		?>
+	<h2>Cadastro de oferta de curso</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
 	<?php
-	$ppcs = buscarP
-	?>
+		$ppcs = buscarP?>
 	</div>
-	</form>
+		</form>
+	<?php
+	endif;
+	
+	?>
 	</div>
 </body>
 </html>

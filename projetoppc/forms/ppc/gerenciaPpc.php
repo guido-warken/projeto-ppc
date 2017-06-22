@@ -1,5 +1,4 @@
 <?php
-require_once 'c:\xampp\htdocs\projetoppc\factory\connectionFactory.php';
 require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 require_once 'c:\xampp\htdocs\projetoppc\dao\ppcDao.php';
 $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
@@ -98,16 +97,14 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 		if (! array_key_exists ( "ppcmodal", $_POST ) && ! array_key_exists ( "ppcobj", $_POST ) && ! array_key_exists ( "ppcdesc", $_POST ) && ! array_key_exists ( "ppcestagio", $_POST ) && ! array_key_exists ( "curcod", $_POST ) && ! array_key_exists ( "ppcanoini", $_POST ))
 			return;
 		try {
-			if (inserirPpc ( $conn, $_POST ["ppcmodal"], $_POST ["ppcobj"], $_POST ["ppcdesc"], $_POST ["ppcestagio"], $_POST ["curcod"], $_POST ["ppcanoini"] )) {
+			if (inserirPpc ( $_POST ["ppcmodal"], $_POST ["ppcobj"], $_POST ["ppcdesc"], $_POST ["ppcestagio"], $_POST ["curcod"], $_POST ["ppcanoini"], $conn )) {
 				echo "<h1>Ppc cadastrado com êxito!</h1><br>";
 				echo "<a href= 'gerenciaPpc.php?opcao=consultar'>Clique aqui para visualizar os Ppcs cadastrados</a><br>";
 			}
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
-		desconectarDoBanco ( $conn );
-	 
-	elseif ($_GET ["opcao"] == "consultar") :
+	 elseif ($_GET ["opcao"] == "consultar") :
 		?>
 		<h2>Consultando os PPCs cadastrados</h2>
 		<br> <a href="gerenciaPpc.php?opcao=cadastrar">Novo ppc</a><br>
@@ -151,106 +148,96 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 		<?php
 		if (! array_key_exists ( "curcod", $_POST ))
 			return;
-		$consultappc = buscarPpcsPorCurso ( $conn, $_POST ["curcod"] );
-		if ($consultappc->execute () && $consultappc->rowCount () > 0) :
+		$ppcsPorCurso = buscarPpcsPorCurso ( $_POST ["curcod"], $conn );
+		if (count ( $ppcsPorCurso ) > 0) :
 			?>
-		<h2>Número de PPcs encontrados: <?=$consultappc->rowCount(); ?></h2>
+		<h2>Número de PPcs encontrados: <?=count($ppcsPorCurso); ?></h2>
 		<br>
 		<p>Clique em um dos PPCs abaixo para ler seu conteúdo.</p>
 		<br>
 		<ol class="list-group">
 		<?php
-			while ( $row = $consultappc->fetch ( PDO::FETCH_ASSOC ) ) :
+			foreach ( $ppcsPorCurso as $ppc ) :
 				?>
-		<li><a href="gerenciaPpc.php?opcao=ler&ppccod=<?=$row['ppccod']; ?>"><?=$row["ppcanoini"]; ?> - <?=$row["curnome"]; ?></a>
+		<li><a href="gerenciaPpc.php?opcao=ler&ppccod=<?=$ppc['ppccod']; ?>"><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></a>
 			</li>
 			<?php
-			endwhile
+			endforeach
 			;
 			?>
 		</ol>
 		<?php
-			$consultappc->closeCursor ();
-					endif;
+								endif;
 		
-		desconectarDoBanco ( $conn );
 	 elseif ($_GET ["opcao"] == "ler") :
 		?>
 	<h2>Apresentando o conteúdo do ppc selecionado:</h2>
 		<br>
 		<?php
-		$consultappc = buscarPpcPorId ( $conn, $_GET ["ppccod"] );
-		if ($consultappc->execute () && $consultappc->rowCount () > 0) :
-			$row = $consultappc->fetch ( PDO::FETCH_ASSOC );
-			?>
+		$ppc = buscarPpcPorId ( $_GET ["ppccod"], $conn );
+		?>
 						<h2>Modalidade do ppc:</h2>
 		<br>
-		<p><?=$row["ppcmodal"]; ?></p>
+		<p><?=$ppc["ppcmodal"]; ?></p>
 		<br>
 		<h2>Objetivo do ppc:</h2>
 		<br>
 		<pre>
-		<?=$row["ppcobj"]; ?>
+		<?=$ppc["ppcobj"]; ?>
 		</pre>
 		<br>
 		<h2>Descrição da estrutura curricular do ppc:</h2>
 		<br>
 		<pre>
-		<?=$row["ppcdesc"]; ?>
+		<?=$ppc["ppcdesc"]; ?>
 		</pre>
 		<br>
 		<h2>Normas de estágio do ppc:</h2>
 		<br>
 		<pre>
-	<?=$row["ppcestagio"]; ?>	
+	<?=$ppc["ppcestagio"]; ?>	
 		</pre>
 		<br> <a
-			href="gerenciaPpc.php?opcao=alterar&ppccod=<?=$row['ppccod']; ?>">Alterar
+			href="gerenciaPpc.php?opcao=alterar&ppccod=<?=$ppc['ppccod']; ?>">Alterar
 			conteúdo</a><br> <a
-			href="gerenciaPpc.php?opcao=excluir&ppccod=<?=$row['ppccod']; ?>">Excluir
+			href="gerenciaPpc.php?opcao=excluir&ppccod=<?=$ppc['ppccod']; ?>">Excluir
 			ppc</a><br> <a href="gerenciaPpc.php?opcao=consultar">Voltar à tela
 			de consulta de ppc</a><br>
 				<?php
-	endif;
-		
-		$consultappc->closeCursor ();
-		desconectarDoBanco ( $conn );
 	 elseif ($_GET ["opcao"] == "alterar") :
-		$consultappc = buscarPpcPorId ( $conn, $_GET ["ppccod"] );
-		if ($consultappc->execute () && $consultappc->rowCount () > 0) :
-			$row = $consultappc->fetch ( PDO::FETCH_ASSOC );
-			?>
+		$ppc = buscarPpcPorId ( $_GET ["ppccod"], $conn );
+		?>
 	<h2>Alterando o ppc</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
 				<label>Selecione a modalidade do curso: </label> <br>
 				<?php
-			if ($row ["ppcmodal"] == "presencial") :
-				?>
+		if ($ppc ["ppcmodal"] == "presencial") :
+			?>
 				<label>presencial <input class="form-check" type="radio"
 					name="ppcmodal" value="presencial" checked="checked">
 				</label><br> <label>À distância<input class="form-check"
 					type="radio" name="ppcmodal" value="À distância">
 				</label>
 				<?php
-			 elseif ($row ["ppcmodal"] == "À distância") :
-				?>
+		 elseif ($ppc ["ppcmodal"] == "À distância") :
+			?>
 				<label>presencial <input class="form-check" type="radio"
 					name="ppcmodal" value="presencial">
 				</label><br> <label>À distância<input class="form-check"
 					type="radio" name="ppcmodal" value="À distância" checked="checked">
 				</label>
 				<?php
-			endif;
-			?>
+		endif;
+		?>
 			</div>
 			<br>
 			<div class="form-group">
 				<label for="ppcobj">Objetivo do plano pedagógico do curso: </label>
 				<textarea rows="3" cols="3" class="form-control" id="ppcobj"
 					name="ppcobj">
-					<?=$row["ppcobj"]; ?>
+					<?=$ppc["ppcobj"]; ?>
 					</textarea>
 			</div>
 			<br>
@@ -258,7 +245,7 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 				<label for="ppcdesc">Descreva a estrutura curricular do PPC: </label>
 				<textarea rows="3" cols="3" id="ppcdesc" name="ppcdesc"
 					class="form-control">
-					<?=$row["ppcdesc"]; ?>
+					<?=$ppc["ppcdesc"]; ?>
 					</textarea>
 			</div>
 			<br>
@@ -266,43 +253,43 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 				<label for="ppcestagio">Descreva o estágio do curso: </label>
 				<textarea rows="3" cols="3" id="ppcestagio" name="ppcestagio"
 					class="form-control">
-					<?=$row["ppcestagio"]; ?>
+					<?=$ppc["ppcestagio"]; ?>
 					</textarea>
 			</div>
 			<br>
 			<div class="form-group">
 			<?php
-			$consultacurso = buscarCursoPorId ( $conn, $row ["curcod"] );
-			if ($consultacurso->execute () && $consultacurso->rowCount () > 0) :
-				?>
+		$consultacurso = buscarCursoPorId ( $conn, $ppc ["curcod"] );
+		if ($consultacurso->execute () && $consultacurso->rowCount () > 0) :
+			?>
 				<label for="curcod">Selecione o curso vinculado ao PPC: </label> <select
 					class="form-control" name="curcod" id="curcod">
 			<?php
-				while ( $opcao = $consultacurso->fetch ( PDO::FETCH_ASSOC ) ) :
-					?>
+			while ( $opcao = $consultacurso->fetch ( PDO::FETCH_ASSOC ) ) :
+				?>
 			<option value="<?= $opcao['curcod']; ?>" selected="selected">
 			<?=$opcao["curnome"]; ?>
 			</option>
 			<?php
-				endwhile
-				;
-				$consultacurso->closeCursor ();
+			endwhile
+			;
+			$consultacurso->closeCursor ();
 			endif;
-			
-			$consultacurso = buscarCursosExceto ( $conn, $row ["curcod"] );
-			if ($consultacurso->execute () && $consultacurso->rowCount () > 0) :
-				while ( $opcoes = $consultacurso->fetch ( PDO::FETCH_ASSOC ) ) :
-					?>
+		
+		$consultacurso = buscarCursosExceto ( $conn, $row ["curcod"] );
+		if ($consultacurso->execute () && $consultacurso->rowCount () > 0) :
+			while ( $opcoes = $consultacurso->fetch ( PDO::FETCH_ASSOC ) ) :
+				?>
 			<option value="<?=$opcoes['curcod']; ?>">
 			<?=$opcoes["curnome"]; ?>
 			</option>
 			<?php
-				endwhile
-				;
-				$consultacurso->closeCursor ();
+			endwhile
+			;
+			$consultacurso->closeCursor ();
 			endif;
-			
-			?>
+		
+		?>
 			</select>
 			</div>
 			<br>
@@ -318,23 +305,17 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 			<br>
 		</form>
 		<?php
-			if (! array_key_exists ( "ppcmodal", $_POST ) && ! array_key_exists ( "ppcobj", $_POST ) && ! array_key_exists ( "ppcdesc", $_POST ) && ! array_key_exists ( "ppcestagio", $_POST ) && ! array_key_exists ( "curcod", $_POST ) && ! array_key_exists ( "ppcanoini", $_POST ))
-				return;
-			try {
-				if (atualizarPpc ( $conn, $_POST ["curcod"], $_POST ["ppcmodal"], $_POST ["ppcobj"], $_POST ["ppcdesc"], $_POST ["ppcestagio"], $_GET ["ppccod"], $_POST ["ppcanoini"] )) {
-					echo "<h1>PPC alterado com êxito! </h1><br>";
-					echo "<a href= 'gerenciaPpc.php?opcao=consultar'>Voltar à tela de consulta de ppc</a><br>";
-				}
-			} catch ( PDOException $e ) {
-				echo $e->getMessage ();
+		if (! array_key_exists ( "ppcmodal", $_POST ) && ! array_key_exists ( "ppcobj", $_POST ) && ! array_key_exists ( "ppcdesc", $_POST ) && ! array_key_exists ( "ppcestagio", $_POST ) && ! array_key_exists ( "curcod", $_POST ) && ! array_key_exists ( "ppcanoini", $_POST ))
+			return;
+		try {
+			if (atualizarPpc ( $_POST ["curcod"], $_POST ["ppcmodal"], $_POST ["ppcobj"], $_POST ["ppcdesc"], $_POST ["ppcestagio"], $_GET ["ppccod"], $_POST ["ppcanoini"], $conn )) {
+				echo "<h1>PPC alterado com êxito! </h1><br>";
+				echo "<a href= 'gerenciaPpc.php?opcao=consultar'>Voltar à tela de consulta de ppc</a><br>";
 			}
-			?>
-	<?php
-	endif;
-		
-		desconectarDoBanco ( $conn );
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
+		}
 	 elseif ($_GET ["opcao"] == "excluir") :
-		
 		?>
 	<h2>Exclusão de ppc</h2>
 		<br>
@@ -358,8 +339,7 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 			</div>
 			<br>
 		</form>
-		
-	<?php
+			<?php
 		if (! array_key_exists ( "escolha", $_POST ))
 			return;
 		if ($_POST ["escolha"] == "sim") {
@@ -372,10 +352,8 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 				echo $e->getMessage ();
 			}
 		} elseif ($_POST ["escolha"] == "não") {
-			echo "<p>Ok, o ppc não será excluído</p><br>";
 			header ( "Location: gerenciaPpc.php?opcao=consultar" );
 		}
-		desconectarDoBanco ( $conn );
 	endif;
 	?>
 	</div>
