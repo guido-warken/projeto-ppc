@@ -276,7 +276,7 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 			$consultacurso->closeCursor ();
 			endif;
 		
-		$consultacurso = buscarCursosExceto ( $conn, $row ["curcod"] );
+		$consultacurso = buscarCursosExceto ( $conn, $ppc ["curcod"] );
 		if ($consultacurso->execute () && $consultacurso->rowCount () > 0) :
 			while ( $opcoes = $consultacurso->fetch ( PDO::FETCH_ASSOC ) ) :
 				?>
