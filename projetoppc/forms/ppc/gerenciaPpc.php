@@ -54,31 +54,29 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 			<br>
 			<div class="form-group">
 			<?php
-		$consultacurso = buscarCursosPorEixo ( $conn );
-		if ($consultacurso->execute () && $consultacurso->rowCount () > 0) :
+		$cursos = buscarCursosPorEixo ( $conn );
+		if (count ( $cursos ) > 0) :
 			?>
 				<label for="curcod">Selecione o curso vinculado ao PPC: </label> <select
 					class="form-control" name="curcod" id="curcod">
 			<?php
-			while ( $row = $consultacurso->fetch ( PDO::FETCH_ASSOC ) ) :
+			foreach ( $cursos as $curso ) :
 				?>
-			<option value="<?= $row['curcod']; ?>">
-			<?=$row["curnome"]; ?>
+			<option value="<?= $curso['curcod']; ?>">
+			<?=$curso["curnome"]; ?>
 			</option>
 			<?php
-			endwhile
+			endforeach
 			;
 			?>
 			</select>
 			<?php
-			$consultacurso->closeCursor ();
-		 elseif ($consultacurso->execute () && $consultacurso->rowCount () == 0) :
+		 elseif (count ( $cursos ) == 0) :
 			?>
 						<h1>Nenhum curso cadastrado.</h1>
 				<br> <a href="../curso/gerenciaCurso.php?opcao=cadastrar">Clique
 					aqui para cadastrar um novo curso</a><br>
 						<?php
-			$consultacurso->closeCursor ();
 		endif;
 		?>
 			</div>
@@ -111,31 +109,29 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 		<form action="" method="post">
 			<div class="form-group">
 			<?php
-		$consultacurso = buscarCursoPorPpc ( $conn );
-		if ($consultacurso->execute () && $consultacurso->rowCount () > 0) :
+		$cursos = buscarCursoPorPpc ( $conn );
+		if (count ( $cursos ) > 0) :
 			?>
 				<label for="curcod">Selecione o curso para visualizar os PPCs: </label>
 				<select class="form-control" name="curcod" id="curcod">
 <?php
-			while ( $row = $consultacurso->fetch ( PDO::FETCH_ASSOC ) ) :
+			foreach ( $cursos as $curso ) :
 				?>
-<option value="<?=$row['curcod']; ?>">
-<?=$row["curnome"]; ?>
+<option value="<?=$curso['curcod']; ?>">
+<?=$curso["curnome"]; ?>
 </option>
 <?php
-			endwhile
+			endforeach
 			;
 			?>
 				</select>
 <?php
-			$consultacurso->closeCursor ();
-		 elseif ($consultacurso->execute () && $consultacurso->rowCount () == 0) :
+		 elseif (count ( $cursos ) == 0) :
 			?>
 <h1>Não há ppcs cadastrados</h1>
 				<br> <a href="gerenciaPpc.php?opcao=cadastrar">Clique aqui para
 					cadastrar um ppc</a><br>
 <?php
-			$consultacurso->closeCursor ();
 		endif;
 		?>
 			</div>
@@ -259,35 +255,25 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 			<br>
 			<div class="form-group">
 			<?php
-		$consultacurso = buscarCursoPorId ( $ppc ["curcod"], $conn );
-		if ($consultacurso->execute () && $consultacurso->rowCount () > 0) :
-			?>
+		$curso = buscarCursoPorId ( $ppc ["ppccod"], $conn );
+		?>
 				<label for="curcod">Selecione o curso vinculado ao PPC: </label> <select
 					class="form-control" name="curcod" id="curcod">
-			<?php
-			while ( $opcao = $consultacurso->fetch ( PDO::FETCH_ASSOC ) ) :
-				?>
-			<option value="<?= $opcao['curcod']; ?>" selected="selected">
-			<?=$opcao["curnome"]; ?>
+					<option value="<?= $curso['curcod']; ?>" selected="selected">
+			<?=$curso["curnome"]; ?>
 			</option>
 			<?php
-			endwhile
-			;
-			$consultacurso->closeCursor ();
-			endif;
-		
-		$consultacurso = buscarCursosExceto ( $conn, $ppc ["curcod"] );
-		if ($consultacurso->execute () && $consultacurso->rowCount () > 0) :
-			while ( $opcoes = $consultacurso->fetch ( PDO::FETCH_ASSOC ) ) :
+		$cursos = buscarCursosExceto ( $curso ["curcod"], $conn );
+		if (count ( $cursos ) > 0) :
+			foreach ( $cursos as $curso ) :
 				?>
-			<option value="<?=$opcoes['curcod']; ?>">
-			<?=$opcoes["curnome"]; ?>
+			<option value="<?=$curso['curcod']; ?>">
+			<?=$curso["curnome"]; ?>
 			</option>
 			<?php
-			endwhile
+			endforeach
 			;
-			$consultacurso->closeCursor ();
-			endif;
+						endif;
 		
 		?>
 			</select>

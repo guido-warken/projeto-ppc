@@ -1,34 +1,71 @@
 <?php
 require_once 'c:\xampp\htdocs\projetoppc\factory\connectionFactory.php';
-function inserirCurso(PDO &$conn, string $curnome, string $curtit, int $eixcod): bool {
+function inserirCurso(string $curnome, string $curtit, int $eixcod, PDO &$conn = null): bool {
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$insercaoCurso = $conn->prepare ( "insert into curso (curnome, curtit, eixcod) values (:curnome, :curtit, :eixcod)" );
 	$insercaoCurso->bindParam ( ":curnome", $curnome );
 	$insercaoCurso->bindParam ( ":curtit", $curtit );
 	$insercaoCurso->bindParam ( ":eixcod", $eixcod );
-	return $insercaoCurso->execute ();
+	$resultado = $insercaoCurso->execute ();
+	return $resultado;
 }
-function buscarCursosPorEixo(PDO &$conn): PDOStatement {
+function buscarCursosPorEixo(PDO &$conn = null): array {
+	$informacoescurso = [ ];
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$consultacurso = $conn->query ( "select curso.curcod, curso.curnome, curso.curtit, eixotec.eixdesc from curso inner join eixotec on curso.eixcod = eixotec.eixcod" );
-	return $consultacurso;
+	if (! $consultacurso->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoescurso;
+	} elseif ($consultacurso->execute () && $consultacurso->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoescurso;
+	} elseif ($consultacurso->execute () && $consultacurso->rowCount () > 0) {
+		for($i = 0; $i < $consultacurso->rowCount (); $i ++) {
+			$informacoescurso [$i] = $consultacurso->fetch ( PDO::FETCH_ASSOC );
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoescurso;
 }
-function buscarCursoPorId(int $curcod, PDO &$conn = null): PDOStatement {
+function buscarCursoPorId(int $curcod, PDO &$conn = null): array {
+	$informacoescurso = [ ];
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$consultacurso = $conn->prepare ( "select * from curso where curcod = :curcod" );
 	$consultacurso->bindParam ( ":curcod", $curcod );
-	return $consultacurso;
+	if (! $consultacurso->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoescurso;
+	} elseif ($consultacurso->execute () && $consultacurso->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoescurso;
+	} elseif ($consultacurso->execute () && $consultacurso->rowCount () == 1) {
+		$informacoescurso = $consultacurso->fetch ( PDO::FETCH_ASSOC );
+	}
+	return $informacoescurso;
 }
-function buscarTodosOsCursos(PDO &$conn): PDOStatement {
+function buscarTodosOsCursos(PDO &$conn = null): array {
+	$informacoescurso = [ ];
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$consultacurso = $conn->query ( "select * from curso" );
-	return $consultacurso;
+	if (! $consultacurso->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoescurso;
+	} elseif ($consultacurso->execute () && $consultacurso->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoescurso;
+	} elseif ($consultacurso->execute () && $consultacurso->rowCount () > 0) {
+		for($i = 0; $i < $consultacurso->rowCount (); $i ++) {
+			$informacoescurso [$i] = $consultacurso->fetch ( PDO::FETCH_ASSOC );
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoescurso;
 }
-function atualizarCurso(PDO &$conn, string $curnome, string $curtit, int $eixcod, int $curcod): bool {
+function atualizarCurso(string $curnome, string $curtit, int $eixcod, int $curcod, PDO &$conn = null): bool {
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$atualizacaocurso = $conn->prepare ( "update curso set curnome = :curnome, curtit = :curtit, eixcod = :eixcod where curcod = :curcod" );
@@ -36,27 +73,57 @@ function atualizarCurso(PDO &$conn, string $curnome, string $curtit, int $eixcod
 	$atualizacaocurso->bindParam ( ":curtit", $curtit );
 	$atualizacaocurso->bindParam ( ":eixcod", $eixcod );
 	$atualizacaocurso->bindParam ( ":curcod", $curcod );
-	return $atualizacaocurso->execute ();
+	$resultado = $atualizacaocurso->execute ();
+	desconectarDoBanco ( $conn );
+	return $resultado;
 }
-function excluirCurso(PDO &$conn, int $curcod): bool {
+function excluirCurso(int $curcod, PDO &$conn = null): bool {
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$delcurso = $conn->prepare ( "delete from curso where curcod = :curcod" );
 	$delcurso->bindParam ( ":curcod", $curcod );
-	return $delcurso->execute ();
+	$resultado = $delcurso->execute ();
+	desconectarDoBanco ( $conn );
+	return $resultado;
 }
-function buscarCursoPorPpc(PDO &$conn): PDOStatement {
+function buscarCursoPorPpc(PDO &$conn = null): array {
+	$informacoescurso = [ ];
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$consultacurso = $conn->query ( "select curso.curcod, curso.curnome from curso inner join ppc on curso.curcod = ppc.curcod" );
-	return $consultacurso;
+	if (! $consultacurso->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoescurso;
+	} elseif ($consultacurso->execute () && $consultacurso->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoescurso;
+	} elseif ($consultacurso->execute () && $consultacurso->rowCount () > 0) {
+		for($i = 0; $i < $consultacurso->rowCount (); $i ++) {
+			$informacoescurso [$i] = $consultacurso->fetch ( PDO::FETCH_ASSOC );
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoescurso;
 }
-function buscarCursosExceto(PDO &$conn, int $curcod): PDOStatement {
+function buscarCursosExceto(int $curcod, PDO &$conn = null): array {
+	$informacoescurso = [ ];
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$consultacurso = $conn->prepare ( "select * from curso where curcod <> :curcod" );
 	$consultacurso->bindParam ( ":curcod", $curcod );
-	return $consultacurso;
+	if (! $consultacurso->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoescurso;
+	} elseif ($consultacurso->execute () && $consultacurso->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoescurso;
+	} elseif ($consultacurso->execute () && $consultacurso->rowCount () > 0) {
+		for($i = 0; $i < $consultacurso->rowCount (); $i ++) {
+			$informacoescurso [$i] = $consultacurso->fetch ( PDO::FETCH_ASSOC );
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoescurso;
 }
 
 ?>
