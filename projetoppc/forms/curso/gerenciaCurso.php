@@ -169,7 +169,7 @@ if ($_GET ["opcao"] == "cadastrar") :
 			<br>
 		</form>
 	<?php
-	if (! array_key_exists ( "curnome", $_POST ) && ! array_key_exists ( "curtit", $_POST ) && array_key_exists ( "eixcod", $_POST ))
+	if (! array_key_exists ( "curnome", $_POST ) && ! array_key_exists ( "curtit", $_POST ) && ! array_key_exists ( "eixcod", $_POST ))
 		return;
 	try {
 		if (atualizarCurso ( $_POST ["curnome"], $_POST ["curtit"], $_POST ["eixcod"], $_GET ["curcod"], $conn )) {
