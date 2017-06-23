@@ -1,5 +1,6 @@
 <?php
 require_once 'c:\xampp\htdocs\projetoppc\dao\ofertaDao.php';
+require_once 'c:\xampp\htdocs\projetoppc\dao\ppcDao.php';
 ?>
 
 <!DOCTYPE html>
@@ -117,10 +118,10 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\ofertaDao.php';
 			if (inserirOferta ( $_POST ["ppccod"], $_POST ["unicod"], $_POST ["ofecont"], $_POST ["ofevagasmat"], $_POST ["ofevagasvesp"], $_POST ["ofevagasnot"] )) {
 				echo "<h1>Oferta cadastrada com êxito!</h1><br>";
 				echo "<a href = 'gerenciaOferta.php?opcao=consultar'>Clique aqui para ver as ofertas de curso cadastradas</a><br>";
+			}
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
 		}
-	} catch (PDOException $e) {
-		echo $e->getMessage();
-	}
 	endif;
 	
 	?>
