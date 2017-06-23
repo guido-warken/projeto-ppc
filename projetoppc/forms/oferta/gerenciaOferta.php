@@ -25,10 +25,102 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\ofertaDao.php';
 		<form action="" method="post">
 			<div class="form-group">
 	<?php
-		$ppcs = buscarP?>
+		$ppcs = buscarPpcs ();
+		$unidades = buscarUnidadesPorPdi ();
+		if (count ( $ppcs ) > 0) :
+			?>
+		<label for="ppccod">Selecione o ppc: </label> <select
+					class="form-control" id="ppccod" name="ppccod">
+		<?php
+			foreach ( $ppcs as $ppc ) :
+				?>
+		<option value="<?=$ppc['ppccod']; ?>">
+		<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
+		</option>
+		<?php
+			endforeach
+			;
+			?>
+		</select>
+		<?php
+		 elseif (count ( $ppcs ) == 0) :
+			?>
+		<h1>Nenhum ppcCadastrado</h1>
+				<br> <a href="../ppc/gerenciaPpc.php?opcao=cadastrar">Clique aqui
+					para cadastrar um novo Ppc</a><br>
+		<?php
+		endif;
+		?>
 	</div>
+			<br>
+			<div class="form-group">
+	<?php
+		if (count ( $unidades ) > 0) :
+			?>
+	<label>Selecione a unidade SENAC de oferta: </label> <select
+					class="form-control" id="unicod" name="unicod">
+	<?php
+			foreach ( $unidades as $unidade ) :
+				?>
+	<option value="<?=$unidade['unicod']; ?>">
+	<?=$unidade["uninome"]; ?>
+	</option>
+	<?php
+			endforeach
+			;
+			?>
+	</select>
+	<?php
+		 elseif (count ( $unidades ) == 0) :
+			?>
+	<h1>Nenhuma unidade SENAC cadastrada</h1>
+				<br> <a href="../unidade/gerenciaUnidade.php?opcao=cadastrar">Clique
+					aqui para cadastrar uma nova unidade SENAC</a><br>
+	<?php
+		endif;
+		?>
+	</div>
+			<br>
+			<div class="form-group">
+				<label for="ofecont">Contexto educacional</label>
+				<textarea rows="3" cols="3" id="ofecont" name="ofecont"
+					class="form-control"></textarea>
+			</div>
+			<br>
+			<div class="form-control">
+				<label for="ofevagasmat">Número de vagas matutinas: </label> <input
+					type="number" id="ofevagasmat" name="ofevagasmat"
+					class="form-control">
+			</div>
+			<br>
+			<div class="form-control">
+				<label for="ofevagasvesp">Numero de vagas vespertinas: </label> <input
+					type="number" id="ofevagasvesp" name="ofevagasvesp"
+					class="form-control">
+			</div>
+			<br>
+			<div class="form-control">
+				<label for="ofevagasnot">Numero de vagas noturnas: </label> <input
+					type="number" id="ofevagasnot" name="ofevagasnot"
+					class="form-control">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" value="salvar">
+			</div>
+			<br>
 		</form>
 	<?php
+		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "unicod", $_POST ) && ! array_key_exists ( "ofecont", $_POST ) && ! array_key_exists ( "ofevagasmat", $_POST ) && ! array_key_exists ( "ofevagasvesp", $_POST ) && ! array_key_exists ( "ofevagasnot", $_POST ))
+			return;
+		try {
+			if (inserirOferta ( $_POST ["ppccod"], $_POST ["unicod"], $_POST ["ofecont"], $_POST ["ofevagasmat"], $_POST ["ofevagasvesp"], $_POST ["ofevagasnot"] )) {
+				echo "<h1>Oferta cadastrada com êxito!</h1><br>";
+				echo "<a href = 'gerenciaOferta.php?opcao=consultar'>Clique aqui para ver as ofertas de curso cadastradas</a><br>";
+		}
+	} catch (PDOException $e) {
+		echo $e->getMessage();
+	}
 	endif;
 	
 	?>
