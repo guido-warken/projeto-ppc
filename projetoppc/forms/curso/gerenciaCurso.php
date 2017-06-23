@@ -73,8 +73,7 @@ if ($_GET ["opcao"] == "cadastrar") :
 	?>
 	<h2>Consultando os cursos cadastrados</h2>
 		<br> <a href="gerenciaCurso.php?opcao=cadastrar">Cadastrar mais um
-			curso</a> <br>
-		<br>
+			curso</a> <br> <br>
 	<?php
 	$cursos = buscarCursosPorEixo ( $conn );
 	if (count ( $cursos ) > 0) :
@@ -147,8 +146,8 @@ if ($_GET ["opcao"] == "cadastrar") :
 <?php
 	$eixotec = buscarEixoPorId ( $curso ["eixcod"], $conn );
 	?>
-	<option value="<?= $curso['eixcod']; ?>" selected="selected">
-	<?=$curso["eixdesc"]; ?>
+	<option value="<?= $eixotec['eixcod']; ?>" selected="selected">
+	<?=$eixotec["eixdesc"]; ?>
 	</option>
 	<?php
 	$eixostec = buscarEixosexceto ( $eixotec ["eixcod"], $conn );
