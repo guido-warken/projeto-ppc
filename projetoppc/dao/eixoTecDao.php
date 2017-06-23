@@ -1,27 +1,61 @@
 <?php
 require_once 'c:\xampp\htdocs\projetoppc\factory\connectionFactory.php';
-function buscarEixos(PDO &$conn):PDOStatement {
-	if (is_null($conn))
-		$conn = conectarAoBanco("localhost", "dbdep", "root", "");
-	$consulta = $conn->prepare("select * from eixotec");
-	return $consulta;
+function buscarEixos(PDO &$conn = null): array {
+	$informacoeseixotec = [ ];
+	if (is_null ( $conn ))
+		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
+	$consultaeixotec = $conn->query ( "select * from eixotec" );
+	if (! $consultaeixotec->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoeseixotec;
+	} elseif ($consultaeixotec->execute () && $consultaeixotec->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoeseixotec;
+	} elseif ($consultaeixotec->execute () && $consultaeixotec->rowCount () > 0) {
+		for($i = 0; $i < $consultaeixotec->rowCount (); $i ++) {
+			$informacoeseixotec [$i] = $consultaeixotec->fetch ( PDO::FETCH_ASSOC );
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoeseixotec;
 }
-
-function buscarEixoPorId(PDO &$conn, int $eixcod):PDOStatement {
-	if (is_null($conn))
-		$conn = conectarAoBanco("localhost", "dbdep", "root", "");
-	$consulta = $conn->prepare("select * from eixotec where eixcod = :eixcod");
-	$consulta->bindParam(":eixcod", $eixcod);
-	return $consulta;
+function buscarEixoPorId(int $eixcod, PDO &$conn = null): array {
+	$informacoeseixotec = [ ];
+	if (is_null ( $conn ))
+		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
+	$consultaeixotec = $conn->prepare ( "select * from eixotec where eixcod = :eixcod" );
+	$consultaeixotec->bindParam ( ":eixcod", $eixcod );
+	if (! $consultaeixotec->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoeseixotec;
+	} elseif ($consultaeixotec->execute () && $consultaeixotec->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoeseixotec;
+	} elseif ($consultaeixotec->execute () && $consultaeixotec->rowCount () == 1) {
+		$informacoeseixotec = $consultaeixotec->fetch ( PDO::FETCH_ASSOC );
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoeseixotec;
 }
-
-function buscarEixosexceto(PDO &$conn, int $eixcod):PDOStatement {
-	if (is_null($conn))
-		$conn = conectarAoBanco("localhost", "dbdep", "root", "");
-	$consulta = $conn->prepare("select * from eixotec where eixcod <> :eixcod");
-$consulta->bindParam(":eixcod", $eixcod);
-return $consulta;
+function buscarEixosexceto(int $eixcod, PDO &$conn = null): array {
+	$informacoeseixotec = [ ];
+	if (is_null ( $conn ))
+		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
+	$consultaeixotec = $conn->prepare ( "select * from eixotec where eixcod <> :eixcod" );
+	$consultaeixotec->bindParam ( ":eixcod", $eixcod );
+	if (! $consultaeixotec->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoeseixotec;
+	} elseif ($consultaeixotec->execute () && $consultaeixotec->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoeseixotec;
+	} elseif ($consultaeixotec->execute () && $consultaeixotec->rowCount () > 0) {
+		for($i = 0; $i < $consultaeixotec->rowCount (); $i ++) {
+			$informacoeseixotec [$i] = $consultaeixotec->fetch ( PDO::FETCH_ASSOC );
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoeseixotec;
 }
-
 
 ?>
