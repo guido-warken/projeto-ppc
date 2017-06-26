@@ -38,31 +38,12 @@ function excluirOferta(int $ppccod, int $unicod): bool {
 	desconectarDoBanco ( $conn );
 	return $resultado;
 }
-function buscarOfertasPorPpc(int $ppccod, PDO &$conn = null): array {
+function buscarOfertas(int $ppccod, int $unicod, PDO &$conn = null): array {
 	$informacoesoferta = [ ];
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
-	$consultaoferta = $conn->prepare ( "select * from oferta where ppccod = :ppccod" );
+	$consultaoferta = $conn->prepare ( "select * from oferta where ppccod = :ppccod and unicod = :unicod" );
 	$consultaoferta->bindParam ( ":ppccod", $ppccod );
-	if (! $consultaoferta->execute ()) {
-		desconectarDoBanco ( $conn );
-		return $informacoesoferta;
-	} elseif ($consultaoferta->execute () && $consultaoferta->rowCount () == 0) {
-		desconectarDoBanco ( $conn );
-		return $informacoesoferta;
-	} elseif ($consultaoferta->execute () && $consultaoferta->rowCount () > 0) {
-		for($i = 0; $i < $consultaoferta->rowCount (); $i ++) {
-			$informacoesoferta [$i] = $consultaoferta->fetch ( PDO::FETCH_ASSOC );
-		}
-	}
-	desconectarDoBanco ( $conn );
-	return $informacoesoferta;
-}
-function buscarOfertasPorUnidade(int $unicod, PDO &$conn = null): array {
-	$informacoesoferta = [ ];
-	if (is_null ( $conn ))
-		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
-	$consultaoferta = $conn->prepare ( "select * from oferta where unicod = :unicod" );
 	$consultaoferta->bindParam ( ":unicod", $unicod );
 	if (! $consultaoferta->execute ()) {
 		desconectarDoBanco ( $conn );

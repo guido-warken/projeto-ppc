@@ -104,5 +104,24 @@ function buscarUnidadesExceto(int $unicod, PDO &$conn = null): array {
 	desconectarDoBanco ( $conn );
 	return $informacoesunidade;
 }
+function buscarUnidadesPorOferta(PDO &$conn = null): array {
+	$informacoesunidade = [ ];
+	if (is_null ( $conn ))
+		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
+	$consultaunidade = $conn->query ( "select * from unidadesenac inner join oferta on unidadesenac.unicod = oferta.unicod" );
+	if (! $consultaunidade->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoesunidade;
+	} elseif ($consultaunidade->execute () && $consultaunidade->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoesunidade;
+	} elseif ($consultaunidade->execute () && $consultaunidade->rowCount () > 0) {
+		for($i = 0; $i < $consultaunidade->rowCount (); $i ++) {
+			$informacoesunidade [$i] = $consultaunidade->fetch ( PDO::FETCH_ASSOC );
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoesunidade;
+}
 
 ?>

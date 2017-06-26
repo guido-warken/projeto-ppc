@@ -96,13 +96,13 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 			</div>
 			<br>
 			<div class="form-control">
-				<label for="ofevagasvesp">Numero de vagas vespertinas: </label> <input
+				<label for="ofevagasvesp">Número de vagas vespertinas: </label> <input
 					type="number" id="ofevagasvesp" name="ofevagasvesp"
 					class="form-control">
 			</div>
 			<br>
 			<div class="form-control">
-				<label for="ofevagasnot">Numero de vagas noturnas: </label> <input
+				<label for="ofevagasnot">Número de vagas noturnas: </label> <input
 					type="number" id="ofevagasnot" name="ofevagasnot"
 					class="form-control">
 			</div>
