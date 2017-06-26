@@ -195,7 +195,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 	<?php
 		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "unicod", $_POST ))
 			return;
-		$ofertas = buscarOfertas ( $_POST ["ppccod"], $_POST ["unicod"] );
+		$oferta = buscarOfertas ( $_POST ["ppccod"], $_POST ["unicod"] );
 		if (count ( $ofertas ) > 0) :
 			?>
 	<table class="table table-bordered">
