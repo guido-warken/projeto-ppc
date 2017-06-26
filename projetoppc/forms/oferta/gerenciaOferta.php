@@ -123,8 +123,113 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_GET ["opcao"] == "consultar") :
+		$ppcs = buscarPpcsPorOferta ();
+		$unidades = buscarUnidadesPorOferta ();
+		?>
+	<h2>Consulta de oferta</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+	<?php
+		if (count ( $ppcs ) > 0) :
+			?>
+	<label for="ppccod">Selecione o ppc: </label> <select
+					class="form-control" name="ppccod" id="ppccod">
+	<?php
+			foreach ( $ppcs as $ppc ) :
+				?>
+	<option value="<?=$ppc['ppccod']; ?>">
+	<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
+	</option>
+	<?php
+			endforeach
+			;
+			?>
+	</select>
+	<?php
+		 elseif (count ( $ppcs ) == 0) :
+			?>
+	<h1>Nenhuma oferta cadastrada e vinculada com nenhum ppc do sistema</h1>
+				<br> <a href="gerenciaOferta.php?opcao=cadastrar">Cadastrar uma nova
+					oferta</a><br>
+	<?php
+		endif;
+		?>
+	</div>
+			<br>
+			<div class="form-group">
+	<?php
+		if (count ( $unidades ) > 0) :
+			?>
+	<label for="unicod">Selecione a unidade SENAC: </label> <select
+					class="form-control" name="unicod" id="unicod">
+	<?php
+			foreach ( $unidades as $unidade ) :
+				?>
+	<option value="<?=$unidade['unicod']; ?>">
+	<?=$unidade["uninome"]; ?> 
+	</option>
+	<?php
+			endforeach
+			;
+			?>
+	</select>
+	<?php
+		 elseif (count ( $unidades ) == 0) :
+			?>
+	<h1>Nenhuma oferta cadastrada e vinculada com as unidades SENAC do
+					sistema</h1>
+				<br> <a href="gerenciaOferta.php?opcao=cadastrar">Cadastrar uma nova
+					oferta</a><br>
+	<?php
+		endif;
+		?>
+	</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" value="enviar">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "unicod", $_POST ))
+			return;
+		$ofertas = buscarOfertas ( $_POST ["ppccod"], $_POST ["unicod"] );
+		?>
+	<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Contexto educacional</th>
+					<th>Número de vagas matutinas</th>
+					<th>Número de vagas vespertinas</th>
+					<th>Número de vagas noturnas</th>
+					<th colspan="2">Ação</th>
+				</tr>
+			</thead>
+			<tbody>
+	<?php
+		foreach ( $ofertas as $oferta ) :
+			?>
+	<tr>
+					<td><?=$oferta["ofecont"]; ?></td>
+					<td><?=$oferta["ofevagasmat"]; ?></td>
+					<td><?=$oferta["ofevagasvesp"]; ?></td>
+					<td><?=$oferta["ofevagasnot"]; ?></td>
+					<td><a
+						href="gerenciaOferta.php?opcao=alterar&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>">Alterar
+							dados</a></td>
+					<td><a
+						href="gerenciaOferta.php?opcao=excluir&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>">excluir
+							oferta</a></td>
+				</tr>
+	<?php
+	endforeach;
+	?>
+	</tbody>
+		</table>
+	<?php
 	endif;
-	
 	?>
 	</div>
 </body>
