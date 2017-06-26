@@ -196,7 +196,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "unicod", $_POST ))
 			return;
 		$oferta = buscarOfertas ( $_POST ["ppccod"], $_POST ["unicod"] );
-		if (count ( $ofertas ) > 0) :
+		if (count ( $oferta ) > 0) :
 			?>
 	<table class="table table-bordered">
 			<thead>
@@ -224,7 +224,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 			</tbody>
 		</table>
 	<?php
-		 elseif (count ( $ofertas ) == 0) :
+		 elseif (count ( $oferta ) == 0) :
 			?>
 		<p>Oferta não encontrada com ppc e unidade SENAC informados.</p>
 		<br> <a href="gerenciaOferta.php?opcao=consultar">Voltar e consultar
