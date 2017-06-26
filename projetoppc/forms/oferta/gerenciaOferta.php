@@ -128,7 +128,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 		$unidades = buscarUnidadesPorOferta ();
 		?>
 	<h2>Consulta de oferta</h2>
-		<br>
+		<br> <a href="gerenciaOferta.php?opcao=cadastrar">Nova oferta</a><br>
 		<form action="" method="post">
 			<div class="form-group">
 	<?php
