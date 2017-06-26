@@ -52,9 +52,7 @@ function buscarOfertas(int $ppccod, int $unicod, PDO &$conn = null): array {
 		desconectarDoBanco ( $conn );
 		return $informacoesoferta;
 	} elseif ($consultaoferta->execute () && $consultaoferta->rowCount () > 0) {
-		for($i = 0; $i < $consultaoferta->rowCount (); $i ++) {
-			$informacoesoferta [$i] = $consultaoferta->fetch ( PDO::FETCH_ASSOC );
-		}
+		$informacoesoferta = $consultaoferta->fetch ( PDO::FETCH_ASSOC );
 	}
 	desconectarDoBanco ( $conn );
 	return $informacoesoferta;
