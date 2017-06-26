@@ -209,10 +209,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 				</tr>
 			</thead>
 			<tbody>
-	<?php
-			foreach ( $ofertas as $oferta ) :
-				?>
-	<tr>
+				<tr>
 					<td><?=$oferta["ofecont"]; ?></td>
 					<td><?=$oferta["ofevagasmat"]; ?></td>
 					<td><?=$oferta["ofevagasvesp"]; ?></td>
@@ -224,11 +221,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 						href="gerenciaOferta.php?opcao=excluir&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>">excluir
 							oferta</a></td>
 				</tr>
-	<?php
-			endforeach
-			;
-			?>
-	</tbody>
+			</tbody>
 		</table>
 	<?php
 		 elseif (count ( $ofertas ) == 0) :
