@@ -109,7 +109,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 			</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" value="salvar">
+				<input type="submit" value="salvar" class="btn btn-success">
 			</div>
 			<br>
 		</form>
@@ -189,7 +189,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 	</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" value="enviar">
+				<input type="submit" value="enviar" class="btn btn-success">
 			</div>
 			<br>
 		</form>
