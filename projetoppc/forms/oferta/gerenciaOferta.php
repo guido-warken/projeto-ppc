@@ -244,7 +244,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 			<div class="form-group">
 				<label for="ppccod">Selecione o ppc: </label> <select
 					class="form-control" id="ppccod" name="ppccod">
-					<option value="<?=$ppc['ppccod']; ?>">
+					<option value="<?=$ppc['ppccod']; ?>" selected="selected">
 		<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
 		</option>
 		<?php
@@ -266,7 +266,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 			<div class="form-group">
 				<label>Selecione a unidade SENAC de oferta: </label> <select
 					class="form-control" id="unicod" name="unicod">
-					<option value="<?=$unidade['unicod']; ?>">
+					<option value="<?=$unidade['unicod']; ?>" selected="selected">
 	<?=$unidade["uninome"]; ?>
 	</option>
 	<?php
@@ -327,8 +327,51 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_GET ["opcao"] == "excluir") :
+		$oferta = buscarOfertas ( $_GET ["ppccod"], $_GET ["unicod"] );
+		$unidade = buscarUnidadePorId ( $oferta ["unicod"] );
+		$ppc = buscarPpcPorId ( $oferta ["ppccod"] );
+		$curso = buscarCursoPorId ( $ppc ["curcod"] );
+		?>
+	<h2>Exclusão de oferta de curso</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<p>
+	Você está prestes a excluir a oferta do curso <?$curso["curnome"]; ?>, com o ppc do ano de <?=$ppc["ppcanoini"]; ?>, na unidade SENAC <?=$unidade["uninome"]; ?>.<br>
+					Você tem certeza de que deseja executar esta operação?<br> Após a
+					confirmação, a operação não poderá ser desfeita.
+				</p>
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" name="escolha" value="sim"
+					class="btn btn-success">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" name="escolha" value="não"
+					class="btn btn-success">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "escolha", $_POST ))
+			return;
+		if ($_POST ["escolha"] == "sim") {
+			try {
+				if (excluirOferta ( $oferta ["ppccod"], $oferta ["unicod"] )) {
+					echo "<h1>Oferta excluída com êxito!</h1><br>";
+					echo "<a href= 'gerenciaOferta.php?opcao=consultar'>Voltar à tela de consulta de oferta</a><br>";
+				}
+			} catch ( PDOException $e ) {
+				echo $e->getMessage ();
+			}
+		} else {
+			header ( "Location: gerenciaOferta.php?opcao=consultar");
+	}
 	endif;
 	?>
-	</div>
+</div>
 </body>
 </html>
