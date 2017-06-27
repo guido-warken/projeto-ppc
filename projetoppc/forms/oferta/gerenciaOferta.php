@@ -231,6 +231,102 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 			novamente</a><br>
 		<?php
 		endif;
+	 elseif ($_GET ["opcao"] == "alterar") :
+		$oferta = buscarOfertas ( $_GET ["ppccod"], $_GET ["unicod"] );
+		$unidade = buscarUnidadePorId ( $oferta ["unicod"] );
+		$unidades = buscarUnidadesExceto ( $unidade ["unicod"] );
+		$ppc = buscarPpcPorId ( $oferta ["ppccod"] );
+		$ppcs = buscarPpcsExceto ( $ppc ["ppccod"] );
+		?>
+	<h2>Alteração de oferta de cursos</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<label for="ppccod">Selecione o ppc: </label> <select
+					class="form-control" id="ppccod" name="ppccod">
+					<option value="<?=$ppc['ppccod']; ?>">
+		<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
+		</option>
+		<?php
+		if (count ( $ppcs ) > 0) :
+			foreach ( $ppcs as $ppc ) :
+				?>
+			<option value="<?=$ppc['ppccod']; ?>">
+		<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
+		</option>
+		<?php
+			endforeach
+			;
+		endif;
+		
+		?>
+		</select>
+			</div>
+			<br>
+			<div class="form-group">
+				<label>Selecione a unidade SENAC de oferta: </label> <select
+					class="form-control" id="unicod" name="unicod">
+					<option value="<?=$unidade['unicod']; ?>">
+	<?=$unidade["uninome"]; ?>
+	</option>
+	<?php
+		if (count ( $unidades ) > 0) :
+			foreach ( $unidades as $unidade ) :
+				?>
+			<option value="<?=$unidade['unicod']; ?>">
+	<?=$unidade["uninome"]; ?>
+	</option>
+	<?php
+			endforeach
+			;
+	endif;
+		
+		?>
+	</select>
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="ofecont">Contexto educacional</label>
+				<textarea rows="3" cols="3" id="ofecont" name="ofecont"
+					class="form-control">
+					<?=$oferta["ofecont"]; ?>
+					</textarea>
+			</div>
+			<br>
+			<div class="form-control">
+				<label for="ofevagasmat">Número de vagas matutinas: </label> <input
+					type="number" id="ofevagasmat" name="ofevagasmat"
+					class="form-control" value="<?=$oferta['ofevagasmat']; ?>">
+			</div>
+			<br>
+			<div class="form-control">
+				<label for="ofevagasvesp">Número de vagas vespertinas: </label> <input
+					type="number" id="ofevagasvesp" name="ofevagasvesp"
+					class="form-control" value="<?=$oferta['ofevagasvesp']; ?>">
+			</div>
+			<br>
+			<div class="form-control">
+				<label for="ofevagasnot">Número de vagas noturnas: </label> <input
+					type="number" id="ofevagasnot" name="ofevagasnot"
+					class="form-control" value="<?=$oferta['ofevagasnot']; ?>">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" value="alterar">
+			</div>
+			<br>
+		</form>
+		<?php
+		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "unicod", $_POST ) && ! array_key_exists ( "ofecont", $_POST ) && ! array_key_exists ( "ofevagasmat", $_POST ) && ! array_key_exists ( "ofevagasvesp", $_POST ) && ! array_key_exists ( "ofevagasnot", $_POST ))
+			return;
+		try {
+			if (atualizarOferta ( $_POST ["ppccod"], $_POST ["unicod"], $_POST ["ofecont"], $_POST ["ofevagasmat"], $_POST ["ofevagasvesp"], $_POST ["ofevagasnot"] )) {
+				echo "<h1>Oferta atualizada com êxito!</h1><br>";
+				echo "<a href= 'gerenciaOferta.php?opcao=consultar'>Voltar à tela de consulta de ofertas</a>";
+			}
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
+		}
 	endif;
 	?>
 	</div>

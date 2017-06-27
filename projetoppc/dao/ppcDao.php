@@ -38,7 +38,7 @@ function buscarPpcPorId(int $ppccod, PDO &$conn = null): array {
 	$informacoesppc = [ ];
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
-	$consultappc = $conn->prepare ( "select * from ppc where ppccod = :ppccod" );
+	$consultappc = $conn->prepare ( "select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod where ppc.ppccod = :ppccod" );
 	$consultappc->bindParam ( ":ppccod", $ppccod );
 	if (! $consultappc->execute ()) {
 		desconectarDoBanco ( $conn );
@@ -99,6 +99,26 @@ function buscarPpcsPorOferta(PDO &$conn = null): array {
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$consultappc = $conn->query ( "select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod inner join oferta on ppc.ppccod = oferta.ppccod" );
+	if (! $consultappc->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoesppc;
+	} elseif ($consultappc->execute () && $consultappc->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoesppc;
+	} elseif ($consultappc->execute () && $consultappc->rowCount () > 0) {
+		for($i = 0; $i < $consultappc->rowCount (); $i ++) {
+			$informacoesppc [$i] = $consultappc->fetch ( PDO::FETCH_ASSOC );
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoesppc;
+}
+function buscarPpcsExceto(int $ppccod): array {
+	$informacoesppc = [ ];
+	if (is_null ( $conn ))
+		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
+	$consultappc = $conn->prepare ( "select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod where ppc.ppccod <> :ppccod" );
+	$consultappc->bindParam ( ":ppccod", $ppccod );
 	if (! $consultappc->execute ()) {
 		desconectarDoBanco ( $conn );
 		return $informacoesppc;
