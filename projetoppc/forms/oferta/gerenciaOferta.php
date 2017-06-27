@@ -339,7 +339,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 		<form action="" method="post">
 			<div class="form-group">
 				<p>
-	Você está prestes a excluir a oferta do curso <?$curso["curnome"]; ?>, com o ppc do ano de <?=$ppc["ppcanoini"]; ?>, na unidade SENAC <?=$unidade["uninome"]; ?>.<br>
+	Você está prestes a excluir a oferta do curso <?=$curso["curnome"]; ?>, com o ppc do ano de <?=$ppc["ppcanoini"]; ?>, na unidade SENAC <?=$unidade["uninome"]; ?>.<br>
 					Você tem certeza de que deseja executar esta operação?<br> Após a
 					confirmação, a operação não poderá ser desfeita.
 				</p>
