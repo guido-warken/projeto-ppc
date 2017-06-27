@@ -113,7 +113,7 @@ function buscarPpcsPorOferta(PDO &$conn = null): array {
 	desconectarDoBanco ( $conn );
 	return $informacoesppc;
 }
-function buscarPpcsExceto(int $ppccod): array {
+function buscarPpcsExceto(int $ppccod, PDO &$conn = null): array {
 	$informacoesppc = [ ];
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
