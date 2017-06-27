@@ -2,6 +2,7 @@
 require_once 'c:\xampp\htdocs\projetoppc\dao\ofertaDao.php';
 require_once 'c:\xampp\htdocs\projetoppc\dao\ppcDao.php';
 require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
+require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 ?>
 
 <!DOCTYPE html>
