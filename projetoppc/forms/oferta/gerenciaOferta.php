@@ -197,11 +197,16 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "unicod", $_POST ))
 			return;
 		$oferta = buscarOfertas ( $_POST ["ppccod"], $_POST ["unicod"] );
+		$ppc = buscarPpcPorId ( $oferta ["ppccod"] );
+		$curso = buscarCursoPorId ( $ppc ["curcod"] );
 		if (count ( $oferta ) > 0) :
 			?>
-	<table class="table table-bordered">
+				<table class="table table-bordered">
+			<caption>Exibição de oferta de curso</caption>
 			<thead>
 				<tr>
+					<th>Ano de vigência do ppc</th>
+					<th>Curso</th>
 					<th>Contexto educacional</th>
 					<th>Número de vagas matutinas</th>
 					<th>Número de vagas vespertinas</th>
@@ -211,6 +216,8 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 			</thead>
 			<tbody>
 				<tr>
+					<td><?=$ppc["ppcanoini"]; ?></td>
+					<td><?=$curso["curnome"]; ?></td>
 					<td><?=$oferta["ofecont"]; ?></td>
 					<td><?=$oferta["ofevagasmat"]; ?></td>
 					<td><?=$oferta["ofevagasvesp"]; ?></td>
@@ -369,8 +376,8 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 				echo $e->getMessage ();
 			}
 		} else {
-			header ( "Location: gerenciaOferta.php?opcao=consultar");
-	}
+			header ( "Location: gerenciaOferta.php?opcao=consultar" );
+		}
 	endif;
 	?>
 </div>
