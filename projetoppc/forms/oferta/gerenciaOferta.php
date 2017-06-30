@@ -220,7 +220,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 				<tr>
 					<td><?=$ppc["ppcanoini"]; ?></td>
 					<td><?=$curso["curnome"]; ?></td>
-					<td><?=$curso["curnome"]; ?></td>
+					<td><?=$unidade["uninome"]; ?></td>
 					<td><?=$oferta["ofecont"]; ?></td>
 					<td><?=$oferta["ofevagasmat"]; ?></td>
 					<td><?=$oferta["ofevagasvesp"]; ?></td>
