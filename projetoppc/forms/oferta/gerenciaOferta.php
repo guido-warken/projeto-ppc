@@ -197,6 +197,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "unicod", $_POST ))
 			return;
 		$oferta = buscarOfertas ( $_POST ["ppccod"], $_POST ["unicod"] );
+		$unidade = buscarUnidadePorId ( $oferta ["unicod"] );
 		$ppc = buscarPpcPorId ( $oferta ["ppccod"] );
 		$curso = buscarCursoPorId ( $ppc ["curcod"] );
 		if (count ( $oferta ) > 0) :
@@ -207,6 +208,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 				<tr>
 					<th>Ano de vigência do ppc</th>
 					<th>Curso</th>
+					<th>unidade SENAC</th>
 					<th>Contexto educacional</th>
 					<th>Número de vagas matutinas</th>
 					<th>Número de vagas vespertinas</th>
@@ -217,6 +219,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 			<tbody>
 				<tr>
 					<td><?=$ppc["ppcanoini"]; ?></td>
+					<td><?=$curso["curnome"]; ?></td>
 					<td><?=$curso["curnome"]; ?></td>
 					<td><?=$oferta["ofecont"]; ?></td>
 					<td><?=$oferta["ofevagasmat"]; ?></td>
