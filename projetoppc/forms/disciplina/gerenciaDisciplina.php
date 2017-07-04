@@ -46,7 +46,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\disciplinaDao.php';
 			</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" class="form-control" value="salvar">
+				<input type="submit" class="btn btn-success" value="salvar">
 			</div>
 			<br>
 		</form>
@@ -110,9 +110,60 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\disciplinaDao.php';
 		<p>Clique no link acima para cadastrar uma nova disciplina</p>
 		<br>
 <?php
-endif;
-endif;
-?>
+		endif;
+	 elseif ($_GET ["opcao"] == "alterar") :
+		$disciplina = buscarDisciplinaPorId ( $_GET ["discod"] );
+		?>
+<h2>Alteração dos dados da disciplina selecionada</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<label for="disnome">Nome da disciplina: </label> <input type="text"
+					class="form-control" id="disnome" name="disnome"
+					value="<?=$disciplina['disnome']; ?>">
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="disobj">Objetivos da disciplina: </label>
+				<textarea rows="3" cols="3" id="disobj" name="disobj"
+					class="form-control">
+					<?=$disciplina["disobj"]; ?>
+					</textarea>
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="disch">Carga horária da disciplina: </label> <input
+					type="number" id="disch" name="disch" class="form-control"
+					value="<?=$disciplina['disch']; ?>">
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="discementa">Ementa da disciplina: </label>
+				<textarea rows="3" cols="3" id="discementa" name="discementa"
+					class="form-control">
+					<?=$disciplina["discementa"]; ?>
+					</textarea>
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" class="btn btn-success" value="alterar">
+			</div>
+			<br>
+		</form>
+		<?php
+		if (! array_key_exists ( "disnome", $_POST ) && ! array_key_exists ( "disobj", $_POST ) && ! array_key_exists ( "disch", $_POST ) && ! array_key_exists ( "discementa", $_POST ))
+			return;
+		try {
+			if (atualizarDisciplina ( $disciplina ["discod"], $_POST ["disnome"], $_POST ["disobj"], $_POST ["disch"], $_POST ["discementa"] )) {
+				echo "<h1>Disciplina atualizada com êxito!</h1><br>";
+				echo "<a href= 'gerenciaDisciplina.php?opcao=consultar'>Clique aqui para consultar novamente as disciplinas</a>";
+			}
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
+		}
+	endif;
+	
+	?>
 	</div>
 </body>
 </html>
