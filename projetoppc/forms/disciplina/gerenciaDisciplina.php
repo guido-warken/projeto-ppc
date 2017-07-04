@@ -57,10 +57,60 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\disciplinaDao.php';
 			if (inserirDisciplina ( $_POST ["disnome"], $_POST ["disobj"], $_POST ["disch"], $_POST ["discementa"] )) {
 				echo "<h1>Disciplina cadastrada com êxito!</h1><br>";
 				echo "<a href= 'gerenciaDisciplina.php?opcao=consultar'>Clique aqui para consultar as disciplinas cadastradas</a><br>";
-	}
-} catch (PDOException $e) {
-	echo $e->getMessage();
-}
+			}
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
+		}
+	 elseif ($_GET ["opcao"] == "consultar") :
+		$disciplinas = buscarDisciplinas ();
+		?>
+<h2>Exibição das disciplinas cadastradas</h2>
+		<br> <a href="gerenciaDisciplina.php?opcao=cadastrar">Nova disciplina</a><br>
+<?php
+		if (count ( $disciplinas ) > 0) :
+			?>
+<table class="table table bordered">
+			<caption>Disciplinas</caption>
+			<thead>
+				<tr>
+					<th>Nome da disciplina</th>
+					<th>Objetivo da disciplina</th>
+					<th>Carga horária da disciplina</th>
+					<th>Ementa da disciplina</th>
+					<th colspan="2">Ação</th>
+				</tr>
+			</thead>
+			<tbody>
+<?php
+			foreach ( $disciplinas as $disciplina ) :
+				?>
+<tr>
+					<td><?=$disciplina["disnome"]; ?></td>
+					<td><?=$disciplina["disobj"]; ?></td>
+					<td><?=$disciplina["disch"]; ?></td>
+					<td><?=$disciplina["discementa"]; ?></td>
+					<td><a
+						href="gerenciaDisciplina.php?opcao=alterar&discod=<?=$disciplina['discod']; ?>">Alterar
+							dados</a></td>
+					<td><a
+						href="gerenciaDisciplina.php?opcao=excluir&discod=<?=$disciplina['discod']; ?>">Excluir
+							disciplina</a></td>
+				</tr>
+<?php
+			endforeach
+			;
+			?>
+</tbody>
+		</table>
+<?php
+		 elseif (count ( $disciplinas ) == 0) :
+			?>
+<h2>Nenhuma disciplina cadastrada no momento</h2>
+		<br>
+		<p>Clique no link acima para cadastrar uma nova disciplina</p>
+		<br>
+<?php
+endif;
 endif;
 ?>
 	</div>
