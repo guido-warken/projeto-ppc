@@ -161,8 +161,47 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\disciplinaDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_GET ["opcao"] == "excluir") :
+		$disciplina = buscarDisciplinaPorId ( $_GET ["discod"] );
+		?>
+	<h2>Exclusão da disciplina selecionada</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<p>
+	Você está prestes a excluir a disciplina <?=$disciplina["disnome"]; ?>.<br>
+					Você gostaria de executar esta operação?<br> Após a confirmação, a
+					operação não poderá ser desfeita.<br>
+				</p>
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" name="escolha" class="btn btn-success"
+					value="sim">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" name="escolha" class="btn btn-success"
+					value="não">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "escolha", $_POST ))
+			return;
+		if ($_POST ["escolha"] == "sim") {
+			try {
+				if (excluirDisciplina ( $disciplina ["discod"] )) {
+					echo "<h1>Disciplina excluída com êxito!</h1><br>";
+					echo "<a href= 'gerenciaDisciplina.php?opcao=consultar'>Clique aqui para voltar à tela de consulta de disciplinas</a><br>";
+				}
+			} catch ( PDOException $e ) {
+				echo $e->getMessage ();
+			}
+		} elseif ($_POST ["escolha"] == "não") {
+			header ( "Location: gerenciaDisciplina.php?opcao=consultar");
+	}
 	endif;
-	
 	?>
 	</div>
 </body>
