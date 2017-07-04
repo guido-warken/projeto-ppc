@@ -21,7 +21,7 @@ function atualizarDisciplina(int $discod, string $disnome, string $disobj, int $
 	$atualizacaodisciplina->bindParam ( ":disch", $disch );
 	$atualizacaodisciplina->bindParam ( ":discementa", $discementa );
 	$atualizacaodisciplina->bindParam ( ":discod", $discod );
-	$resultado = $insercaodisciplina->execute ();
+	$resultado = $atualizacaodisciplina->execute ();
 	desconectarDoBanco ( $conn );
 	return $resultado;
 }
