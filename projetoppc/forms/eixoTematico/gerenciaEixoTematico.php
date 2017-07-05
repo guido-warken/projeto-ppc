@@ -44,8 +44,54 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_get ["opcao"] == "consultar") :
+		$eixostematicos = buscarEixos ();
+		?>
+	<h2>Consultando os eixos temáticos</h2>
+		<br> <a href="gerenciaEixoTematico.php?opcao=cadastrar">Novo eixo
+			temático</a><br>
+	<?php
+		if (count ( $eixostematicos ) > 0) :
+			?>
+	<h2>Número de eixos temáticos encontrados: <?=count($eixostematicos); ?></h2>
+		<br>
+		<table class="table table-bordered">
+			<caption>Eixos Temáticos</caption>
+			<thead>
+				<tr>
+					<th>Eixo Temático</th>
+					<th colspan="2">Ação</th>
+				</tr>
+			</thead>
+			<tbody>
+	<?php
+			foreach ( $eixostematicos as $eixo ) :
+				?>
+	<tr>
+					<td><?=$eixo["eixtdes"]; ?></td>
+					<td><a
+						href="gerenciaEixoTematico.php?opcao=alterar&eixtcod=<?=$eixo['eixtcod']; ?>">Alterar
+							dados</a></td>
+					<td><a
+						href="gerenciaEixoTematico.php?opcao=excluir&eixtcod=<?=$eixo['eixtcod']; ?>">Excluir
+							eixo temático</a></td>
+				</tr>
+	<?php
+			endforeach
+			;
+			?>
+	</tbody>
+		</table>
+	<?php
+		 elseif (count ( $eixostematicos ) == 0) :
+			?>
+	<h1>Nenhum eixo temático cadastrado no sistema</h1>
+		<br>
+		<p>Clique no link acima para cadastrar um novo eixo temático</p>
+		<br>
+	<?php
 	endif;
-	
+	endif;
 	?>
 	</div>
 </body>
