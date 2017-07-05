@@ -7,7 +7,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gerenciamento de disciplinas</title>
+<title>Gerenciamento de eixos temáticos</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
@@ -44,7 +44,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
-	 elseif ($_get ["opcao"] == "consultar") :
+	 elseif ($_GET ["opcao"] == "consultar") :
 		$eixostematicos = buscarEixos ();
 		?>
 	<h2>Consultando os eixos temáticos</h2>
@@ -90,7 +90,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 		<p>Clique no link acima para cadastrar um novo eixo temático</p>
 		<br>
 	<?php
-	endif;
+		endif;
 	endif;
 	?>
 	</div>
