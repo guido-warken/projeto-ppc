@@ -45,7 +45,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 			echo $e->getMessage ();
 		}
 	 elseif ($_GET ["opcao"] == "consultar") :
-		$eixostematicos = buscarEixos ();
+		$eixostematicos = buscarEixosTematicos ();
 		?>
 	<h2>Consultando os eixos temáticos</h2>
 		<br> <a href="gerenciaEixoTematico.php?opcao=cadastrar">Novo eixo
