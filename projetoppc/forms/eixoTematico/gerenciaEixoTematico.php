@@ -91,6 +91,34 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 		<br>
 	<?php
 		endif;
+	 elseif ($_GET ["opcao"] == "alterar") :
+		$eixotematico = buscarEixoTematicoPorId ( $_GET ["eixtcod"] );
+		?>
+	<h2>Alteração do eixo temático selecionado</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<label for="eixtdes">Eixo temático: </label> <input type="text"
+					name="eixtdes" id="eixtdes" class="form-control"
+					value="<?=$eixotematico['eixtdes'] ?>">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" class="btn btn-success" value="alterar">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "eixtdes", $_POST ))
+			return;
+		try {
+			if (atualizarEixoTematico ( $eixotematico ["eixtcod"], $_POST ["eixtdes"] )) {
+				echo "<h1>Eixo temático atualizado com êxito!</h1><br>";
+				echo "<a href= 'gerenciaEixoTematico.php?opcao=consultar'>Clique aqui para consultar novamente os eixos temáticos</a><br>";
+			}
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
+		}
 	endif;
 	?>
 	</div>
