@@ -119,6 +119,46 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_GET ["opcao"] == "excluir") :
+		$eixotematico = buscarEixoTematicoPorId ( $_GET ["eixtcod"] );
+		?>
+	<h2>Exclusão de eixo temático</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<p>
+	Você está prestes a excluir o eixo temático <?=$eixotematico["eixtdes"]; ?>.<br>
+					Você realmente deseja executar esta operação?<br> Após a
+					confirmação, esta operação não poderá ser desfeita.
+				</p>
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" name="escolha" value="sim"
+					class="btn btn-success">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" name="escolha" value="não"
+					class="btn btn-success">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "escolha", $_POST ))
+			return;
+		if ($_POST ["escolha"] == "sim") {
+			try {
+				if (excluirEixoTematico ( $eixotematico ["eixtcod"] )) {
+					echo "<h1>Eixo temático excluído com êxito!</h1><br>";
+					echo "<a href= 'gerenciaEixoTematico.php?opcao=consultar'>Clique aqui para consultar novamente os eixos temáticos</a><br>";
+				}
+			} catch ( PDOException $e ) {
+				echo $e->getMessage ();
+			}
+		} else {
+			header ( "Location: gerenciaEixoTematico.php?opcao=consultar" );
+		}
 	endif;
 	?>
 	</div>
