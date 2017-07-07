@@ -24,6 +24,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 	if ($_GET ["opcao"] == "cadastrar") :
 		?>
 	<h2>Cadastro de conteúdo curricular</h2>
+		<br>
 		<form action="" method="post">
 			<div class="form-group">
 	<?php
@@ -134,11 +135,70 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 				echo "<h1>Conteúdo curricular cadastrado com êxito!</h1><br>";
 				echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para consultar os conteúdos curriculares cadastrados no sistema</a><br>";
 			}
-		} catch (PDOException $e) {
-		echo $e->getMessage();
-	}
-	endif;
-	?>
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
+		}
+	 elseif ($_GET ["opcao"] == "consultar") :
+		$conteudos = buscarConteudosCurriculares ();
+		$totalconteudos = count ( $conteudos );
+		?>
+		<h2>Exibição dos conteúdos curriculares</h2>
+		<br> <a href="gerenciaConteudo.php?opcao=cadastrar">Novo conteúdo
+			curricular</a><br>
+		<?php
+		if ($totalconteudos > 0) :
+			?>
+		<h2>Número de Conteúdos curriculares encontrados: <?=$totalconteudos; ?></h2>
+		<br>
+		<table class="table table-bordered">
+			<caption>Conteúdos curriculares</caption>
+			<thead>
+				<tr>
+					<th>ano de início do ppc</th>
+					<th>Nome do curso</th>
+					<th>Disciplina</th>
+					<th>Eixo temático</th>
+					<th>Fase da disciplina</th>
+					<th colspan="2">Ação</th>
+				</tr>
+			</thead>
+			<tbody>
+		<?php
+			foreach ( $conteudos as $conteudo ) :
+				$ppc = buscarPpcPorId ( $conteudo ["ppccod"] );
+				$disciplina = buscarDisciplinaPorId ( $conteudo ["discod"] );
+				$eixotematico = buscarEixoTematicoPorId ( $conteudo ["eixtcod"] );
+				?>
+		<tr>
+					<td><?=$ppc["ppcanoini"]; ?></td>
+					<td><?=$ppc["curnome"]; ?></td>
+					<td><?=$disciplina["disnome"]; ?></td>
+					<td><?=$eixotematico["eixtdes"]; ?></td>
+					<td><?=$conteudo["contfase"]; ?></td>
+					<td><a
+						href="gerenciaConteudo.php?opcao=alterar&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Alterar
+							dados</a></td>
+					<td><a
+						href="gerenciaConteudo.php?opcao=excluir&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Excluir
+							conteudo curricular</a></td>
+				</tr>
+		<?php
+			endforeach
+			;
+			?>
+		</tbody>
+		</table>
+		<?php
+		else :
+			?>
+		<h1>Nenhum conteúdo curricular cadastrado no sistema</h1>
+		<br>
+		<p>Clique no link acima para cadastrar um conteúdo curricular</p>
+		<br>
+		<?php
+		endif;
+		endif;
+		?>
 	</div>
 </body>
 </html>
