@@ -1,0 +1,144 @@
+<?php
+require_once 'c:\xampp\htdocs\projetoppc\dao\conteudoCurricularDao.php';
+require_once 'c:\xampp\htdocs\projetoppc\dao\disciplinaDao.php';
+require_once 'c:\xampp\htdocs\projetoppc\dao\ppcDao.php';
+require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gerenciamento de conteúdo curricular</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+	<?php
+	if ($_GET ["opcao"] == "cadastrar") :
+		?>
+	<h2>Cadastro de conteúdo curricular</h2>
+		<form action="" method="post">
+			<div class="form-group">
+	<?php
+		$ppcs = buscarPpcs ();
+		$totalppcs = count ( $ppcs );
+		if ($totalppcs > 0) :
+			?>
+	<label for="ppccod">Selecione o ppc: </label> <select
+					class="form-control" id="ppccod" name="ppccod">
+	<?php
+			foreach ( $ppcs as $ppc ) :
+				?>
+	<option value="<?=$ppc['ppccod']; ?>">
+	<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
+	</option>
+	<?php
+			endforeach
+			;
+			?>
+	</select>
+	<?php
+		else :
+			?>
+	<h1>Nenhum ppc cadastrado no sistema</h1>
+				<br> <a href="../ppc/gerenciappc.php?opcao=cadastrar">Clique aqui
+					para cadastrar um ppc</a><br>
+	<?php
+		endif;
+		?>
+	</div>
+			<br>
+			<div class="form-group">
+	<?php
+		$disciplinas = buscarDisciplinas ();
+		$totaldisciplinas = count ( $disciplinas );
+		if ($totaldisciplinas > 0) :
+			?>
+	<label for="discod">Selecione a disciplina: </label> <select
+					class="form-control" id="discod" name="discod">
+	<?php
+			foreach ( $disciplinas as $disciplina ) :
+				?>
+	<option value="<?=$disciplina['discod']; ?>">
+	<?=$disciplina["disnome"]; ?>
+	</option>
+	<?php
+			endforeach
+			;
+			?>
+	</select>
+	<?php
+		else :
+			?>
+	<h1>Nenhuma disciplina cadastrada no sistema</h1>
+				<br> <a href="../disciplina/gerenciaDisciplina.php?opcao=cadastrar">Clique
+					aqui para cadastrar uma disciplina</a><br>
+	<?php
+		endif;
+		?>
+	</div>
+			<br>
+			<div class="form-group">
+	<?php
+		$eixostematicos = buscarEixosTematicos ();
+		$totaleixostematicos = count ( $eixostematicos );
+		if ($totaleixostematicos > 0) :
+			?>
+	<label for="eixtcod">Selecione o eixo temático: </label> <select
+					class="form-control" id="eixtcod" name="eixtcod">
+	<?php
+			foreach ( $eixostematicos as $eixotematico ) :
+				?>
+	<option value="<?=$eixotematico['eixtcod']; ?>">
+	<?=$eixotematico["eixtdes"]; ?>
+	</option>
+	<?php
+			endforeach
+			;
+			?>
+	</select>
+	<?php
+		else :
+			?>
+	<h1>Nenhum eixo temático cadastrado no sistema</h1>
+				<br> <a
+					href="../eixotematico/gerenciaEixoTematico.php?opcao=cadastrar">Clique
+					aqui para cadastrar um eixo temático</a><br>
+	<?php
+		endif;
+		?>
+	</div>
+			<br>
+			<div class="form-group">
+				<label for="contfase">Número da fase da disciplina: </label> <input
+					type="number" id="contfase" name="contfase" class="form-control">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" value="salvar">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "discod", $_POST ) && ! array_key_exists ( "eixtcod", $_POST ) && ! array_key_exists ( "contfase", $_POST ))
+			return;
+		try {
+			if (inserirConteudoCurricular ( $_POST ["ppccod"], $_POST ["discod"], $_POST ["eixtcod"], $_POST ["contfase"] )) {
+				echo "<h1>Conteúdo curricular cadastrado com êxito!</h1><br>";
+				echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para consultar os conteúdos curriculares cadastrados no sistema</a><br>";
+			}
+		} catch (PDOException $e) {
+		echo $e->getMessage();
+	}
+	endif;
+	?>
+	</div>
+</body>
+</html>
