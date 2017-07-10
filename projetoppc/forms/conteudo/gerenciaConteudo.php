@@ -174,7 +174,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 					<td><?=$ppc["curnome"]; ?></td>
 					<td><?=$disciplina["disnome"]; ?></td>
 					<td><?=$eixotematico["eixtdes"]; ?></td>
-					<td><?=$conteudo["contfase"]; ?></td>
+					<td><?=$conteudo["contfase"]. ª; ?></td>
 					<td><a
 						href="gerenciaConteudo.php?opcao=alterar&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Alterar
 							dados</a></td>
@@ -305,6 +305,49 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 			}
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
+		}
+	 elseif ($_GET ["opcao"] == "excluir") :
+		$conteudo = buscarConteudoCurricularPorId ( $_GET ["ppccod"], $_GET ["discod"] );
+		$ppc = buscarPpcPorId ( $conteudo ["ppccod"] );
+		$disciplina = buscarDisciplinaPorId ( $conteudo ["discod"] );
+		$eixotematico = buscarEixoTematicoPorId ( $conteudo ["eixtcod"] );
+		?>
+	<h2>Exclusão de conteúdo curricular</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<p>
+	Você está prestes a excluir o conteudo curricular, referente ao ppc do curso <?=$ppc["curnome"]; ?>, com ano inicial de vigência em <?=$ppc["ppcanoini"]; ?>, com a disciplina <?=$disciplina["disnome"]; ?>, dada na <?=$conteúdo["contfase"]. ª; ?>fase.<br>
+					Você tem certeza de que deseja executar esta operação?<br> Após a
+					confirmação, esta operação não poderá ser desfeita.
+				</p>
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" name="escolha" class="btn btn-success"
+					value="sim">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" name="escolha" class="btn btn-success"
+					value="não">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "escolha", $_POST ))
+			return;
+		if ($_POST ["escolha"] == "sim") {
+			try {
+				if (excluirConteudoCurricular ( $conteudo ["ppccod"], $conteudo ["discod"] )) {
+					echo "<h1>Conteúdo curricular excluído com êxito!</h1><br>";
+					echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para voltar à tela de consulta de conteúdos curriculares</a><br>"
+				}
+			} catch ( PDOException $e ) {
+				echo $e->getMessage ();
+			}
+		} else {
+			header ( "Location: gerenciaConteudo.php?opcao=consultar" );
 		}
 	endif;
 	?>
