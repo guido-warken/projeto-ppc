@@ -341,7 +341,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 			try {
 				if (excluirConteudoCurricular ( $conteudo ["ppccod"], $conteudo ["discod"] )) {
 					echo "<h1>Conteúdo curricular excluído com êxito!</h1><br>";
-					echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para voltar à tela de consulta de conteúdos curriculares</a><br>"
+					echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para voltar à tela de consulta de conteúdos curriculares</a><br>";
 				}
 			} catch ( PDOException $e ) {
 				echo $e->getMessage ();
