@@ -174,7 +174,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 					<td><?=$ppc["curnome"]; ?></td>
 					<td><?=$disciplina["disnome"]; ?></td>
 					<td><?=$eixotematico["eixtdes"]; ?></td>
-					<td><?=$conteudo["contfase"]. ª; ?></td>
+					<td><?=$conteudo["contfase"]; ?>ª</td>
 					<td><a
 						href="gerenciaConteudo.php?opcao=alterar&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Alterar
 							dados</a></td>
@@ -317,7 +317,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 		<form action="" method="post">
 			<div class="form-group">
 				<p>
-	Você está prestes a excluir o conteudo curricular, referente ao ppc do curso <?=$ppc["curnome"]; ?>, com ano inicial de vigência em <?=$ppc["ppcanoini"]; ?>, com a disciplina <?=$disciplina["disnome"]; ?>, dada na <?=$conteúdo["contfase"]. ª; ?>fase.<br>
+	Você está prestes a excluir o conteudo curricular, referente ao ppc do curso <?=$ppc["curnome"]; ?>, com ano inicial de vigência em <?=$ppc["ppcanoini"]; ?>, com a disciplina <?=$disciplina["disnome"]; ?>, dada na <?=$conteúdo["contfase"]; ?>ª fase.<br>
 					Você tem certeza de que deseja executar esta operação?<br> Após a
 					confirmação, esta operação não poderá ser desfeita.
 				</p>
