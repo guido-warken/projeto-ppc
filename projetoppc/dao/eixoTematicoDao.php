@@ -65,4 +65,25 @@ function buscarEixosTematicos(PDO &$conn = null): array {
 	desconectarDoBanco ( $conn );
 	return $informacoeseixotematico;
 }
+function buscarEixosTematicosExceto(int $eixtcod, PDO &$conn = null): array {
+	$informacoeseixotematico = [ ];
+	if (is_null ( $conn ))
+		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
+	$consultaeixotematico = $conn->prepare ( "select * from eixotematico where eixtcod <> :eixtcod" );
+	$consultaeixotematico->bindParam ( ":eixtcod", $eixtcod );
+	if (! $consultaeixotematico->execute ()) {
+		desconectarDoBanco ( $conn );
+		return $informacoeseixotematico;
+	} elseif ($consultaeixotematico->execute () && $consultaeixotematico->rowCount () == 0) {
+		desconectarDoBanco ( $conn );
+		return $informacoeseixotematico;
+	} elseif ($consultaeixotematico->execute () && $consultaeixotematico->rowCount () > 0) {
+		for($i = 0; $i < $consultaeixotematico->rowCount (); $i ++) {
+			$informacoeseixotematico [$i] = $consultaeixotematico->fetch ( PDO::FETCH_ASSOC );
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $informacoeseixotematico;
+}
+
 ?>

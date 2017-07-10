@@ -197,8 +197,117 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 		<br>
 		<?php
 		endif;
-		endif;
+	 elseif ($_GET ["opcao"] == "alterar") :
+		$conteudo = buscarConteudoCurricularPorId ( $_GET ["ppccod"], $_GET ["discod"] );
+		$ppc = buscarPpcPorId ( $conteudo ["ppccod"] );
+		$disciplina = buscarDisciplinaPorId ( $conteudo ["discod"] );
+		$eixotematico = buscarEixoTematicoPorId ( $conteudo ["eixtcod"] );
+		$ppcs = buscarPpcsExceto ( $ppc ["ppccod"] );
+		$disciplinas = buscarDisciplinasExceto ( $disciplina ["discod"] );
+		$eixostematicos = buscarEixosTematicosExceto ( $eixotematico ["eixtcod"] );
 		?>
+		<h2>Alteração de conteúdo curricular</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+	<?php
+		$totalppcs = count ( $ppcs );
+		?>
+	<label for="ppccod">Selecione o ppc: </label> <select
+					class="form-control" id="ppccod" name="ppccod">
+					<option value="<?=$ppc['ppccod']; ?>" selected="selected">
+					<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
+					</option>
+	<?php
+		if ($totalppcs > 0) :
+			foreach ( $ppcs as $ppc ) :
+				?>
+	<option value="<?=$ppc['ppccod']; ?>">
+	<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
+	</option>
+	<?php
+			endforeach
+			;
+			endif;
+		
+		?>
+	</select>
+			</div>
+			<br>
+			<div class="form-group">
+	<?php
+		$totaldisciplinas = count ( $disciplinas );
+		?>
+	<label for="discod">Selecione a disciplina: </label> <select
+					class="form-control" id="discod" name="discod">
+					<option value="<?=$disciplina['discod']; ?>" selected="selected">
+					<?=$disciplina["disnome"]; ?>
+					</option>
+	<?php
+		if ($totaldisciplinas > 0) :
+			foreach ( $disciplinas as $disciplina ) :
+				?>
+	<option value="<?=$disciplina['discod']; ?>">
+	<?=$disciplina["disnome"]; ?>
+	</option>
+	<?php
+			endforeach
+			;
+			endif;
+		
+		?>
+	</select>
+			</div>
+			<br>
+			<div class="form-group">
+	<?php
+		$totaleixostematicos = count ( $eixostematicos );
+		?>
+	<label for="eixtcod">Selecione o eixo temático: </label> <select
+					class="form-control" id="eixtcod" name="eixtcod">
+					<option value="<?=$eixotematico['eixtcod']; ?>" selected="selected">
+					<?=$eixotematico["eixtdes"]; ?>
+					</option>
+	<?php
+		if ($totaleixostematicos > 0) :
+			foreach ( $eixostematicos as $eixotematico ) :
+				?>
+	<option value="<?=$eixotematico['eixtcod']; ?>">
+	<?=$eixotematico["eixtdes"]; ?>
+	</option>
+	<?php
+			endforeach
+			;
+			endif;
+		
+		?>
+	</select>
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="contfase">Número da fase da disciplina: </label> <input
+					type="number" id="contfase" name="contfase" class="form-control"
+					value="<?=$conteudo['contfase']; ?>">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" value="alterar">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "discod", $_POST ) && ! array_key_exists ( "eixtcod", $_POST ) && ! array_key_exists ( "contfase", $_POST ))
+			return;
+		try {
+			if (atualizarConteudoCurricular ( $_POST ["ppccod"], $_POST ["discod"], $_POST ["eixtcod"], $_POST ["contfase"] )) {
+				echo "<h1>Conteúdo curricular atualizado com êxito!</h1><br>";
+				echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para consultar novamente os conteúdos curriculares</a><br>";
+			}
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
+		}
+	endif;
+	?>
 	</div>
 </body>
 </html>
