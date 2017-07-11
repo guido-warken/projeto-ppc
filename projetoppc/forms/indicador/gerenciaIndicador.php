@@ -20,7 +20,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 	<?php
 	if ($_GET ["opcao"] == "cadastrar") :
 		?>
-	<h2>Cadastro de indicador</h2>
+	<h2>Cadastro de indicadores</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
@@ -39,7 +39,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 			return;
 		try {
 			if (inserirIndicador ( $_POST ["inddesc"] )) {
-				echo "<h1>Indicador cadastrado com êxito</h1><br>";
+				echo "<h1>Indicador cadastrado com êxito!</h1><br>";
 				echo "<a href= 'gerenciaIndicador.php?opcao=consultar'>Clique aqui para consultar os indicadores</a><br>";
 			}
 		} catch ( PDOException $e ) {
@@ -57,6 +57,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 	<h2>Numero de indicadores encontrados: <?=$totalindicadores; ?></h2>
 		<br>
 		<table class="table table-bordered">
+			<caption>Indicadores</caption>
 			<thead>
 				<tr>
 					<th>indicador</th>
@@ -90,6 +91,36 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 		<p>Clique no link acima para cadastrar um novo indicador</p>
 	<?php
 		endif;
+	 elseif ($_GET ["opcao"] == "alterar") :
+		$indicador = buscarIndicadorPorId ( $_GET ["indicod"] );
+		?>
+	<h2>Alteração do indicador selecionado</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<label for="inddesc">Digite o indicador: </label>
+				<textarea rows="3" cols="3" id="inddesc" name="inddesc"
+					class="form-control">
+					<?=$indicador["inddesc"]; ?>
+					</textarea>
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" value="alterar">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "inddesc", $_POST ))
+			return;
+		try {
+			if (atualizarIndicador ( $indicador ["indcod"], $_POST ["inddesc"] )) {
+				echo "<h1>Indicador atualizado com êxito!</h1><br>";
+				echo "<a href= 'gerenciaIndicador.php?opcao=consultar'>Clique aqui para consultar novamente os indicadores cadastrados</a><br>";
+			}
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
+		}
 	endif;
 	?>
 	</div>
