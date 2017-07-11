@@ -121,6 +121,45 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_GET ["opcao"] == "excluir") :
+		$indicador = buscarIndicadorPorId ( $_GET ["indcod"] );
+		?>
+	<h2>Exclusão do indicador selecionado</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<p>
+	Você está prestes a excluir o indicador <?=$indicador["inddesc"]; ?>.<br>
+					Você tem certeza de que deseja executar esta operação?<br> Após a
+					confirmação, a operação não poderá ser desfeita.
+				</p>
+			</div>
+			<div class="form-group">
+				<input type="submit" name="escolha" class="btn btn-success"
+					value="sim">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" name="escolha" class="btn btn-success"
+					value="não">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "escolha", $_POST ))
+			return;
+		if ($_POST ["escolha"] == "sim") {
+			try {
+				if (excluirIndicador ( $indicador ["indcod"] )) {
+					echo "<h1>Indicador excluído com êxito!</h1><br>";
+					echo "<a href= 'gerenciaIndicador.php?opcao=consultar'>Clique aqui para consultar novamente os indicadores</a><br>";
+				}
+			} catch ( PDOException $e ) {
+				echo $e->getMessage ();
+			}
+		} else {
+			header ( "Location: gerenciaIndicador.php?opcao=consultar");
+	}
 	endif;
 	?>
 	</div>
