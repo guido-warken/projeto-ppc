@@ -23,15 +23,14 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 	<h2>Cadastro de indicador</h2>
 		<br>
 		<form action="" method="post">
-			<div class="container">
-				<label for="inddesc">Digite o indicador: </label
-				
+			<div class="form-group">
+				<label for="inddesc">Digite o indicador: </label>
 				<textarea rows="3" cols="3" id="inddesc" name="inddesc"
 					class="form-control"></textarea>
 			</div>
 			<br>
-			<div class="container">
-				<input type="submit" value="enviar">
+			<div class="form-group">
+				<input type="submit" value="salvar">
 			</div>
 			<br>
 		</form>
@@ -45,8 +44,9 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 			}
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
-	}
+		}
 	endif;
+	
 	?>
 	</div>
 </body>
