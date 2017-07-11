@@ -92,7 +92,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 	<?php
 		endif;
 	 elseif ($_GET ["opcao"] == "alterar") :
-		$indicador = buscarIndicadorPorId ( $_GET ["indicod"] );
+		$indicador = buscarIndicadorPorId ( $_GET ["indcod"] );
 		?>
 	<h2>Alteração do indicador selecionado</h2>
 		<br>
