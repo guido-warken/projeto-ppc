@@ -7,7 +7,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gerenciamento de eixos temáticos</title>
+<title>Gerenciamento de indicadores</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
@@ -45,8 +45,52 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_GET ["opcao"] == "consultar") :
+		$indicadores = buscarIndicadores ();
+		$totalindicadores = count ( $indicadores );
+		?>
+	<h2>Consulta de indicadores</h2>
+		<br> <a href="gerenciaIndicador.php?opcao=cadastrar">Novo indicador</a><br>
+	<?php
+		if ($totalindicadores > 0) :
+			?>
+	<h2>Numero de indicadores encontrados: <?=$totalindicadores; ?></h2>
+		<br>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>indicador</th>
+					<th colspan="2">Ação</th>
+				</tr>
+			</thead>
+			<tbody>
+	<?php
+			foreach ( $indicadores as $indicador ) :
+				?>
+	<tr>
+					<td><?=$indicador["inddesc"]; ?></td>
+					<td><a
+						href="gerenciaIndicador.php?opcao=alterar&indcod=<?=$indicador['indcod']; ?>">Alterar
+							dados</a></td>
+					<td><a
+						href="gerenciaIndicador.php?opcao=excluir&indcod=<?=$indicador['indcod']; ?>">Excluir
+							indicador</a></td>
+				</tr>
+	<?php
+			endforeach
+			;
+			?>
+	</tbody>
+		</table>
+	<?php
+		else :
+			?>
+	<h1>Nenhum indicador cadastrado no sistema</h1>
+		<br>
+		<p>Clique no link acima para cadastrar um novo indicador</p>
+	<?php
+		endif;
 	endif;
-	
 	?>
 	</div>
 </body>
