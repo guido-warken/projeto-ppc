@@ -22,6 +22,7 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	<div class="container">
 <?php
 if ($_GET ["opcao"] == "cadastrar") :
+$eixostec = buscarEixosTecnologicos($conn);
 	?>
 <form action="" method="post">
 			<h2>Cadastro de cursos</h2>
@@ -38,11 +39,14 @@ if ($_GET ["opcao"] == "cadastrar") :
 			</div>
 			<br>
 			<div class="form-group">
+			<?php
+			$totaleixostec = count($eixostec);
+			if ($totaleixostec > 0):
+			?>
 				<label for="eixcod">Selecione o eixo tecnológico: </label> <select
 					class="form-control" name="eixcod" id="eixcod">
 <?php
-	$eixostec = buscarEixos ( $conn );
-	foreach ( $eixostec as $eixotec ) :
+		foreach ( $eixostec as $eixotec ) :
 		?>
 			<option value="<?=$eixotec['eixcod']; ?>"><?=$eixotec["eixdesc"]; ?></option>
 				<?php
@@ -50,6 +54,14 @@ if ($_GET ["opcao"] == "cadastrar") :
 	;
 	?>
 </select>
+<?php
+else:
+?>
+<h1>Nenhum eixo tecnológico cadastrado no sistema</h1><br>
+<a href="../eixotec/gerenciaEixoTec.php?opcao=cadastrar">Cadastrar um novo eixo tecnológico</a><br>
+<?php
+endif;
+?>
 			</div>
 			<br>
 			<div class="form-group">
@@ -76,9 +88,10 @@ if ($_GET ["opcao"] == "cadastrar") :
 			curso</a> <br> <br>
 	<?php
 	$cursos = buscarCursosPorEixo ( $conn );
-	if (count ( $cursos ) > 0) :
+	$totalcursos = count($cursos);
+	if ( $totalcursos > 0) :
 		?>
-	<h2>Número de cursos encontrados: <?= count($cursos); ?></h2>
+	<h2>Número de cursos encontrados: <?= $totalcursos; ?></h2>
 		<br>
 		<table class="table table-bordered">
 			<thead>
@@ -111,21 +124,23 @@ if ($_GET ["opcao"] == "cadastrar") :
 		</tbody>
 		</table>
 	<?php
-	 elseif (count ( $cursos ) == 0) :
+	 else :
 		?>
 	<h1>Nenhum curso cadastrado no momento.</h1>
-		<br> <a href="gerenciaCurso.php?opcao=cadastrar">Clique aqui para
-			cadastrar um novo curso</a> <br>
+		<br>
+		<p>
+		Clique no link acima para cadastrar um novo curso.
+		</p><br>
 	<?php
 	endif;
  elseif ($_GET ["opcao"] == "alterar") :
+ $curso = buscarCursoPorId($_GET["curcod"], $conn);
+ $eixotec = buscarEixoTecnologicoPorId($curso["eixcod"], $conn);
+ $eixostec = buscarEixosTecnologicosExceto($eixotec["eixcod"]);
 	?>
 	<h2>Alteração dos dados do curso selecionado</h2>
 		<br>
-	<?php
-	$curso = buscarCursoPorId ( $_GET ["curcod"], $conn );
-	?>
-	<form action="" method="post">
+		<form action="" method="post">
 			<div class="form-group">
 				<label for="curnome">Nome do curso: </label> <input type="text"
 					class="form-control" name="curnome" id="curnome"
@@ -141,17 +156,15 @@ if ($_GET ["opcao"] == "cadastrar") :
 			</div>
 			<br>
 			<div class="form-group">
-				<label for="eixcod">Selecione o eixo tecnológico: </label> <select
+				<label for="eixcod">Altere o eixo tecnológico: </label> <select
 					class="form-control" name="eixcod" id="eixcod">
-<?php
-	$eixotec = buscarEixoPorId ( $curso ["eixcod"], $conn );
-	?>
 	<option value="<?= $eixotec['eixcod']; ?>" selected="selected">
 	<?=$eixotec["eixdesc"]; ?>
 	</option>
 	<?php
-	$eixostec = buscarEixosexceto ( $eixotec ["eixcod"], $conn );
-	foreach ( $eixostec as $eixotec ) :
+	$totaleixostec = count($eixostec);
+	if ($totaleixostec > 0):
+		foreach ( $eixostec as $eixotec ) :
 		?>
 	<option value="<?=$eixotec['eixcod']; ?>">
 	<?=$eixotec["eixdesc"]; ?>
@@ -159,6 +172,7 @@ if ($_GET ["opcao"] == "cadastrar") :
 	<?php
 	endforeach
 	;
+	endif;
 	?>
 </select>
 			</div>
@@ -172,7 +186,7 @@ if ($_GET ["opcao"] == "cadastrar") :
 	if (! array_key_exists ( "curnome", $_POST ) && ! array_key_exists ( "curtit", $_POST ) && ! array_key_exists ( "eixcod", $_POST ))
 		return;
 	try {
-		if (atualizarCurso ( $_POST ["curnome"], $_POST ["curtit"], $_POST ["eixcod"], $_GET ["curcod"], $conn )) {
+		if (atualizarCurso ( $_POST ["curnome"], $_POST ["curtit"], $_POST ["eixcod"], $curso["curcod"], $conn )) {
 			echo "<h1>Curso atualizado com êxito!</h1><br>";
 			echo "<a href = 'gerenciacurso.php?opcao=consultar'>Voltar à consulta de cursos</a><br>";
 		}
@@ -187,8 +201,9 @@ if ($_GET ["opcao"] == "cadastrar") :
 		<form action="" method="post">
 			<div class="form-group">
 				<p class="text-warning">
-				Você está prestes a excluir um Curso. Você tem certeza de que deseja
-				realmente excluir o curso <?=$curso["curnome"]; ?>? <br>Ao executar
+				Você está prestes a excluir o Curso <?=$curso["curnome"]; ?>.<br>
+				Você tem certeza de que deseja executar esta operação?
+				<br>Ao executar
 					esta operação, ela não poderá mais ser desfeita.
 				</p>
 			</div>
@@ -207,14 +222,14 @@ if ($_GET ["opcao"] == "cadastrar") :
 		return;
 	if ($_POST ["escolha"] == "sim") :
 		try {
-			if (excluirCurso ( $_GET ["curcod"], $conn )) {
+			if (excluirCurso ( $curso["curcod"], $conn )) {
 				echo "<h1>Curso excluído com êxito</h1><br>";
 				echo "<a href='gerenciaCurso.php?opcao=consultar'>Consultar novamente os cursos cadastrados</a><br>";
 			}
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
-	 elseif ($_POST ["escolha"] == "não") :
+	 else :
 		header ( "Location: gerenciaCurso.php?opcao=consultar" );
 	endif;
 endif;
