@@ -120,6 +120,46 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTecDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_GET ["opcao"] == "excluir") :
+		$eixotec = buscarEixoTecnologicoPorId ( $_GET ["eixcod"] );
+		?>
+	<h2>Exclusão do eixo tecnológico selecionado</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<p>
+	Você está prestes a excluir o eixo tecnológico <?=$eixotec["eixdesc"]; ?>.<br>
+					Você tem certeza de que deseja executar esta operação?<br> Após a
+					confirmação, esta ação não poderá ser desfeita.
+				</p>
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" name="escolha" value="sim"
+					class="btn btn-success">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" name="escolha" value="não"
+					class="btn btn-success">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "escolha", $_POST ))
+			return;
+		if ($_POST ["escolha"] == "sim") {
+			try {
+				if (excluirEixoTecnologico ( $eixotec ["eixcod"] )) {
+					echo "<h1>Eixo tecnológico excluído com êxito!</h1><br>";
+					echo "<a href= 'gerenciaEixoTec.php?opcao=consultar'>Clique aqui para consultar novamente os eixos tecnológicos</a><br>";
+				}
+			} catch ( PDOException $e ) {
+				echo $e->getMessage ();
+			}
+		} else {
+			header ( "Location: gerenciaEixoTec.php?opcao=consultar" );
+		}
 	endif;
 	?>
 	</div>
