@@ -22,7 +22,7 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	<div class="container">
 <?php
 if ($_GET ["opcao"] == "cadastrar") :
-$eixostec = buscarEixosTecnologicos($conn);
+	$eixostec = buscarEixosTecnologicos ( $conn );
 	?>
 <form action="" method="post">
 			<h2>Cadastro de cursos</h2>
@@ -40,28 +40,29 @@ $eixostec = buscarEixosTecnologicos($conn);
 			<br>
 			<div class="form-group">
 			<?php
-			$totaleixostec = count($eixostec);
-			if ($totaleixostec > 0):
-			?>
+	$totaleixostec = count ( $eixostec );
+	if ($totaleixostec > 0) :
+		?>
 				<label for="eixcod">Selecione o eixo tecnológico: </label> <select
 					class="form-control" name="eixcod" id="eixcod">
 <?php
 		foreach ( $eixostec as $eixotec ) :
-		?>
+			?>
 			<option value="<?=$eixotec['eixcod']; ?>"><?=$eixotec["eixdesc"]; ?></option>
 				<?php
-	endforeach
-	;
-	?>
+		endforeach
+		;
+		?>
 </select>
 <?php
-else:
-?>
-<h1>Nenhum eixo tecnológico cadastrado no sistema</h1><br>
-<a href="../eixotec/gerenciaEixoTec.php?opcao=cadastrar">Cadastrar um novo eixo tecnológico</a><br>
+	else :
+		?>
+<h1>Nenhum eixo tecnológico cadastrado no sistema</h1>
+				<br> <a href="../eixotec/gerenciaEixoTec.php?opcao=cadastrar">Cadastrar
+					um novo eixo tecnológico</a><br>
 <?php
-endif;
-?>
+	endif;
+	?>
 			</div>
 			<br>
 			<div class="form-group">
@@ -88,8 +89,8 @@ endif;
 			curso</a> <br> <br>
 	<?php
 	$cursos = buscarCursosPorEixo ( $conn );
-	$totalcursos = count($cursos);
-	if ( $totalcursos > 0) :
+	$totalcursos = count ( $cursos );
+	if ($totalcursos > 0) :
 		?>
 	<h2>Número de cursos encontrados: <?= $totalcursos; ?></h2>
 		<br>
@@ -124,19 +125,18 @@ endif;
 		</tbody>
 		</table>
 	<?php
-	 else :
+	else :
 		?>
 	<h1>Nenhum curso cadastrado no momento.</h1>
 		<br>
-		<p>
-		Clique no link acima para cadastrar um novo curso.
-		</p><br>
+		<p>Clique no link acima para cadastrar um novo curso.</p>
+		<br>
 	<?php
 	endif;
  elseif ($_GET ["opcao"] == "alterar") :
- $curso = buscarCursoPorId($_GET["curcod"], $conn);
- $eixotec = buscarEixoTecnologicoPorId($curso["eixcod"], $conn);
- $eixostec = buscarEixosTecnologicosExceto($eixotec["eixcod"]);
+	$curso = buscarCursoPorId ( $_GET ["curcod"], $conn );
+	$eixotec = buscarEixoTecnologicoPorId ( $curso ["eixcod"], $conn );
+	$eixostec = buscarEixosTecnologicosExceto ( $eixotec ["eixcod"] );
 	?>
 	<h2>Alteração dos dados do curso selecionado</h2>
 		<br>
@@ -158,21 +158,22 @@ endif;
 			<div class="form-group">
 				<label for="eixcod">Altere o eixo tecnológico: </label> <select
 					class="form-control" name="eixcod" id="eixcod">
-	<option value="<?= $eixotec['eixcod']; ?>" selected="selected">
+					<option value="<?= $eixotec['eixcod']; ?>" selected="selected">
 	<?=$eixotec["eixdesc"]; ?>
 	</option>
 	<?php
-	$totaleixostec = count($eixostec);
-	if ($totaleixostec > 0):
+	$totaleixostec = count ( $eixostec );
+	if ($totaleixostec > 0) :
 		foreach ( $eixostec as $eixotec ) :
-		?>
+			?>
 	<option value="<?=$eixotec['eixcod']; ?>">
 	<?=$eixotec["eixdesc"]; ?>
 	</option>
 	<?php
-	endforeach
-	;
+		endforeach
+		;
 	endif;
+	
 	?>
 </select>
 			</div>
@@ -186,7 +187,7 @@ endif;
 	if (! array_key_exists ( "curnome", $_POST ) && ! array_key_exists ( "curtit", $_POST ) && ! array_key_exists ( "eixcod", $_POST ))
 		return;
 	try {
-		if (atualizarCurso ( $_POST ["curnome"], $_POST ["curtit"], $_POST ["eixcod"], $curso["curcod"], $conn )) {
+		if (atualizarCurso ( $_POST ["curnome"], $_POST ["curtit"], $_POST ["eixcod"], $curso ["curcod"], $conn )) {
 			echo "<h1>Curso atualizado com êxito!</h1><br>";
 			echo "<a href = 'gerenciacurso.php?opcao=consultar'>Voltar à consulta de cursos</a><br>";
 		}
@@ -202,9 +203,8 @@ endif;
 			<div class="form-group">
 				<p class="text-warning">
 				Você está prestes a excluir o Curso <?=$curso["curnome"]; ?>.<br>
-				Você tem certeza de que deseja executar esta operação?
-				<br>Ao executar
-					esta operação, ela não poderá mais ser desfeita.
+					Você tem certeza de que deseja executar esta operação? <br>Ao
+					executar esta operação, ela não poderá mais ser desfeita.
 				</p>
 			</div>
 			<br>
@@ -222,14 +222,14 @@ endif;
 		return;
 	if ($_POST ["escolha"] == "sim") :
 		try {
-			if (excluirCurso ( $curso["curcod"], $conn )) {
+			if (excluirCurso ( $curso ["curcod"], $conn )) {
 				echo "<h1>Curso excluído com êxito</h1><br>";
 				echo "<a href='gerenciaCurso.php?opcao=consultar'>Consultar novamente os cursos cadastrados</a><br>";
 			}
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
-	 else :
+	else :
 		header ( "Location: gerenciaCurso.php?opcao=consultar" );
 	endif;
 endif;
