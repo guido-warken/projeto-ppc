@@ -7,7 +7,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTecDao.php';
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gerenciamento de eixos temáticos</title>
+<title>Gerenciamento de eixos tecnológicos</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
@@ -44,6 +44,54 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTecDao.php';
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_GET ["opcao"] == "consultar") :
+		$eixostec = buscarEixosTecnologicos ();
+		$totaleixostec = count ( $eixostec );
+		?>
+	<h2>Consulta de eixos tecnológicos</h2>
+		<br> <a href="gerenciaEixoTec.php?opcao=cadastrar">Novo eixo
+			tecnológico</a><br>
+	<?php
+		if ($totaleixostec > 0) :
+			?>
+		<h2>Número de eixos tecnológicos encontrados: <?=$totaleixostec; ?></h2>
+		<br>
+		<table class="table table-bordered">
+			<caption>Eixos Tecnológicos</caption>
+			<thead>
+				<tr>
+					<th>Eixo Tecnológico</th>
+					<th colspan="2">Ação</th>
+				</tr>
+			</thead>
+			<tbody>
+		<?php
+			foreach ( $eixostec as $eixotec ) :
+				?>
+		<tr>
+					<td><?=$eixotec["eixdesc"]; ?></td>
+					<td><a
+						href="gerenciaEixoTec.php?opcao=alterar&eixcod=<?=$eixotec['eixcod']; ?>">Alterar
+							dados</a></td>
+					<td><a
+						href="gerenciaEixoTec.php?opcao=excluir&eixcod=<?=$eixotec['eixcod']; ?>">Excluir
+							eixo tecnológico</a></td>
+				</tr>
+		<?php
+			endforeach
+			;
+			?>
+		</tbody>
+		</table>
+		<?php
+		else :
+			?>
+		<h1>Nenhum eixo tecnológico cadastrado no sistema.</h1>
+		<br>
+		<p>Clique no link acima para cadastrar um novo eixo tecnológico.</p>
+		<br>
+		<?php
+		endif;
 	endif;
 	?>
 	</div>
