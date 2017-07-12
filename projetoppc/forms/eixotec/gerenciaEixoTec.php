@@ -92,6 +92,34 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTecDao.php';
 		<br>
 		<?php
 		endif;
+	 elseif ($_GET ["opcao"] == "alterar") :
+		$eixotec = buscarEixoTecnologicoPorId ( $_GET ["eixcod"] );
+		?>
+	<h2>Alteração do eixo tecnológico selecionado</h2>
+		<br>
+		<form action="" method="post">
+			<div class="form-group">
+				<label for="eixdesc">eixo tecnológico</label> <input type="text"
+					id="eixdesc" name="eixdesc" class="form-control"
+					value="<?=$eixotec['eixdesc']; ?>">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" value="alterar" class="btn btn-success">
+			</div>
+			<br>
+		</form>
+	<?php
+		if (! array_key_exists ( "eixdesc", $_POST ))
+			return;
+		try {
+			if (atualizarEixoTecnologico ( $eixotec ["eixcod"], $_POST ["eixdesc"] )) {
+				echo "<h1>Eixo Tecnológico atualizado com êxito!</h1><br>";
+				echo "<a href= 'gerenciaEixoTec.php?opcao=consultar'>Clique aqui para consultar novamente os eixos tecnológicos</a><br>";
+			}
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
+		}
 	endif;
 	?>
 	</div>
