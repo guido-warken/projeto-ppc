@@ -28,7 +28,7 @@ function atualizarOferta(int $ppccod, int $unicod, string $ofecont, string $ofev
 	desconectarDoBanco ( $conn );
 	return $resultado;
 }
-function excluirOferta(int $ppccod, int $unicod): bool {
+function excluirOferta(int $ppccod, int $unicod, PDO &$conn = null): bool {
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 	$deloferta = $conn->prepare ( "delete from oferta where ppccod = :ppccod and unicod = :unicod" );
