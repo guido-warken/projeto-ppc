@@ -275,7 +275,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 			</div>
 			<br>
 			<div class="form-group">
-				<label>Selecione a unidade SENAC de oferta: </label> <select
+				<label for="unicod">Selecione a unidade SENAC de oferta: </label> <select
 					class="form-control" id="unicod" name="unicod">
 					<option value="<?=$unidade['unicod']; ?>" selected="selected">
 	<?=$unidade["uninome"]; ?>
