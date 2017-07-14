@@ -15,13 +15,13 @@ function inserirConteudoCurricular(int $ppccod, int $discod, int $eixtcod, int $
 function atualizarConteudoCurricular(int $ppccod, int $discod, int $eixtcod, int $contfase, int $new_ppccod, int $new_discod, PDO &$conn = null): bool {
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
-	$atualizacaoconteudo = $conn->prepare ( "update conteudocurricular set ppccod = :ppccod, discod = :discod, eixtcod = :eixtcod, contfase = :contfase where ppccod = :ppccod and discod = :discod" );
+	$atualizacaoconteudo = $conn->prepare ( "update conteudocurricular set ppccod = :ppccod, discod = :discod, eixtcod = :eixtcod, contfase = :contfase where ppccod = :newppccod and discod = :newdiscod" );
 	$atualizacaoconteudo->bindParam ( ":ppccod", $new_ppccod );
 	$atualizacaoconteudo->bindParam ( ":discod", $new_discod );
 	$atualizacaoconteudo->bindParam ( ":eixtcod", $eixtcod );
 	$atualizacaoconteudo->bindParam ( ":contfase", $contfase );
-	$atualizacaoconteudo->bindParam ( ":ppccod", $ppccod );
-	$atualizacaoconteudo->bindParam ( ":discod", $discod );
+	$atualizacaoconteudo->bindParam ( ":newppccod", $ppccod );
+	$atualizacaoconteudo->bindParam ( ":newdiscod", $discod );
 	$resultado = $atualizacaoconteudo->execute ();
 	desconectarDoBanco ( $conn );
 	return $resultado;
