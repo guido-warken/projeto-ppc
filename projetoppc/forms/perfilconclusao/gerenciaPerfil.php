@@ -20,62 +20,70 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 <body>
 	<div class="container">
 	<?php
-	if ($_GET["opcao"] == "cadastrar"):
-	$ppcs = buscarPpcs();
-	$competencias = buscarCompetencias();
-	?>
+	if ($_GET ["opcao"] == "cadastrar") :
+		$ppcs = buscarPpcs ();
+		$competencias = buscarCompetencias ();
+		?>
 	<h2>Cadastro de perfil de conclusão</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
 	<?php
-	$totalppcs = count($ppcs);
-	if ($totalppcs > 0):
-	?>
+		$totalppcs = count ( $ppcs );
+		if ($totalppcs > 0) :
+			?>
 	<label for="ppccod">Selecione o PPC: </label> <select
 					class="form-control" id="ppccod" name="ppccod">
 	<?php
-	foreach ($ppcs as $ppc):
-	?>
+			foreach ( $ppcs as $ppc ) :
+				?>
 	<option value="<?=$ppc['ppccod']; ?>">
 	<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
 	</option>
 	<?php
-	endforeach;
-	?>
+			endforeach
+			;
+			?>
 	</select>
 	<?php
-	else:
-	?>
+		else :
+			?>
 	<h1>Nenhum ppc cadastrado no sistema</h1>
 				<br> <a href="../ppc/gerenciaPpc.php?opcao=cadastrar">Clique aqui
 					para cadastrar um novo ppc</a><br>
+					<?php
+		endif;
+		?>
 			</div>
 			<br>
 			<div class="form-group">
 	<?php
-	$totalcompetencias = count($competencias);
-	if ($totalcompetencias > 0):
-	?>
+		$totalcompetencias = count ( $competencias );
+		if ($totalcompetencias > 0) :
+			?>
 	<label for="compcod">Selecione a competência: </label> <select
 					class="form-control" id="compcod" name="compcod">
 	<?php
-	foreach ($competencias as $competencia):
-	?>
+			foreach ( $competencias as $competencia ) :
+				?>
 	<option value="<?=$competencia['compcod']; ?>">
 	<?=$competencia["compdes"]; ?>
 	</option>
 	<?php
-	endforeach;
-	?>
+			endforeach
+			;
+			?>
 	</select>
 	<?php
-	else:
-	?>
+		else :
+			?>
 	<h1>Nenhuma competência cadastrada no sistema</h1>
 				<br> <a
 					href="../competencia/gerenciaCompetencia.php?opcao=cadastrar">Clique
 					aqui para cadastrar uma nova competência</a><br>
+					<?php
+		endif;
+		?>
 			</div>
 			<br>
 			<div class="form-group">
@@ -84,18 +92,19 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 			<br>
 		</form>
 		<?php
-		if (!array_key_exists("ppccod", $_POST) && !array_key_exists("compcod", $_POST))
+		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "compcod", $_POST ))
 			return;
 		try {
-			if (inserirPerfilConclusao($_POST["ppccod"], $_POST["compcod"])) {
+			if (inserirPerfilConclusao ( $_POST ["ppccod"], $_POST ["compcod"] )) {
 				echo "<h1>Perfil de Conclusão cadastrado com êxito</h1><br>";
 				echo "<a href= 'gerenciaPerfil.php?opcao=consultar'>Clique aqui para consultar os perfis de conclusão cadastrados</a><br>";
 			}
-		} catch (PDOException $e) {
-			echo $e->getMessage();
+		} catch ( PDOException $e ) {
+			echo $e->getMessage ();
 		}
 		endif;
-		?>
+	
+	?>
 	</div>
 </body>
 </html>
