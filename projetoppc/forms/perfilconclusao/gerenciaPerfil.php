@@ -2,7 +2,6 @@
 require_once 'c:\xampp\htdocs\projetoppc\dao\perfilConclusaoDao.php';
 require_once 'c:\xampp\htdocs\projetoppc\dao\ppcDao.php';
 require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
-header ( "Content-Type: text/html;charset=utf8" );
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +24,7 @@ header ( "Content-Type: text/html;charset=utf8" );
 		$ppcs = buscarPpcs ();
 		$competencias = buscarCompetencias ();
 		?>
-	<h2>Cadastro de perfil de conclusão</h2>
+	<h2>Cadastro de perfil de conclusï¿½o</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
@@ -62,7 +61,7 @@ header ( "Content-Type: text/html;charset=utf8" );
 		$totalcompetencias = count ( $competencias );
 		if ($totalcompetencias > 0) :
 			?>
-	<label for="compcod">Selecione a competência: </label> <select
+	<label for="compcod">Selecione a competï¿½ncia: </label> <select
 					class="form-control" id="compcod" name="compcod">
 	<?php
 			foreach ( $competencias as $competencia ) :
@@ -78,10 +77,10 @@ header ( "Content-Type: text/html;charset=utf8" );
 	<?php
 		else :
 			?>
-	<h1>Nenhuma competência cadastrada no sistema</h1>
+	<h1>Nenhuma competï¿½ncia cadastrada no sistema</h1>
 				<br> <a
 					href="../competencia/gerenciaCompetencia.php?opcao=cadastrar">Clique
-					aqui para cadastrar uma nova competência</a><br>
+					aqui para cadastrar uma nova competï¿½ncia</a><br>
 					<?php
 		endif;
 		?>
@@ -97,8 +96,8 @@ header ( "Content-Type: text/html;charset=utf8" );
 			return;
 		try {
 			if (inserirPerfilConclusao ( $_POST ["ppccod"], $_POST ["compcod"] )) {
-				echo "<h1>Perfil de Conclusão cadastrado com êxito</h1><br>";
-				echo "<a href= 'gerenciaPerfil.php?opcao=consultar'>Clique aqui para consultar os perfis de conclusão cadastrados</a><br>";
+				echo "<h1>Perfil de Conclusï¿½o cadastrado com ï¿½xito</h1><br>";
+				echo "<a href= 'gerenciaPerfil.php?opcao=consultar'>Clique aqui para consultar os perfis de conclusï¿½o cadastrados</a><br>";
 			}
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
