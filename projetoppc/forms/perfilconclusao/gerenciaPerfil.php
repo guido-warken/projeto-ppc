@@ -2,7 +2,7 @@
 require_once 'c:\xampp\htdocs\projetoppc\dao\perfilConclusaoDao.php';
 require_once 'c:\xampp\htdocs\projetoppc\dao\ppcDao.php';
 require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
-header ( "Content-Type: text/html;charset=utf-8" );
+header ( "Content-Type: text/html;charset=utf8" );
 ?>
 
 <!DOCTYPE html>
