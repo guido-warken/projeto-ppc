@@ -299,7 +299,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "discod", $_POST ) && ! array_key_exists ( "eixtcod", $_POST ) && ! array_key_exists ( "contfase", $_POST ))
 			return;
 		try {
-			if (atualizarConteudoCurricular ( $_POST ["ppccod"], $_POST ["discod"], $_POST ["eixtcod"], $_POST ["contfase"] )) {
+			if (atualizarConteudoCurricular ( $ppc ["ppccod"], $disciplina ["discod"], $_POST ["eixtcod"], $_POST ["contfase"], $_POST ["ppccod"], $_POST ["discod"] )) {
 				echo "<h1>Conteúdo curricular atualizado com êxito!</h1><br>";
 				echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para consultar novamente os conteúdos curriculares</a><br>";
 			}
@@ -318,8 +318,8 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 			<div class="form-group">
 				<p>
 	Você está prestes a excluir o conteudo curricular, referente ao ppc do curso <?=$ppc["curnome"]; ?>, com ano inicial de vigência em <?=$ppc["ppcanoini"]; ?>, com a disciplina <?=$disciplina["disnome"]; ?>, dada na <?=$conteudo["contfase"]; ?>ª fase.<br>
-					Você tem certeza de que deseja executar esta operação?<br> Após a
-					confirmação, esta operação não poderá ser desfeita.
+					Você tem certeza de que deseja executar esta operação?<br> Após
+					a confirmação, esta operação não poderá ser desfeita.
 				</p>
 			</div>
 			<br>
