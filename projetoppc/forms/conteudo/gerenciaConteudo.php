@@ -211,56 +211,6 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 		<form action="" method="post">
 			<div class="form-group">
 	<?php
-		$totalppcs = count ( $ppcs );
-		?>
-	<label for="ppccod">Selecione o ppc: </label> <select
-					class="form-control" id="ppccod" name="ppccod">
-					<option value="<?=$ppc['ppccod']; ?>" selected="selected">
-					<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
-					</option>
-	<?php
-		if ($totalppcs > 0) :
-			foreach ( $ppcs as $ppc ) :
-				?>
-	<option value="<?=$ppc['ppccod']; ?>">
-	<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
-	</option>
-	<?php
-			endforeach
-			;
-			endif;
-		
-		?>
-	</select>
-			</div>
-			<br>
-			<div class="form-group">
-	<?php
-		$totaldisciplinas = count ( $disciplinas );
-		?>
-	<label for="discod">Selecione a disciplina: </label> <select
-					class="form-control" id="discod" name="discod">
-					<option value="<?=$disciplina['discod']; ?>" selected="selected">
-					<?=$disciplina["disnome"]; ?>
-					</option>
-	<?php
-		if ($totaldisciplinas > 0) :
-			foreach ( $disciplinas as $disciplina ) :
-				?>
-	<option value="<?=$disciplina['discod']; ?>">
-	<?=$disciplina["disnome"]; ?>
-	</option>
-	<?php
-			endforeach
-			;
-			endif;
-		
-		?>
-	</select>
-			</div>
-			<br>
-			<div class="form-group">
-	<?php
 		$totaleixostematicos = count ( $eixostematicos );
 		?>
 	<label for="eixtcod">Selecione o eixo temático: </label> <select
@@ -299,7 +249,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTematicoDao.php';
 		if (! array_key_exists ( "ppccod", $_POST ) && ! array_key_exists ( "discod", $_POST ) && ! array_key_exists ( "eixtcod", $_POST ) && ! array_key_exists ( "contfase", $_POST ))
 			return;
 		try {
-			if (atualizarConteudoCurricular ( $ppc ["ppccod"], $disciplina ["discod"], $_POST ["eixtcod"], $_POST ["contfase"], $_POST ["ppccod"], $_POST ["discod"] )) {
+			if (atualizarConteudoCurricular ( $ppc ["ppccod"], $disciplina ["discod"], $_POST ["eixtcod"], $_POST ["contfase"] )) {
 				echo "<h1>Conteúdo curricular atualizado com êxito!</h1><br>";
 				echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para consultar novamente os conteúdos curriculares</a><br>";
 			}
