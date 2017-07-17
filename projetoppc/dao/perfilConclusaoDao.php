@@ -20,17 +20,18 @@ function excluirPerfilConclusao(int $ppccod, int $compcod, PDO &$conn = null): b
 	desconectarDoBanco ( $conn );
 	return $resultado;
 }
-function buscarPerfilConclusaoPorId(int $ppccod, int $compcod, PDO &$conn = null): array {
+function buscarPerfilConclusaoPorPpc(int $ppccod, PDO &$conn = null): array {
 	$perfil = [ ];
 	if (is_null ( $conn ))
 		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
-	$consultaperfil = $conn->prepare ( "select * from perfilconclusao where ppccod = :ppccod and compcod = :compcod" );
+	$consultaperfil = $conn->prepare ( "select * from perfilconclusao where ppccod = :ppccod " );
 	$consultaperfil->bindParam ( ":ppccod", $ppccod );
-	$consultaperfil->bindParam ( ":compcod", $compcod );
 	if ($consultaperfil->execute ()) {
 		$numregistros = $consultaperfil->rowCount ();
-		if ($numregistros == 1) {
-			$perfil = $consultaperfil->fetch ( PDO::FETCH_ASSOC );
+		if ($numregistros > 0) {
+			for($i = 0; $i < $numregistros; $i ++) {
+				$perfil [$i] = $consultaperfil->fetch ( PDO::FETCH_ASSOC );
+			}
 		} else {
 			desconectarDoBanco ( $conn );
 			return $perfil;

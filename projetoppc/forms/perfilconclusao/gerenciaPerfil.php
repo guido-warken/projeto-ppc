@@ -24,7 +24,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 		$ppcs = buscarPpcs ();
 		$competencias = buscarCompetencias ();
 		?>
-	<h2>Cadastro de perfil de conclus�o</h2>
+	<h2>Cadastro de perfil de conclusão</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
@@ -61,7 +61,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 		$totalcompetencias = count ( $competencias );
 		if ($totalcompetencias > 0) :
 			?>
-	<label for="compcod">Selecione a compet�ncia: </label> <select
+	<label for="compcod">Selecione a competência: </label> <select
 					class="form-control" id="compcod" name="compcod">
 	<?php
 			foreach ( $competencias as $competencia ) :
@@ -77,7 +77,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 	<?php
 		else :
 			?>
-	<h1>Nenhuma compet�ncia cadastrada no sistema</h1>
+	<h1>Nenhuma competência cadastrada no sistema</h1>
 				<br> <a
 					href="../competencia/gerenciaCompetencia.php?opcao=cadastrar">Clique
 					aqui para cadastrar uma nova compet�ncia</a><br>
@@ -96,15 +96,87 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 			return;
 		try {
 			if (inserirPerfilConclusao ( $_POST ["ppccod"], $_POST ["compcod"] )) {
-				echo "<h1>Perfil de Conclus�o cadastrado com �xito</h1><br>";
-				echo "<a href= 'gerenciaPerfil.php?opcao=consultar'>Clique aqui para consultar os perfis de conclus�o cadastrados</a><br>";
+				echo "<h1>Perfil de Conclusão cadastrado com êxito!</h1><br>";
+				echo "<a href= 'gerenciaPerfil.php?opcao=consultar'>Clique aqui para consultar os perfis de conclusão cadastrados</a><br>";
 			}
 		} catch ( PDOException $e ) {
 			echo $e->getMessage ();
 		}
+	 elseif ($_GET ["opcao"] == "consultar") :
+		$perfis = buscarPerfisConclusao ();
+		?>
+		<h2>Consulta de perfis de conclusão</h2>
+		<br> <a href="gerenciaPerfil.php?opcao=cadastrar">Novo perfil de
+			conclusão</a>
+		<form action="" method="post">
+			<div class="form-group">
+		<?php
+		$totalperfis = count ( $perfis );
+		if ($totalperfis > 0) :
+			?>
+		<label for="ppccod">Selecione o ppc vinculado ào perfil de conclusão</label>
+				<select id="ppccod" name="ppccod" class="form-control">
+		<?php
+			foreach ( $perfis as $perfil ) :
+				$ppc = buscarPpcPorId ( $perfil ["ppccod"] );
+				?>
+		<option value="<?=$ppc['ppccod']; ?>">
+		<?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?>
+		</option>
+		<?php
+			endforeach
+			;
+			?>
+		</select>
+		<?php
+		else :
+			?>
+		<h1>Nenhum perfil de conclusão foi cadastrado no sistema</h1>
+				<br> <a href="gerenciaperfil.php?opcao=cadastrar">Novo perfil de
+					conclusão</a><br>
+		<?php
 		endif;
-	
+		?>
+		</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" value="enviar">
+			</div>
+			<br>
+		</form>
+		<?php
+		if (! array_key_exists ( "ppccod", $_POST ))
+			return;
+		$perfis = buscarPerfilConclusaoPorPpc ( $_POST ["ppccod"] );
+		?>
+		<table class="table table-bordered">
+			<caption>Perfil de Conclusão do curso</caption>
+			<thead>
+				<tr>
+					<th>Competência</th>
+					<th>Ação</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php
+		foreach ( $perfis as $perfil ) :
+			$competencia = buscarCompetenciaPorId ( $perfil ["compcod"] );
+			?>
+				<tr>
+					<td><?=$competencia["compdes"]; ?></td>
+					<td><a
+						href="gerenciaPerfil.php?opcao=excluir&ppccod=<?=$perfil['ppccod']; ?>&compcod=<?=$perfil['compcod']; ?>">Excluir</a>
+					</td>
+				</tr>
+				<?php
+		endforeach
+		;
+		?>
+			</tbody>
+		</table>
+		<?php
+	endif;
 	?>
-	</div>
+			</div>
 </body>
 </html>
