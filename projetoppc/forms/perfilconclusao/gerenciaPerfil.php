@@ -2,6 +2,7 @@
 require_once 'c:\xampp\htdocs\projetoppc\dao\perfilConclusaoDao.php';
 require_once 'c:\xampp\htdocs\projetoppc\dao\ppcDao.php';
 require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
+require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 ?>
 
 <!DOCTYPE html>
@@ -175,6 +176,43 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 			</tbody>
 		</table>
 		<?php
+	elseif ($_GET["opcao"] == "excluir"):
+	$perfil = buscarPerfilConclusaoPorId($_GET["ppccod"], $_GET["compcod"]);
+	$ppc = buscarPpcPorId($perfil["ppccod"]);
+	$competencia = buscarCompetenciaPorId($perfil["compcod"]);
+	$curso = buscarCursoPorId($ppc["curcod"]);
+	?>
+	<h2>Exclusão de Perfil de conclusão</h2><br>
+	<form action="" method="post">
+	<div class="form-group">
+	<p>
+	Você está prestes a excluir a competência <?=$competencia["compdes"]; ?>, do curso de <?=$curso["curnome"]; ?>, com o ano de vigência de <?=$ppc["ppcanoini"]; ?>.<br>
+	Você tem certeza de que deseja executar esta operação?<br>
+	Ao confirmar, a operação não poderá ser desfeita.
+	</p>
+	</div><br>
+	<div class="form-group">
+	<input type="submit" name="escolha" value="sim">
+	</div><br>
+	<div class="form-group">
+	<input type="submit" name="escolha" value="não">
+	</div><br>
+	</form>
+	<?php
+	if (!array_key_exists("escolha", $_POST))
+		return;
+	if ($_POST["escolha"] == "sim") {
+		try {
+			if (excluirPerfilConclusao($perfil["ppccod"], $perfil["compcod"])) {
+				echo "<h1>Perfil de conclusão de curso excluído com êxito!</h1><br>";
+				echo "<a href= 'gerenciaPerfil.php?opcao=consultar'>Voltar à tela de consulta de perfil de conclusão</a>";
+			}
+		} catch (PDOException $e) {
+			echo $e->getMessage();
+		}
+	} else {
+		header("Location: gerenciaPerfil.php?opcao=consultar");
+	}
 	endif;
 	?>
 			</div>

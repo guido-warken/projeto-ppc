@@ -59,5 +59,23 @@ function buscarPerfisConclusao(PDO &$conn = null): array {
 	desconectarDoBanco ( $conn );
 	return $perfil;
 }
-
+function buscarPerfilConclusaoPorId(int $ppccod, int $compcod, PDO &$conn = null): array {
+	$perfil = [ ];
+	if (is_null ( $conn ))
+		$conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
+	$consultaperfil = $conn->prepare ( "select * from perfilconclusao where ppccod = :ppccod and compcod = :compcod" );
+	$consultaperfil->bindParam ( ":ppccod", $ppccod );
+	$consultaperfil->bindParam ( ":compcod", $compcod );
+	if ($consultaperfil->execute ()) {
+		$numregistros = $consultaperfil->rowCount ();
+		if ($numregistros == 1) {
+			$perfil = $consultaperfil->fetch ( PDO::FETCH_ASSOC );
+		} else {
+			desconectarDoBanco ( $conn );
+			return $perfil;
+		}
+	}
+	desconectarDoBanco ( $conn );
+	return $perfil;
+}
 ?>
