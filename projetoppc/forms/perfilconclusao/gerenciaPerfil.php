@@ -10,7 +10,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gerenciamento de conteúdo curricular</title>
+<title>Gerenciamento de perfil de conclusão de Curso</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
@@ -186,7 +186,7 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
 	<form action="" method="post">
 	<div class="form-group">
 	<p>
-	Você está prestes a excluir a competência <?=$competencia["compdes"]; ?>, do curso de <?=$curso["curnome"]; ?>, com o ano de vigência de <?=$ppc["ppcanoini"]; ?>.<br>
+	Você está prestes a excluir a competência <?=$competencia["compdes"]; ?>, do <?=$curso["curnome"]; ?>, com o ano de vigência de <?=$ppc["ppcanoini"]; ?>.<br>
 	Você tem certeza de que deseja executar esta operação?<br>
 	Ao confirmar, a operação não poderá ser desfeita.
 	</p>
