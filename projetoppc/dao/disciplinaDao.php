@@ -48,14 +48,14 @@ function buscarDisciplinaPorId($discod, &$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultadisciplina = $conn->prepare("select * from disciplina where discod = :discod");
     $consultadisciplina->bindParam(":discod", $discod);
-    if (! $consultadisciplina->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoesdisciplina;
-    } elseif ($consultadisciplina->execute() && $consultadisciplina->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoesdisciplina;
-    } elseif ($consultadisciplina->execute() && $consultadisciplina->rowCount() == 1) {
-        $informacoesdisciplina = $consultadisciplina->fetch(PDO::FETCH_ASSOC);
+    if ($consultadisciplina->execute()) {
+        $numregistros = $consultadisciplina->rowCount();
+        if ($numregistros == 1) {
+            $informacoesdisciplina = $consultadisciplina->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesdisciplina;
+        }
     }
     desconectarDoBanco($conn);
     return $informacoesdisciplina;
@@ -67,15 +67,15 @@ function buscarDisciplinas(&$conn = null)
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultadisciplina = $conn->query("select * from disciplina");
-    if (! $consultadisciplina->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoesdisciplina;
-    } elseif ($consultadisciplina->execute() && $consultadisciplina->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoesdisciplina;
-    } elseif ($consultadisciplina->execute() && $consultadisciplina->rowCount() > 0) {
-        for ($i = 0; $i < $consultadisciplina->rowCount(); $i ++) {
-            $informacoesdisciplina[$i] = $consultadisciplina->fetch(PDO::FETCH_ASSOC);
+    if ($consultadisciplina->execute()) {
+        $numregistros = $consultadisciplina->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoesdisciplina[$i] = $consultadisciplina->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesdisciplina;
         }
     }
     desconectarDoBanco($conn);
@@ -89,15 +89,15 @@ function buscarDisciplinasExceto($discod, &$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultadisciplina = $conn->prepare("select * from disciplina where discod <> :discod");
     $consultadisciplina->bindParam(":discod", $discod);
-    if (! $consultadisciplina->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoesdisciplina;
-    } elseif ($consultadisciplina->execute() && $consultadisciplina->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoesdisciplina;
-    } elseif ($consultadisciplina->execute() && $consultadisciplina->rowCount() > 0) {
-        for ($i = 0; $i < $consultadisciplina->rowCount(); $i ++) {
-            $informacoesdisciplina[$i] = $consultadisciplina->fetch(PDO::FETCH_ASSOC);
+    if ($consultadisciplina->execute()) {
+        $numregistros = $consultadisciplina->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoesdisciplina[$i] = $consultadisciplina->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesdisciplina;
         }
     }
     desconectarDoBanco($conn);

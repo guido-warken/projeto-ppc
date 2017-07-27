@@ -42,14 +42,14 @@ function buscarIndicadorPorId($indcod, &$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultaindicador = $conn->prepare("select * from indicador where indcod = :indcod");
     $consultaindicador->bindParam(":indcod", $indcod);
-    if (! $consultaindicador->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoesindicador;
-    } elseif ($consultaindicador->execute() && $consultaindicador->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoesindicador;
-    } elseif ($consultaindicador->execute() && $consultaindicador->rowCount() == 1) {
-        $informacoesindicador = $consultaindicador->fetch(PDO::FETCH_ASSOC);
+    if ($consultaindicador->execute()) {
+        $numregistros = $consultaindicador->rowCount();
+        if ($numregistros == 1) {
+            $informacoesindicador = $consultaindicador->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesindicador;
+        }
     }
     desconectarDoBanco($conn);
     return $informacoesindicador;
@@ -62,9 +62,9 @@ function buscarIndicadores(&$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultaindicador = $conn->query("select * from indicador ");
     if ($consultaindicador->execute()) {
-        $total = $consultaindicador->rowCount();
-        if ($total > 0) {
-            for ($i = 0; $i < $total; $i ++) {
+        $numregistros = $consultaindicador->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
                 $informacoesindicador[$i] = $consultaindicador->fetch(PDO::FETCH_ASSOC);
             }
         } else {

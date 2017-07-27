@@ -1,5 +1,5 @@
 <?php
-require_once 'c:\xampp\htdocs\projetoppc\dao\certificacaoDao.php';
+require_once 'c:\wamp64\www\projetoppc\dao\certificacaoDao.php';
 ?>
 
 <!DOCTYPE html>
@@ -18,8 +18,8 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\certificacaoDao.php';
 <body>
 	<div class="container">
 	<?php
-	if ($_GET ["opcao"] == "cadastrar") :
-		?>
+if ($_GET["opcao"] == "cadastrar") :
+    ?>
 	<h2>Cadastro de certificação</h2>
 		<br>
 		<form action="" method="post">
@@ -45,26 +45,26 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\certificacaoDao.php';
 			<br>
 		</form>
 	<?php
-		if (! array_key_exists ( "cerdes", $_POST ) && ! array_key_exists ( "cerreq", $_POST ) && ! array_key_exists ( "cerch", $_POST ))
-			return;
-		try {
-			if (inserirCertificacao ( $_POST ["cerdes"], $_POST ["cerreq"], $_POST ["cerch"] )) {
-				echo "<h1>Certificação cadastrada com êxito!</h1><br>";
-				echo "<a href= 'gerenciaCertificacao.php?opcao=consultar'>Clique aqui para consultar as certificações cadastradas</a>";
-			}
-		} catch ( PDOException $e ) {
-			echo $e->getMessage ();
-		}
-	 elseif ($_GET ["opcao"] == "consultar") :
-		$certificacoes = buscarCert ();
-		$totalcerts = count ( $certificacoes );
-		?>
+    if (! array_key_exists("cerdes", $_POST) && ! array_key_exists("cerreq", $_POST) && ! array_key_exists("cerch", $_POST))
+        return;
+    try {
+        if (inserirCertificacao($_POST["cerdes"], $_POST["cerreq"], $_POST["cerch"])) {
+            echo "<h1>Certificação cadastrada com êxito!</h1><br>";
+            echo "<a href= 'gerenciaCertificacao.php?opcao=consultar'>Clique aqui para consultar as certificações cadastradas</a>";
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+ elseif ($_GET["opcao"] == "consultar") :
+    $certificacoes = buscarCert();
+    $totalcerts = count($certificacoes);
+    ?>
 	<h2>Consulta de certificações</h2>
 		<br> <a href="gerenciacertificacao.php?opcao=cadastrar">Nova
 			certificação</a><br>
 	<?php
-		if ($totalcerts > 0) :
-			?>
+    if ($totalcerts > 0) :
+        ?>
 	<h2>Número de certificações encontradas: <?=$totalcerts; ?></h2>
 		<br>
 		<table class="table table-bordered">
@@ -79,8 +79,8 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\certificacaoDao.php';
 			</thead>
 			<tbody>
 	<?php
-			foreach ( $certificacoes as $certificacao ) :
-				?>
+        foreach ($certificacoes as $certificacao) :
+            ?>
 	<tr>
 					<td><?=$certificacao["cerdes"]; ?></td>
 					<td><?=$certificacao["cerreq"]; ?></td>
@@ -93,22 +93,22 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\certificacaoDao.php';
 							certificação </a></td>
 				</tr>
 	<?php
-			endforeach
-			;
-			?>
+        endforeach
+        ;
+        ?>
 	</tbody>
 		</table>
 	<?php
-		else :
-			?>
+    else :
+        ?>
 	<h1>Nenhuma certificação cadastrada no sistema</h1>
 		<br>
 		<p>Clique no link acima para cadastrar uma nova certificação</p>
 		<br>
 	<?php
-		endif;
-	endif;
-	?>
+    endif;
+endif;
+?>
 	</div>
 </body>
 </html>

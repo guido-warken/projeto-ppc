@@ -1,5 +1,5 @@
 <?php
-require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
+require_once 'c:\wamp64\www\projetoppc\dao\indicadorDao.php';
 ?>
 
 <!DOCTYPE html>
@@ -18,8 +18,8 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 <body>
 	<div class="container">
 	<?php
-	if ($_GET ["opcao"] == "cadastrar") :
-		?>
+if ($_GET["opcao"] == "cadastrar") :
+    ?>
 	<h2>Cadastro de indicadores</h2>
 		<br>
 		<form action="" method="post">
@@ -35,25 +35,25 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 			<br>
 		</form>
 	<?php
-		if (! array_key_exists ( "inddesc", $_POST ))
-			return;
-		try {
-			if (inserirIndicador ( $_POST ["inddesc"] )) {
-				echo "<h1>Indicador cadastrado com êxito!</h1><br>";
-				echo "<a href= 'gerenciaIndicador.php?opcao=consultar'>Clique aqui para consultar os indicadores</a><br>";
-			}
-		} catch ( PDOException $e ) {
-			echo $e->getMessage ();
-		}
-	 elseif ($_GET ["opcao"] == "consultar") :
-		$indicadores = buscarIndicadores ();
-		$totalindicadores = count ( $indicadores );
-		?>
+    if (! array_key_exists("inddesc", $_POST))
+        return;
+    try {
+        if (inserirIndicador($_POST["inddesc"])) {
+            echo "<h1>Indicador cadastrado com êxito!</h1><br>";
+            echo "<a href= 'gerenciaIndicador.php?opcao=consultar'>Clique aqui para consultar os indicadores</a><br>";
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+ elseif ($_GET["opcao"] == "consultar") :
+    $indicadores = buscarIndicadores();
+    $totalindicadores = count($indicadores);
+    ?>
 	<h2>Consulta de indicadores</h2>
 		<br> <a href="gerenciaIndicador.php?opcao=cadastrar">Novo indicador</a><br>
 	<?php
-		if ($totalindicadores > 0) :
-			?>
+    if ($totalindicadores > 0) :
+        ?>
 	<h2>Numero de indicadores encontrados: <?=$totalindicadores; ?></h2>
 		<br>
 		<table class="table table-bordered">
@@ -66,8 +66,8 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 			</thead>
 			<tbody>
 	<?php
-			foreach ( $indicadores as $indicador ) :
-				?>
+        foreach ($indicadores as $indicador) :
+            ?>
 	<tr>
 					<td><?=$indicador["inddesc"]; ?></td>
 					<td><a
@@ -78,22 +78,22 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 							indicador</a></td>
 				</tr>
 	<?php
-			endforeach
-			;
-			?>
+        endforeach
+        ;
+        ?>
 	</tbody>
 		</table>
 	<?php
-		else :
-			?>
+    else :
+        ?>
 	<h1>Nenhum indicador cadastrado no sistema</h1>
 		<br>
 		<p>Clique no link acima para cadastrar um novo indicador</p>
 	<?php
-		endif;
-	 elseif ($_GET ["opcao"] == "alterar") :
-		$indicador = buscarIndicadorPorId ( $_GET ["indcod"] );
-		?>
+    endif;
+ elseif ($_GET["opcao"] == "alterar") :
+    $indicador = buscarIndicadorPorId($_GET["indcod"]);
+    ?>
 	<h2>Alteração do indicador selecionado</h2>
 		<br>
 		<form action="" method="post">
@@ -111,19 +111,19 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 			<br>
 		</form>
 	<?php
-		if (! array_key_exists ( "inddesc", $_POST ))
-			return;
-		try {
-			if (atualizarIndicador ( $indicador ["indcod"], $_POST ["inddesc"] )) {
-				echo "<h1>Indicador atualizado com êxito!</h1><br>";
-				echo "<a href= 'gerenciaIndicador.php?opcao=consultar'>Clique aqui para consultar novamente os indicadores cadastrados</a><br>";
-			}
-		} catch ( PDOException $e ) {
-			echo $e->getMessage ();
-		}
-	 elseif ($_GET ["opcao"] == "excluir") :
-		$indicador = buscarIndicadorPorId ( $_GET ["indcod"] );
-		?>
+    if (! array_key_exists("inddesc", $_POST))
+        return;
+    try {
+        if (atualizarIndicador($indicador["indcod"], $_POST["inddesc"])) {
+            echo "<h1>Indicador atualizado com êxito!</h1><br>";
+            echo "<a href= 'gerenciaIndicador.php?opcao=consultar'>Clique aqui para consultar novamente os indicadores cadastrados</a><br>";
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+ elseif ($_GET["opcao"] == "excluir") :
+    $indicador = buscarIndicadorPorId($_GET["indcod"]);
+    ?>
 	<h2>Exclusão do indicador selecionado</h2>
 		<br>
 		<form action="" method="post">
@@ -146,22 +146,22 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\indicadorDao.php';
 			<br>
 		</form>
 	<?php
-		if (! array_key_exists ( "escolha", $_POST ))
-			return;
-		if ($_POST ["escolha"] == "sim") {
-			try {
-				if (excluirIndicador ( $indicador ["indcod"] )) {
-					echo "<h1>Indicador excluído com êxito!</h1><br>";
-					echo "<a href= 'gerenciaIndicador.php?opcao=consultar'>Clique aqui para consultar novamente os indicadores</a><br>";
-				}
-			} catch ( PDOException $e ) {
-				echo $e->getMessage ();
-			}
-		} else {
-			header ( "Location: gerenciaIndicador.php?opcao=consultar");
-	}
-	endif;
-	?>
+    if (! array_key_exists("escolha", $_POST))
+        return;
+    if ($_POST["escolha"] == "sim") {
+        try {
+            if (excluirIndicador($indicador["indcod"])) {
+                echo "<h1>Indicador excluído com êxito!</h1><br>";
+                echo "<a href= 'gerenciaIndicador.php?opcao=consultar'>Clique aqui para consultar novamente os indicadores</a><br>";
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    } else {
+        header("Location: gerenciaIndicador.php?opcao=consultar");
+    }
+endif;
+?>
 	</div>
 </body>
 </html>

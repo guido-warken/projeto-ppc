@@ -1,5 +1,5 @@
 <?php
-require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
+require_once 'c:\wamp64\www\projetoppc\dao\competenciaDao.php';
 ?>
 
 <!DOCTYPE html>
@@ -18,8 +18,8 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 <body>
 	<div class="container">
 	<?php
-	if ($_GET ["opcao"] == "cadastrar") :
-		?>
+if ($_GET["opcao"] == "cadastrar") :
+    ?>
 		<h2>Cadastro de competências</h2>
 		<br>
 		<form action="" method="post">
@@ -35,25 +35,25 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 			<br>
 		</form>
 	<?php
-		if (! array_key_exists ( "compdes", $_POST ))
-			return;
-		try {
-			if (inserirCompetencia ( $_POST ["compdes"] )) {
-				echo "<h1>Competência cadastrada com êxito!</h1><br>";
-				echo "<a href= 'gerenciaCompetencia.php?opcao=consultar'>Clique aqui para consultar as competências cadastradas</a><br>";
-			}
-		} catch ( PDOException $e ) {
-			echo $e->getMessage ();
-		}
-	 elseif ($_GET ["opcao"] == "consultar") :
-		$competencias = buscarCompetencias ();
-		?>
+    if (! array_key_exists("compdes", $_POST))
+        return;
+    try {
+        if (inserirCompetencia($_POST["compdes"])) {
+            echo "<h1>Competência cadastrada com êxito!</h1><br>";
+            echo "<a href= 'gerenciaCompetencia.php?opcao=consultar'>Clique aqui para consultar as competências cadastradas</a><br>";
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+ elseif ($_GET["opcao"] == "consultar") :
+    $competencias = buscarCompetencias();
+    ?>
 		<h2>Consulta de competências</h2>
 		<br> <a href="gerenciaCompetencia.php?opcao=cadastrar">Nova
 			competência</a><br>
 		<?php
-		if (count ( $competencias ) > 0) :
-			?>
+    if (count($competencias) > 0) :
+        ?>
 		<h2>Número de competências encontradas: <?=count($competencias); ?></h2>
 		<br>
 		<table class="table table-bordered">
@@ -65,8 +65,8 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 			</thead>
 			<tbody>
 		<?php
-			foreach ( $competencias as $competencia ) :
-				?>
+        foreach ($competencias as $competencia) :
+            ?>
 				<tr>
 					<td><?=$competencia["compdes"]; ?></td>
 					<td><a
@@ -77,22 +77,22 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 					</td>
 				</tr>
 		<?php
-			endforeach
-			;
-			?>
+        endforeach
+        ;
+        ?>
 		</tbody>
 		</table>
 		<?php
-		else :
-			?>
+    else :
+        ?>
 		<h2>Nenhuma competência cadastrada</h2>
 		<br> <a href="gerenciaCompetencia.php?opcao=cadastrar">Cadastrar uma
 			nova competência</a><br>
 		<?php
-		endif;
-	 elseif ($_GET ["opcao"] == "alterar") :
-		$competencia = buscarCompetenciaPorId ( $_GET ["compcod"] );
-		?>
+    endif;
+ elseif ($_GET["opcao"] == "alterar") :
+    $competencia = buscarCompetenciaPorId($_GET["compcod"]);
+    ?>
 	<h2>Alteração de competência</h2>
 		<br>
 		<form action="" method="post">
@@ -110,19 +110,19 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 			<br>
 		</form>
 		<?php
-		if (! array_key_exists ( "compdes", $_POST ))
-			return;
-		try {
-			if (atualizarCompetencia ( $_POST ["compdes"], $competencia ["compcod"] )) {
-				echo "<h1>Competência atualizada com êxito!</h1><br>";
-				echo "<a href= 'gerenciaCompetencia.php?opcao=consultar'>Clique aqui para consultar novamente as competências</a><br>";
-			}
-		} catch ( PDOException $e ) {
-			echo $e->getMessage ();
-		}
-	 elseif ($_GET ["opcao"] == "excluir") :
-		$competencia = buscarCompetenciaPorId ( $_GET ["compcod"] );
-		?>
+    if (! array_key_exists("compdes", $_POST))
+        return;
+    try {
+        if (atualizarCompetencia($_POST["compdes"], $competencia["compcod"])) {
+            echo "<h1>Competência atualizada com êxito!</h1><br>";
+            echo "<a href= 'gerenciaCompetencia.php?opcao=consultar'>Clique aqui para consultar novamente as competências</a><br>";
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+ elseif ($_GET["opcao"] == "excluir") :
+    $competencia = buscarCompetenciaPorId($_GET["compcod"]);
+    ?>
 	<h2>Exclusão de competência</h2>
 		<br>
 		<form action="" method="post">
@@ -146,22 +146,22 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\competenciaDao.php';
 			<br>
 		</form>
 	<?php
-		if (! array_key_exists ( "escolha", $_POST ))
-			return;
-		if ($_POST ["escolha"] == "sim") {
-			try {
-				if (excluirCompetencia ( $competencia ["compcod"] )) {
-					echo "<h1>Competência excluída com êxito!</h1><br>";
-					echo "<a href= 'gerenciaCompetencia.php?opcao=consultar'>Voltar à tela de competências</a><br>";
-				}
-			} catch ( PDOException $e ) {
-				echo $e->getMessage ();
-			}
-		} elseif ($_POST ["escolha"] == "não") {
-			header ( "Location: gerenciaCompetencia.php?opcao=consultar");
-	}
-	endif;
-	?>
+    if (! array_key_exists("escolha", $_POST))
+        return;
+    if ($_POST["escolha"] == "sim") {
+        try {
+            if (excluirCompetencia($competencia["compcod"])) {
+                echo "<h1>Competência excluída com êxito!</h1><br>";
+                echo "<a href= 'gerenciaCompetencia.php?opcao=consultar'>Voltar à tela de competências</a><br>";
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    } elseif ($_POST["escolha"] == "não") {
+        header("Location: gerenciaCompetencia.php?opcao=consultar");
+    }
+endif;
+?>
 	</div>
 </body>
 </html>

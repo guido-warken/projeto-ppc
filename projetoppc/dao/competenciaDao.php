@@ -42,14 +42,14 @@ function buscarCompetenciaPorId($compcod, &$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultacomp = $conn->prepare("select * from competencia where compcod = :compcod");
     $consultacomp->bindParam(":compcod", $compcod);
-    if (! $consultacomp->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoescomp;
-    } elseif ($consultacomp->execute() && $consultacomp->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoescomp;
-    } elseif ($consultacomp->execute() && $consultacomp->rowCount() == 1) {
-        $informacoescomp = $consultacomp->fetch(PDO::FETCH_ASSOC);
+    if ($consultacomp->execute()) {
+        $numregistros = $consultacomp->rowCount();
+        if ($numregistros == 1) {
+            $informacoescomp = $consultacomp->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoescomp;
+        }
     }
     desconectarDoBanco($conn);
     return $informacoescomp;
@@ -61,15 +61,15 @@ function buscarCompetencias(&$conn = null)
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultacomp = $conn->query("select * from competencia");
-    if (! $consultacomp->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoescomp;
-    } elseif ($consultacomp->execute() && $consultacomp->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoescomp;
-    } elseif ($consultacomp->execute() && $consultacomp->rowCount() > 0) {
-        for ($i = 0; $i < $consultacomp->rowCount(); $i ++) {
-            $informacoescomp[$i] = $consultacomp->fetch(PDO::FETCH_ASSOC);
+    if ($consultacomp->execute()) {
+        $numregistros = $consultacomp->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoescomp[$i] = $consultacomp->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoescomp;
         }
     }
     desconectarDoBanco($conn);

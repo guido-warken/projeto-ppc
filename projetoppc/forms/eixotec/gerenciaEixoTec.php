@@ -1,5 +1,5 @@
 <?php
-require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTecDao.php';
+require_once 'c:\wamp64\www\projetoppc\dao\eixoTecDao.php';
 ?>
 
 <!DOCTYPE html>
@@ -18,8 +18,8 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTecDao.php';
 <body>
 	<div class="container">
 	<?php
-	if ($_GET ["opcao"] == "cadastrar") :
-		?>
+if ($_GET["opcao"] == "cadastrar") :
+    ?>
 	<h2>Cadastro de eixos tecnológicos</h2>
 		<br>
 		<form action="" method="post">
@@ -34,26 +34,26 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTecDao.php';
 			<br>
 		</form>
 	<?php
-		if (! array_key_exists ( "eixdesc", $_POST ))
-			return;
-		try {
-			if (inserirEixoTecnológico ( $_POST ["eixdesc"] )) {
-				echo "<h1>Eixo tecnológico cadastrado com êxito!</h1><br>";
-				echo "<a href= 'gerenciaEixoTec.php?opcao=consultar'>Clique aqui para consultar os eixos tecnológicos cadastrados</a><br>";
-			}
-		} catch ( PDOException $e ) {
-			echo $e->getMessage ();
-		}
-	 elseif ($_GET ["opcao"] == "consultar") :
-		$eixostec = buscarEixosTecnologicos ();
-		$totaleixostec = count ( $eixostec );
-		?>
+    if (! array_key_exists("eixdesc", $_POST))
+        return;
+    try {
+        if (inserirEixoTec($_POST["eixdesc"])) {
+            echo "<h1>Eixo tecnológico cadastrado com êxito!</h1><br>";
+            echo "<a href= 'gerenciaEixoTec.php?opcao=consultar'>Clique aqui para consultar os eixos tecnológicos cadastrados</a><br>";
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+ elseif ($_GET["opcao"] == "consultar") :
+    $eixostec = buscarEixosTec();
+    $totaleixostec = count($eixostec);
+    ?>
 	<h2>Consulta de eixos tecnológicos</h2>
 		<br> <a href="gerenciaEixoTec.php?opcao=cadastrar">Novo eixo
 			tecnológico</a><br>
 	<?php
-		if ($totaleixostec > 0) :
-			?>
+    if ($totaleixostec > 0) :
+        ?>
 		<h2>Número de eixos tecnológicos encontrados: <?=$totaleixostec; ?></h2>
 		<br>
 		<table class="table table-bordered">
@@ -66,8 +66,8 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTecDao.php';
 			</thead>
 			<tbody>
 		<?php
-			foreach ( $eixostec as $eixotec ) :
-				?>
+        foreach ($eixostec as $eixotec) :
+            ?>
 		<tr>
 					<td><?=$eixotec["eixdesc"]; ?></td>
 					<td><a
@@ -78,23 +78,23 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTecDao.php';
 							eixo tecnológico</a></td>
 				</tr>
 		<?php
-			endforeach
-			;
-			?>
+        endforeach
+        ;
+        ?>
 		</tbody>
 		</table>
 		<?php
-		else :
-			?>
+    else :
+        ?>
 		<h1>Nenhum eixo tecnológico cadastrado no sistema.</h1>
 		<br>
 		<p>Clique no link acima para cadastrar um novo eixo tecnológico.</p>
 		<br>
 		<?php
-		endif;
-	 elseif ($_GET ["opcao"] == "alterar") :
-		$eixotec = buscarEixoTecnologicoPorId ( $_GET ["eixcod"] );
-		?>
+    endif;
+ elseif ($_GET["opcao"] == "alterar") :
+    $eixotec = buscarEixoTecPorId($_GET["eixcod"]);
+    ?>
 	<h2>Alteração do eixo tecnológico selecionado</h2>
 		<br>
 		<form action="" method="post">
@@ -110,19 +110,19 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTecDao.php';
 			<br>
 		</form>
 	<?php
-		if (! array_key_exists ( "eixdesc", $_POST ))
-			return;
-		try {
-			if (atualizarEixoTecnologico ( $eixotec ["eixcod"], $_POST ["eixdesc"] )) {
-				echo "<h1>Eixo Tecnológico atualizado com êxito!</h1><br>";
-				echo "<a href= 'gerenciaEixoTec.php?opcao=consultar'>Clique aqui para consultar novamente os eixos tecnológicos</a><br>";
-			}
-		} catch ( PDOException $e ) {
-			echo $e->getMessage ();
-		}
-	 elseif ($_GET ["opcao"] == "excluir") :
-		$eixotec = buscarEixoTecnologicoPorId ( $_GET ["eixcod"] );
-		?>
+    if (! array_key_exists("eixdesc", $_POST))
+        return;
+    try {
+        if (atualizarEixoTec($eixotec["eixcod"], $_POST["eixdesc"])) {
+            echo "<h1>Eixo Tecnológico atualizado com êxito!</h1><br>";
+            echo "<a href= 'gerenciaEixoTec.php?opcao=consultar'>Clique aqui para consultar novamente os eixos tecnológicos</a><br>";
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+ elseif ($_GET["opcao"] == "excluir") :
+    $eixotec = buscarEixoTecPorId($_GET["eixcod"]);
+    ?>
 	<h2>Exclusão do eixo tecnológico selecionado</h2>
 		<br>
 		<form action="" method="post">
@@ -146,22 +146,22 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\eixoTecDao.php';
 			<br>
 		</form>
 	<?php
-		if (! array_key_exists ( "escolha", $_POST ))
-			return;
-		if ($_POST ["escolha"] == "sim") {
-			try {
-				if (excluirEixoTecnologico ( $eixotec ["eixcod"] )) {
-					echo "<h1>Eixo tecnológico excluído com êxito!</h1><br>";
-					echo "<a href= 'gerenciaEixoTec.php?opcao=consultar'>Clique aqui para consultar novamente os eixos tecnológicos</a><br>";
-				}
-			} catch ( PDOException $e ) {
-				echo $e->getMessage ();
-			}
-		} else {
-			header ( "Location: gerenciaEixoTec.php?opcao=consultar" );
-		}
-	endif;
-	?>
+    if (! array_key_exists("escolha", $_POST))
+        return;
+    if ($_POST["escolha"] == "sim") {
+        try {
+            if (excluirEixoTecnologico($eixotec["eixcod"])) {
+                echo "<h1>Eixo tecnológico excluído com êxito!</h1><br>";
+                echo "<a href= 'gerenciaEixoTec.php?opcao=consultar'>Clique aqui para consultar novamente os eixos tecnológicos</a><br>";
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    } else {
+        header("Location: gerenciaEixoTec.php?opcao=consultar");
+    }
+endif;
+?>
 	</div>
 </body>
 </html>

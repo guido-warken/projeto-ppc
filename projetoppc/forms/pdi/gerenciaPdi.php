@@ -1,6 +1,5 @@
 <?php
-require_once 'c:\xampp\htdocs\projetoppc\factory\connectionFactory.php';
-require_once 'c:\xampp\htdocs\projetoppc\dao\pdiDao.php';
+require_once 'c:\wamp64\www\projetoppc\dao\pdiDao.php';
 require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 ?>
 
@@ -20,37 +19,37 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 <body>
 	<div class="container">
 	<?php
-	if ($_GET ["opcao"] == "cadastrar") :
-		?>
+if ($_GET["opcao"] == "cadastrar") :
+    ?>
 	<h2>Cadastro de Pdi</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
 <?php
-		$unidades = buscarUnidades ();
-		if (count ( $unidades ) > 0) :
-			?>
+    $unidades = buscarUnidades();
+    if (count($unidades) > 0) :
+        ?>
 <label for="unicod">Selecione a unidade SENAC, a qual será associado o
 					novo PDI</label> <select class="form-control" id="unicod"
 					name="unicod">
 <?php
-			foreach ( $unidades as $unidade ) :
-				?>
+        foreach ($unidades as $unidade) :
+            ?>
 	<option value="<?=$unidade['unicod']; ?>"><?=$unidade["uninome"]; ?></option>
 <?php
-			endforeach
-			;
-			?>
+        endforeach
+        ;
+        ?>
 				</select>
 				<?php
-		 elseif (count ( $unidades ) == 0) :
-			?>
+     elseif (count($unidades) == 0) :
+        ?>
 				<h2>Não há unidades SENAC cadastradas no sistema</h2>
 				<br> <a href="gerenciaUnidade.php?opcao=cadastrar">Cadastrar uma
 					nova unidade SENAC</a><br>
 				<?php
-		endif;
-		?>
+    endif;
+    ?>
 			</div>
 			<br>
 			<div class="form-group">
@@ -92,45 +91,45 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 			<br>
 		</form>
 		<?php
-		if (! array_key_exists ( "unicod", $_POST ) && ! array_key_exists ( "pdianoini", $_POST ) && ! array_key_exists ( "pdianofim", $_POST ) && ! array_key_exists ( "pdiensino", $_POST ) && ! array_key_exists ( "pdipesquisa", $_POST ) && ! array_key_exists ( "pdimetodo", $_POST ))
-			return;
-		try {
-			if (inserirPdi ( $_POST ["unicod"], $_POST ["pdianoini"], $_POST ["pdianofim"], $_POST ["pdipesquisa"], $_POST ["pdiensino"], $_POST ["pdimetodo"] )) {
-				echo "<h1>Pdi cadastrado com êxito! </h1><br>";
-				echo "<a href= 'gerenciaPdi.php?opcao=consultar'>Clique aqui para consultar os Pdis cadastrados</a><br>";
-			}
-		} catch ( PDOException $e ) {
-			echo $e->getMessage ();
-		}
-	 elseif ($_GET ["opcao"] == "consultar") :
-		$unidades = buscarUnidadesPorPdi ();
-		?>
+    if (! array_key_exists("unicod", $_POST) && ! array_key_exists("pdianoini", $_POST) && ! array_key_exists("pdianofim", $_POST) && ! array_key_exists("pdiensino", $_POST) && ! array_key_exists("pdipesquisa", $_POST) && ! array_key_exists("pdimetodo", $_POST))
+        return;
+    try {
+        if (inserirPdi($_POST["unicod"], $_POST["pdianoini"], $_POST["pdianofim"], $_POST["pdipesquisa"], $_POST["pdiensino"], $_POST["pdimetodo"])) {
+            echo "<h1>Pdi cadastrado com êxito! </h1><br>";
+            echo "<a href= 'gerenciaPdi.php?opcao=consultar'>Clique aqui para consultar os Pdis cadastrados</a><br>";
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+ elseif ($_GET["opcao"] == "consultar") :
+    $unidades = buscarUnidadesPorPdi();
+    ?>
 	<h2>Consulta de Pdi</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
 	<?php
-		if (count ( $unidades ) > 0) :
-			?>
+    if (count($unidades) > 0) :
+        ?>
 	<label for="unicod">Selecione a unidade para a visualização do Pdi: </label>
 				<select class="form-control" id="unicod" name="unicod">
 	<?php
-			foreach ( $unidades as $unidade ) :
-				?>
+        foreach ($unidades as $unidade) :
+            ?>
 	<option value="<?=$unidade['unicod']; ?>"><?=$unidade["uninome"]; ?></option>
 	<?php
-			endforeach
-			;
-			?>
+        endforeach
+        ;
+        ?>
 	</select>
 	<?php
-		 elseif (count ( $unidades ) == 0) :
-			?>
+     elseif (count($unidades) == 0) :
+        ?>
 	<h2>Nenhum Pdi cadastrado no sistema</h2>
 				<br> <a href="gerenciaPdi.php?opcao=cadastrar">Cadastrar um novo Pdi</a><br>
 				<?php
-		endif;
-		?>
+    endif;
+    ?>
 			</div>
 			<br>
 			<div class="form-group">
@@ -139,32 +138,32 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 			<br>
 		</form>
 		<?php
-		if (! array_key_exists ( "unicod", $_POST ))
-			return;
-		$pdis = buscarPdisPorUnidade ( $_POST ["unicod"] );
-		if (count ( $pdis ) > 0) :
-			?>
+    if (! array_key_exists("unicod", $_POST))
+        return;
+    $pdis = buscarPdisPorUnidade($_POST["unicod"]);
+    if (count($pdis) > 0) :
+        ?>
 			<h2>Número de Pdis encontrados: <?=count($pdis); ?></h2>
 		<br>
 		<ol class="list-group">
 		<?php
-			foreach ( $pdis as $pdi ) :
-				?>
+        foreach ($pdis as $pdi) :
+            ?>
 		<li class="list-group-item"><a
 				href="gerenciaPdi.php?opcao=ler&pdicod=<?=$pdi['pdicod']; ?>"><?=$pdi["pdianoini"]; ?> - <?=$pdi["pdianofim"]; ?> <?=$pdi["uninome"]; ?></a>
 			</li>
 		<?php
-			endforeach
-			;
+        endforeach
+        ;
 		endif;
-		
-		?>
+    
+    ?>
 		</ol>
 		<?php
-	 elseif ($_GET ["opcao"] == "ler") :
-		$pdi = buscarPdiPorId ( $_GET ["pdicod"] );
-		$unidade = buscarUnidadePorId ( $pdi ["unicod"] );
-		?>
+ elseif ($_GET["opcao"] == "ler") :
+    $pdi = buscarPdiPorId($_GET["pdicod"]);
+    $unidade = buscarUnidadePorId($pdi["unicod"]);
+    ?>
 		<h2>Exibindo o conteúdo do Pdi</h2>
 		<br>
 		<h2>Ano inicial do Pdi</h2>
@@ -208,29 +207,29 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 			href="gerenciaPdi.php?opcao=excluir&pdicod=<?=$pdi['pdicod']; ?>">excluir
 			Pdi</a><br>
 			<?php
-	 elseif ($_GET ["opcao"] == "alterar") :
-		$pdi = buscarPdiPorId ( $_GET ["pdicod"] );
-		$unidade = buscarUnidadePorId ( $pdi ["unicod"] );
-		?>
+ elseif ($_GET["opcao"] == "alterar") :
+    $pdi = buscarPdiPorId($_GET["pdicod"]);
+    $unidade = buscarUnidadePorId($pdi["unicod"]);
+    ?>
 		<h2>Alteração de Pdi</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
 <?php
-		$unidades = buscarUnidadesExceto ( $unidade ["unicod"] );
-		?>
+    $unidades = buscarUnidadesExceto($unidade["unicod"]);
+    ?>
 <label for="unicod">Selecione a unidade SENAC, a qual será associado o
 					novo PDI</label> <select class="form-control" id="unicod"
 					name="unicod">
 					<option value="<?=$unidade['unicod']; ?>" selected="selected"><?=$unidade["uninome"]; ?></option>
 <?php
-		foreach ( $unidades as $unidade ) :
-			?>
+    foreach ($unidades as $unidade) :
+        ?>
 			<option value="<?=$unidade['unicod']; ?>"><?=$unidade["uninome"]; ?></option>
 			<?php
-		endforeach
-		;
-		?>
+    endforeach
+    ;
+    ?>
 				</select>
 			</div>
 			<br>
@@ -276,19 +275,19 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 			<br>
 		</form>
 		<?php
-		if (! array_key_exists ( "unicod", $_POST ) && ! array_key_exists ( "pdianoini", $_POST ) && ! array_key_exists ( "pdianofim", $_POST ) && ! array_key_exists ( "pdiensino", $_POST ) && ! array_key_exists ( "pdipesquisa", $_POST ) && ! array_key_exists ( "pdimetodo", $_POST ))
-			return;
-		try {
-			if (atualizarPdi ( $pdi ["pdicod"], $_POST ["unicod"], $_POST ["pdianoini"], $_POST ["pdianofim"], $_POST ["pdipesquisa"], $_POST ["pdiensino"], $_POST ["pdimetodo"] )) {
-				echo "<h1>Pdi alterado com êxito!</h1><br>";
-				echo "<a href= 'gerenciaPdi.php?opcao=consultar'>Clique aqui para consultar novamente os Pdis</a><br>";
-			}
-		} catch ( PDOException $e ) {
-			echo $e->getMessage ();
-		}
-	 elseif ($_GET ["opcao"] == "excluir") :
-		$pdi = buscarPdiPorId ( $_GET ["pdicod"] );
-		?>
+    if (! array_key_exists("unicod", $_POST) && ! array_key_exists("pdianoini", $_POST) && ! array_key_exists("pdianofim", $_POST) && ! array_key_exists("pdiensino", $_POST) && ! array_key_exists("pdipesquisa", $_POST) && ! array_key_exists("pdimetodo", $_POST))
+        return;
+    try {
+        if (atualizarPdi($pdi["pdicod"], $_POST["unicod"], $_POST["pdianoini"], $_POST["pdianofim"], $_POST["pdipesquisa"], $_POST["pdiensino"], $_POST["pdimetodo"])) {
+            echo "<h1>Pdi alterado com êxito!</h1><br>";
+            echo "<a href= 'gerenciaPdi.php?opcao=consultar'>Clique aqui para consultar novamente os Pdis</a><br>";
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+ elseif ($_GET["opcao"] == "excluir") :
+    $pdi = buscarPdiPorId($_GET["pdicod"]);
+    ?>
 		<h2>Excluindo o Pdi</h2>
 		<br>
 		<form action="" method="post">
@@ -312,22 +311,22 @@ require_once 'c:\xampp\htdocs\projetoppc\dao\unidadeDao.php';
 			<br>
 		</form>
 		<?php
-		if (! array_key_exists ( "escolha", $_POST ))
-			return;
-		if ($_POST ["escolha"] == "sim") {
-			try {
-				if (excluirPDI ( $pdi ["pdicod"] )) {
-					echo "<h1>Pdi excluído com êxito!</h1><br>";
-					echo "<a href= 'gerenciaPdi.php?opcao=consultar'>Clique aqui para voltar à tela de consulta de Pdis</a><br>";
-				}
-			} catch ( PDOException $e ) {
-				echo $e->getMessage ();
-			}
-		} elseif ($_POST ["escolha"] == "não") {
-			header ( "Location: gerenciaPdi.php?opcao=consultar" );
-		}
-	endif;
-	?>
+    if (! array_key_exists("escolha", $_POST))
+        return;
+    if ($_POST["escolha"] == "sim") {
+        try {
+            if (excluirPDI($pdi["pdicod"])) {
+                echo "<h1>Pdi excluído com êxito!</h1><br>";
+                echo "<a href= 'gerenciaPdi.php?opcao=consultar'>Clique aqui para voltar à tela de consulta de Pdis</a><br>";
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    } elseif ($_POST["escolha"] == "não") {
+        header("Location: gerenciaPdi.php?opcao=consultar");
+    }
+endif;
+?>
 	</div>
 </body>
 </html>

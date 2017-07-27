@@ -49,14 +49,14 @@ function buscarConteudoCurricularPorId($ppccod, $discod, &$conn = null)
     $consultaconteudo = $conn->prepare("select * from conteudocurricular where ppccod = :ppccod and discod = :discod");
     $consultaconteudo->bindParam(":ppccod", $ppccod);
     $consultaconteudo->bindParam(":discod", $discod);
-    if (! $consultaconteudo->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoesconteudo;
-    } elseif ($consultaconteudo->execute() && $consultaconteudo->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoesconteudo;
-    } elseif ($consultaconteudo->execute() && $consultaconteudo->rowCount() == 1) {
-        $informacoesconteudo = $consultaconteudo->fetch(PDO::FETCH_ASSOC);
+    if ($consultaconteudo->execute()) {
+        $numregistros = $consultaconteudo->rowCount();
+        if ($numregistros == 1) {
+            $informacoesconteudo = $consultaconteudo->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesconteudo;
+        }
     }
     desconectarDoBanco($conn);
     return $informacoesconteudo;
@@ -68,15 +68,15 @@ function buscarConteudosCurriculares(&$conn = null)
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultaconteudo = $conn->query("select * from conteudocurricular");
-    if (! $consultaconteudo->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoesconteudo;
-    } elseif ($consultaconteudo->execute() && $consultaconteudo->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoesconteudo;
-    } elseif ($consultaconteudo->execute() && $consultaconteudo->rowCount() > 0) {
-        for ($i = 0; $i < $consultaconteudo->rowCount(); $i ++) {
-            $informacoesconteudo[$i] = $consultaconteudo->fetch(PDO::FETCH_ASSOC);
+    if ($consultaconteudo->execute()) {
+        $numregistros = $consultaconteudo->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoesconteudo[$i] = $consultaconteudo->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesconteudo;
         }
     }
     desconectarDoBanco($conn);

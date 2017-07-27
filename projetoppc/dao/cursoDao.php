@@ -20,33 +20,34 @@ function buscarCursoPorId($curcod, &$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultacurso = $conn->prepare("select * from curso where curcod = :curcod");
     $consultacurso->bindParam(":curcod", $curcod);
-    if (! $consultacurso->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoescurso;
-    } elseif ($consultacurso->execute() && $consultacurso->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoescurso;
-    } elseif ($consultacurso->execute() && $consultacurso->rowCount() == 1) {
-        $informacoescurso = $consultacurso->fetch(PDO::FETCH_ASSOC);
+    if ($consultacurso->execute()) {
+        $numregistros = $consultacurso->rowCount();
+        if ($numregistros == 1) {
+            $informacoescurso = $consultacurso->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoescurso;
+        }
     }
+    desconectarDoBanco($conn);
     return $informacoescurso;
 }
 
-function buscarTodosOsCursos(&$conn = null)
+function buscarCursos(&$conn = null)
 {
     $informacoescurso = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultacurso = $conn->query("select * from curso");
-    if (! $consultacurso->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoescurso;
-    } elseif ($consultacurso->execute() && $consultacurso->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoescurso;
-    } elseif ($consultacurso->execute() && $consultacurso->rowCount() > 0) {
-        for ($i = 0; $i < $consultacurso->rowCount(); $i ++) {
-            $informacoescurso[$i] = $consultacurso->fetch(PDO::FETCH_ASSOC);
+    if ($consultacurso->execute()) {
+        $numregistros = $consultacurso->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoescurso[$i] = $consultacurso->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoescurso;
         }
     }
     desconectarDoBanco($conn);
@@ -85,15 +86,15 @@ function buscarCursosExceto($curcod, &$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultacurso = $conn->prepare("select * from curso where curcod <> :curcod");
     $consultacurso->bindParam(":curcod", $curcod);
-    if (! $consultacurso->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoescurso;
-    } elseif ($consultacurso->execute() && $consultacurso->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoescurso;
-    } elseif ($consultacurso->execute() && $consultacurso->rowCount() > 0) {
-        for ($i = 0; $i < $consultacurso->rowCount(); $i ++) {
-            $informacoescurso[$i] = $consultacurso->fetch(PDO::FETCH_ASSOC);
+    if ($consultacurso->execute()) {
+        $numregistros = $consultacurso->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoescurso[$i] = $consultacurso->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoescurso;
         }
     }
     desconectarDoBanco($conn);

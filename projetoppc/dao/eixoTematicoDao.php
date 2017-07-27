@@ -42,14 +42,14 @@ function buscarEixoTemPorId($eixtcod, &$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultaeixotematico = $conn->prepare("select * from eixotematico where eixtcod = :eixtcod");
     $consultaeixotematico->bindParam(":eixtcod", $eixtcod);
-    if (! $consultaeixotematico->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoeseixotematico;
-    } elseif ($consultaeixotematico->execute() && $consultaeixotematico->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoeseixotematico;
-    } elseif ($consultaeixotematico->execute() && $consultaeixotematico->rowCount() == 1) {
-        $informacoeseixotematico = $consultaeixotematico->fetch(PDO::FETCH_ASSOC);
+    if ($consultaeixotematico->execute()) {
+        $numregistros = $consultaeixotematico->rowCount();
+        if ($numregistros == 1) {
+            $informacoeseixotematico = $consultaeixotematico->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoeseixotematico;
+        }
     }
     desconectarDoBanco($conn);
     return $informacoeseixotematico;
@@ -61,15 +61,15 @@ function buscarEixosTem(&$conn = null)
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultaeixotematico = $conn->query("select * from eixotematico");
-    if (! $consultaeixotematico->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoeseixotematico;
-    } elseif ($consultaeixotematico->execute() && $consultaeixotematico->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoeseixotematico;
-    } elseif ($consultaeixotematico->execute() && $consultaeixotematico->rowCount() > 0) {
-        for ($i = 0; $i < $consultaeixotematico->rowCount(); $i ++) {
-            $informacoeseixotematico[$i] = $consultaeixotematico->fetch(PDO::FETCH_ASSOC);
+    if ($consultaeixotematico->execute()) {
+        $numregistros = $consultaeixotematico->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoeseixotematico[$i] = $consultaeixotematico->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoeseixotematico;
         }
     }
     desconectarDoBanco($conn);
@@ -83,15 +83,15 @@ function buscarEixosTemExceto($eixtcod, &$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultaeixotematico = $conn->prepare("select * from eixotematico where eixtcod <> :eixtcod");
     $consultaeixotematico->bindParam(":eixtcod", $eixtcod);
-    if (! $consultaeixotematico->execute()) {
-        desconectarDoBanco($conn);
-        return $informacoeseixotematico;
-    } elseif ($consultaeixotematico->execute() && $consultaeixotematico->rowCount() == 0) {
-        desconectarDoBanco($conn);
-        return $informacoeseixotematico;
-    } elseif ($consultaeixotematico->execute() && $consultaeixotematico->rowCount() > 0) {
-        for ($i = 0; $i < $consultaeixotematico->rowCount(); $i ++) {
-            $informacoeseixotematico[$i] = $consultaeixotematico->fetch(PDO::FETCH_ASSOC);
+    if ($consultaeixotematico->execute()) {
+        $numregistros = $consultaeixotematico->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoeseixotematico[$i] = $consultaeixotematico->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoeseixotematico;
         }
     }
     desconectarDoBanco($conn);

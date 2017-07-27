@@ -1,6 +1,6 @@
 <?php
-require_once 'c:\xampp\htdocs\projetoppc\dao\cursoDao.php';
-require_once 'c:\xampp\htdocs\projetoppc\dao\ppcDao.php';
+require_once 'c:\wamp64\www\projetoppc\dao\cursoDao.php';
+require_once 'c:\wamp64\www\projetoppc\dao\ppcDao.php';
 $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 
 ?>
