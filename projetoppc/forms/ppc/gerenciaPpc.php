@@ -54,7 +54,7 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 			<br>
 			<div class="form-group">
 			<?php
-		$cursos = buscarCursosPorEixo ( $conn );
+		$cursos = buscarCursos ( $conn );
 		if (count ( $cursos ) > 0) :
 			?>
 				<label for="curcod">Selecione o curso vinculado ao PPC: </label> <select
@@ -109,7 +109,7 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 		<form action="" method="post">
 			<div class="form-group">
 			<?php
-		$cursos = buscarCursoPorPpc ( $conn );
+		$cursos = buscarCursos ( $conn );
 		if (count ( $cursos ) > 0) :
 			?>
 				<label for="curcod">Selecione o curso para visualizar os PPCs: </label>
@@ -128,9 +128,9 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 <?php
 		 elseif (count ( $cursos ) == 0) :
 			?>
-<h1>Não há ppcs cadastrados</h1>
-				<br> <a href="gerenciaPpc.php?opcao=cadastrar">Clique aqui para
-					cadastrar um ppc</a><br>
+<h1>Não há cursos cadastrados</h1>
+				<br> <a href="../curso/gerenciaCurso.php?opcao=cadastrar">Clique aqui para
+					cadastrar um curso</a><br>
 <?php
 		endif;
 		?>
@@ -163,19 +163,24 @@ $conn = conectarAoBanco ( "localhost", "dbdep", "root", "" );
 			?>
 		</ol>
 		<?php
-								endif;
-		
-	 elseif ($_GET ["opcao"] == "ler") :
+								else:
 		?>
-	<h2>Apresentando o conteúdo do ppc selecionado:</h2>
-		<br>
+		<h1>Não há nenhum ppc cadastrado com este curso</h1><br>
+		<p>Clique no link acima para cadastrar um novo ppc</p><br>
 		<?php
+		endif;
+		
+		elseif ($_GET ["opcao"] == "ler") :
 		$ppc = buscarPpcPorId ( $_GET ["ppccod"], $conn );
 		?>
-						<h2>Modalidade do ppc:</h2>
+	<h1><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></h1>
+		<br>
+		<div style="resize: both;">
+		<h2>Modalidade do ppc:</h2>
 		<br>
 		<p><?=$ppc["ppcmodal"]; ?></p>
-		<br>
+				</div><br>
+										
 		<h2>Objetivo do ppc:</h2>
 		<br>
 		<pre>
