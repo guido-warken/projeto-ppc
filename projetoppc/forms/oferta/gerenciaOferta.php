@@ -17,6 +17,7 @@ require_once 'c:\wamp64\www\projetoppc\dao\cursoDao.php';
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../../js/filtro.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -90,19 +91,19 @@ if ($_GET["opcao"] == "cadastrar") :
 					class="form-control"></textarea>
 			</div>
 			<br>
-			<div class="form-control">
+			<div class="form-group">
 				<label for="ofevagasmat">Número de vagas matutinas: </label> <input
 					type="number" id="ofevagasmat" name="ofevagasmat"
 					class="form-control">
 			</div>
 			<br>
-			<div class="form-control">
+			<div class="form-group">
 				<label for="ofevagasvesp">Número de vagas vespertinas: </label> <input
 					type="number" id="ofevagasvesp" name="ofevagasvesp"
 					class="form-control">
 			</div>
 			<br>
-			<div class="form-control">
+			<div class="form-group">
 				<label for="ofevagasnot">Número de vagas noturnas: </label> <input
 					type="number" id="ofevagasnot" name="ofevagasnot"
 					class="form-control">
@@ -131,15 +132,17 @@ if ($_GET["opcao"] == "cadastrar") :
 	<h2>Consulta de oferta</h2>
 		<br> <a href="gerenciaOferta.php?opcao=cadastrar">Nova oferta</a><br>
 		<form action="" method="post">
-		<div class="form-group">
-		<label>Selecione a opção: </label><br>
-		<label class="label-check">Listar ppcs por unidade SENAC:
-		<input type="radio" name="escolha" class="form-check" value="ppc" id="opt1">
-		</label><br>
-		<label class="label-check">Listar unidades SENAC por ppc
-		<input type="radio" name="escolha" class="form-check" value="unidade" id="opt2">
+			<div class="form-group">
+				<label>Selecione a opção: </label><br> <label class="label-check">Listar
+					unidades SENAC por ppc: <input type="radio" name="escolha"
+					class="form-check" value="ppc" id="opt1"
+					onclick="gerenciarFiltro()">
+				</label><br> <label class="label-check">Listar ppcs por unidades SENAC:
+					<input type="radio" name="escolha" class="form-check"
+					value="unidade" id="opt2" onclick="gerenciarFiltro()">
 				</label>
-		</div><br>
+			</div>
+			<br>
 			<div class="form-group" id="div-ppc">
 	<?php
     if (count($ppcs) > 0) :
@@ -161,9 +164,9 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
      elseif (count($ppcs) == 0) :
         ?>
-	<h1>Nenhuma oferta cadastrada e vinculada com nenhum ppc do sistema</h1>
-				<br> <a href="gerenciaOferta.php?opcao=cadastrar">Cadastrar uma nova
-					oferta</a><br>
+	<h1>Nenhum ppc cadastrado no sistema</h1>
+				<br> <a href="../ppc/gerenciaPpc.php?opcao=cadastrar">Cadastrar um novo
+					ppc</a><br>
 	<?php
     endif;
     ?>
@@ -190,10 +193,10 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
      elseif (count($unidades) == 0) :
         ?>
-	<h1>Nenhuma oferta cadastrada e vinculada com as unidades SENAC do
+	<h1>Nenhuma unidade SENAC cadastrada no
 					sistema</h1>
-				<br> <a href="gerenciaOferta.php?opcao=cadastrar">Cadastrar uma nova
-					oferta</a><br>
+				<br> <a href="../unidade/gerenciaUnidade.php?opcao=cadastrar">Cadastrar uma nova
+					unidade SENAC</a><br>
 	<?php
     endif;
     ?>
@@ -205,8 +208,9 @@ if ($_GET["opcao"] == "cadastrar") :
 			<br>
 		</form>
 	<?php
-    if (! array_key_exists("escolha", $_POST) )
+    if (! array_key_exists("escolha", $_POST))
         return;
+    $opcao = $_POST["escolha"];
     $oferta = buscarOfertas($_POST["ppccod"], $_POST["unicod"]);
     $unidade = buscarUnidadePorId($oferta["unicod"]);
     $ppc = buscarPpcPorId($oferta["ppccod"]);

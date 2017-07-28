@@ -7,7 +7,7 @@ require_once 'c:\wamp64\www\projetoppc\dao\unidadeDao.php';
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gerenciamento de PPC</title>
+<title>Gerenciamento de Unidades SENAC</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
@@ -158,9 +158,9 @@ if ($_GET["opcao"] == "cadastrar") :
         }
     } elseif ($_POST["escolha"] == "não") {
         header("Location: gerenciaUnidade.php?opcao=consultar");
-		}
-		endif;
-		?>
+    }
+endif;
+?>
 	</div>
 </body>
 </html>
