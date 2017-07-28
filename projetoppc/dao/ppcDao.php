@@ -25,7 +25,7 @@ function buscarPpcsPorCurso($curcod, &$conn = null)
     $consultappc = $conn->prepare("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod where curso.curcod = :curcod");
     $consultappc->bindParam(":curcod", $curcod);
     if ($consultappc->execute()) {
-        $numregistros = $consultappc->fetch(PDO::FETCH_ASSOC);
+        $numregistros = $consultappc->rowCount();
         if ($numregistros > 0) {
             for ($i = 0; $i < $numregistros; $i ++) {
                 $informacoesppc[$i] = $consultappc->fetch(PDO::FETCH_ASSOC);
@@ -47,7 +47,7 @@ function buscarPpcPorId($ppccod, &$conn = null)
     $consultappc = $conn->prepare("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod where ppc.ppccod = :ppccod");
     $consultappc->bindParam(":ppccod", $ppccod);
     if ($consultappc->execute()) {
-        $numregistros = $consultappc->fetch(PDO::FETCH_ASSOC);
+        $numregistros = $consultappc->rowCount();
         if ($numregistros > 0) {
             $informacoesppc = $consultappc->fetch(PDO::FETCH_ASSOC);
         } else {
@@ -94,7 +94,7 @@ function buscarPpcs(&$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultappc = $conn->query("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod");
     if ($consultappc->execute()) {
-        $numregistros = $consultappc->fetch(PDO::FETCH_ASSOC);
+        $numregistros = $consultappc->rowCount();
         if ($numregistros > 0) {
             for ($i = 0; $i < $numregistros; $i ++) {
                 $informacoesppc[$i] = $consultappc->fetch(PDO::FETCH_ASSOC);
@@ -116,7 +116,7 @@ function buscarPpcsExceto($ppccod, &$conn = null)
     $consultappc = $conn->prepare("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod where ppc.ppccod <> :ppccod");
     $consultappc->bindParam(":ppccod", $ppccod);
     if ($consultappc->execute()) {
-        $numregistros = $consultappc->fetch(PDO::FETCH_ASSOC);
+        $numregistros = $consultappc->rowCount();
         if ($numregistros > 0) {
             for ($i = 0; $i < $numregistros; $i ++) {
                 $informacoesppc[$i] = $consultappc->fetch(PDO::FETCH_ASSOC);
