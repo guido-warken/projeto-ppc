@@ -89,4 +89,25 @@ function buscarOfertasPorUnidade($unicod, &$conn = null)
     return $informacoesoferta;
 }
 
+function buscarOfertaPorId($ppccod, $unicod, &$conn = null)
+{
+    $informacoesoferta = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultaoferta = $conn->prepare("select * from oferta where ppccod = :ppccod and unicod = :unicod");
+    $consultaoferta->bindParam(":ppccod", $ppccod);
+    $consultaoferta->bindParam(":unicod", $unicod);
+    if ($consultaoferta->execute()) {
+        $numregistros = $consultaoferta->rowCount();
+        if ($numregistros == 1) {
+            $informacoesoferta = $consultaoferta->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesoferta;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoesoferta;
+}
+
 ?>
