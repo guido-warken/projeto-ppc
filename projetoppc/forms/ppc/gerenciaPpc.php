@@ -206,12 +206,21 @@ elseif ($_GET["opcao"] == "ler") :
 	<?=$ppc["ppcestagio"]; ?>	
 		</pre>
 		</div>
-		<br> <a
+		<br>
+		<div style="resize: both;">
+				 <a
 			href="gerenciaPpc.php?opcao=alterar&ppccod=<?=$ppc['ppccod']; ?>">Alterar
-			conteúdo</a><br> <a
+			conteúdo</a>
+		</div>
+<div style="resize: both;">
+<a
 			href="gerenciaPpc.php?opcao=excluir&ppccod=<?=$ppc['ppccod']; ?>">Excluir
-			ppc</a><br> <a href="gerenciaPpc.php?opcao=consultar">Voltar à tela
-			de consulta de ppc</a><br>
+			ppc</a>
+</div>
+<div style="resize: both;">
+<a href="gerenciaPpc.php?opcao=consultar">Voltar à tela
+			de consulta de ppc</a>
+</div>
 				<?php
  elseif ($_GET["opcao"] == "alterar") :
     $ppc = buscarPpcPorId($_GET["ppccod"], $conn);
