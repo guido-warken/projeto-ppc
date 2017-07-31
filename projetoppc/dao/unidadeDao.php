@@ -60,7 +60,7 @@ function buscarUnidades(&$conn = null)
     $informacoesunidade = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultaunidade = $conn->query("select * from unidadesenac");
+    $consultaunidade = $conn->query("select * from unidadesenac order by uninome");
     if ($consultaunidade->execute()) {
         $numregistros = $consultaunidade->rowCount();
         if ($numregistros > 0) {
