@@ -17,7 +17,7 @@ require_once 'c:\wamp64\www\projetoppc\dao\cursoDao.php';
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="../../js/filtro.js"></script>
+<script src="../../js/filtrooferta.js"></script>
 </head>
 <body>
 	<div class="container">

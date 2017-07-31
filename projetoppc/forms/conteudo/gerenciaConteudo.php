@@ -139,23 +139,71 @@ if ($_GET["opcao"] == "cadastrar") :
         echo $e->getMessage();
     }
  elseif ($_GET["opcao"] == "consultar") :
-    $conteudos = buscarConteudosCurriculares();
-    $totalconteudos = count($conteudos);
+    $ppcs = buscarPpcs();
+    $disciplinas = buscarDisciplinas();
     ?>
 		<h2>Exibição dos conteúdos curriculares</h2>
 		<br> <a href="gerenciaConteudo.php?opcao=cadastrar">Novo conteúdo
 			curricular</a><br>
-		<?php
-    if ($totalconteudos > 0) :
+		<form action="" method="post">
+			<label>Selecione a opção: </label><br>
+			<div class="form-group">
+				<label class="label-check">Pesquisar conteúdo curricular por ppc: <input
+					type="radio" name="escolha" value="ppc" id="opt1"
+					class="form-check">
+				</label><br> <label class="label-check">Pesquisar conteúdo
+					curricular por disciplina: <input type="radio" name="escolha"
+					value="disciplina" id="opt2" class="form-check">
+				</label>
+			</div>
+			<br>
+			<div class="form-group" id="div-ppc">
+				<label for="ppccod">Selecione o ppc: </label> <select name="ppccod"
+					id="ppccod" class="form-control">
+			<?php
+    foreach ($ppcs as $ppc) :
         ?>
-		<h2>Número de Conteúdos curriculares encontrados: <?=$totalconteudos; ?></h2>
-		<br>
+			<option value="<?=$ppc['ppccod']; ?>"><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></option>
+			<?php
+    endforeach
+    ;
+    ?>
+			</select>
+			</div>
+			<br>
+			<div class="form-group" id="div-unidade">
+				<label for="discod">Selecione a disciplina: </label> <select
+					name="discod" id="discod" class="form-control">
+			<?php
+    foreach ($disciplinas as $disciplina) :
+        ?>
+			<option value="<?=$disciplina['discod']; ?>"><?=$disciplina["disnome"]; ?></option>
+			<?php
+    endforeach
+    ;
+    ?>
+			</select>
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" value="enviar">
+			</div>
+		</form>
+						<?php
+    if (! array_key_exists("escolha", $_POST))
+        return;
+    $opcao = $_POST["escolha"];
+    if ($opcao == "ppc") :
+        $conteudos = buscarConteudosCurricularesPorPpc($_POST["ppccod"]);
+        $ppc = buscarPpcPorId($_POST["ppccod"]);
+        $totalconteudos = count($conteudos);
+        if ($totalconteudos > 0) :
+            ?>
+<h2><?= $ppc["ppcanoini"]; ?> - <?= $ppc["curnome"]; ?></h2>
 		<table class="table table-bordered">
-			<caption>Conteúdos curriculares</caption>
+			<caption>Disciplinas por ppc</caption>
 			<thead>
 				<tr>
-					<th>ano de início do ppc</th>
-					<th>Nome do curso</th>
 					<th>Disciplina</th>
 					<th>Eixo temático</th>
 					<th>Fase da disciplina</th>
@@ -164,14 +212,11 @@ if ($_GET["opcao"] == "cadastrar") :
 			</thead>
 			<tbody>
 		<?php
-        foreach ($conteudos as $conteudo) :
-            $ppc = buscarPpcPorId($conteudo["ppccod"]);
-            $disciplina = buscarDisciplinaPorId($conteudo["discod"]);
-            $eixotematico = buscarEixoTemPorId($conteudo["eixtcod"]);
-            ?>
+            foreach ($conteudos as $conteudo) :
+                $disciplina = buscarDisciplinaPorId($conteudo["discod"]);
+                $eixotematico = buscarEixoTemPorId($conteudo["eixtcod"]);
+                ?>
 		<tr>
-					<td><?=$ppc["ppcanoini"]; ?></td>
-					<td><?=$ppc["curnome"]; ?></td>
 					<td><?=$disciplina["disnome"]; ?></td>
 					<td><?=$eixotematico["eixtdes"]; ?></td>
 					<td><?=$conteudo["contfase"]; ?>ª</td>
@@ -183,19 +228,66 @@ if ($_GET["opcao"] == "cadastrar") :
 							conteudo curricular</a></td>
 				</tr>
 		<?php
-        endforeach
-        ;
-        ?>
+            endforeach
+            ;
+            ?>
 		</tbody>
 		</table>
 		<?php
-    else :
-        ?>
-		<h1>Nenhum conteúdo curricular cadastrado no sistema</h1>
+        else :
+            ?>
+		<h1>Nenhum conteúdo curricular cadastrado com este ppc</h1>
 		<br>
 		<p>Clique no link acima para cadastrar um conteúdo curricular</p>
 		<br>
 		<?php
+        endif;
+     elseif ($opcao == "disciplina") :
+        $conteudos = buscarConteudosCurricularesPorDisciplina($_POST["discod"]);
+        $disciplina = buscarDisciplinaPorId($_POST["discod"]);
+        $totalconteudos = count($conteudos);
+        if ($totalconteudos > 0) :
+            ?>
+		<h2><?=$disciplina["disnome"] ?></h2>
+		<br>
+		<table class="table table-bordered" style="resize: both;">
+			<caption>Ppcs por disciplina</caption>
+			<thead>
+				<tr>
+					<th>ano de vigência do ppc</th>
+					<th>Nome do curso</th>
+					<th colspan="2">Ação</th>
+				</tr>
+			</thead>
+			<tbody>
+		<?php
+            foreach ($conteudos as $conteudo) :
+                $ppc = buscarPpcPorId($conteudo["ppccod"]);
+                ?>
+		<tr>
+					<td><?=$ppc["ppcanoini"]; ?></td>
+					<td><?=$ppc["curnome"]; ?></td>
+					<td><a
+						href="gerenciaConteudo.php?opcao=alterar&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Alterar
+							dados</a></td>
+					<td><a
+						href="gerenciaConteudo.php?opcao=excluir&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Excluir
+							conteudo curricular</a></td>
+				</tr>
+		<?php
+            endforeach
+            ;
+            ?>
+		</tbody>
+		</table>
+		<?php
+        else :
+            ?>
+		<h1>Nenhum conteúdo curricular cadastrado com esta disciplina</h1>
+		<br>
+		<p>Clique no link acima para cadastrar um novo conteúdo curricular</p>
+		<?php
+        endif;
     endif;
  elseif ($_GET["opcao"] == "alterar") :
     $conteudo = buscarConteudoCurricularPorId($_GET["ppccod"], $_GET["discod"]);

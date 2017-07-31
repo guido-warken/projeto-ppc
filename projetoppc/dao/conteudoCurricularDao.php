@@ -83,4 +83,48 @@ function buscarConteudosCurriculares(&$conn = null)
     return $informacoesconteudo;
 }
 
+function buscarConteudosCurricularesPorPpc($ppccod, &$conn = null)
+{
+    $informacoesconteudo = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultaconteudo = $conn->prepare("select * from conteudocurricular where ppccod = :ppccod");
+    $consultaconteudo->bindParam(":ppccod", $ppccod);
+    if ($consultaconteudo->execute()) {
+        $numregistros = $consultaconteudo->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoesconteudo[$i] = $consultaconteudo->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesconteudo;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoesconteudo;
+}
+
+function buscarConteudosCurricularesPorDisciplina($discod, &$conn = null)
+{
+    $informacoesconteudo = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultaconteudo = $conn->prepare("select * from conteudocurricular where discod = :discod");
+    $consultaconteudo->bindParam(":discod", $discod);
+    if ($consultaconteudo->execute()) {
+        $numregistros = $consultaconteudo->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoesconteudo[$i] = $consultaconteudo->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesconteudo;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoesconteudo;
+}
+
 ?>
