@@ -17,6 +17,7 @@ require_once 'c:\wamp64\www\projetoppc\dao\eixoTematicoDao.php';
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src= "../../js/filtroconteudo.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -150,10 +151,10 @@ if ($_GET["opcao"] == "cadastrar") :
 			<div class="form-group">
 				<label class="label-check">Pesquisar conteúdo curricular por ppc: <input
 					type="radio" name="escolha" value="ppc" id="opt1"
-					class="form-check">
+					class="form-check" onclick= "gerenciarFiltro()">
 				</label><br> <label class="label-check">Pesquisar conteúdo
 					curricular por disciplina: <input type="radio" name="escolha"
-					value="disciplina" id="opt2" class="form-check">
+					value="disciplina" id="opt2" class="form-check" onclick= "gerenciarFiltro()">
 				</label>
 			</div>
 			<br>
@@ -171,7 +172,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</select>
 			</div>
 			<br>
-			<div class="form-group" id="div-unidade">
+			<div class="form-group" id="div-disciplina">
 				<label for="discod">Selecione a disciplina: </label> <select
 					name="discod" id="discod" class="form-control">
 			<?php
@@ -200,7 +201,7 @@ if ($_GET["opcao"] == "cadastrar") :
         if ($totalconteudos > 0) :
             ?>
 <h2><?= $ppc["ppcanoini"]; ?> - <?= $ppc["curnome"]; ?></h2>
-		<table class="table table-bordered">
+		<table class="table table-bordered" style="resize: both;">
 			<caption>Disciplinas por ppc</caption>
 			<thead>
 				<tr>
@@ -256,7 +257,7 @@ if ($_GET["opcao"] == "cadastrar") :
 				<tr>
 					<th>ano de vigência do ppc</th>
 					<th>Nome do curso</th>
-					<th colspan="2">Ação</th>
+					<th colspan="3">Ação</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -267,6 +268,9 @@ if ($_GET["opcao"] == "cadastrar") :
 		<tr>
 					<td><?=$ppc["ppcanoini"]; ?></td>
 					<td><?=$ppc["curnome"]; ?></td>
+					<td>
+					<a href= "../ppc/gerenciappc.php?opcao=ler&ppccod=<?=$ppc['ppccod']; ?>">Visualizar PPC</a>
+					</td>
 					<td><a
 						href="gerenciaConteudo.php?opcao=alterar&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Alterar
 							dados</a></td>
@@ -291,11 +295,7 @@ if ($_GET["opcao"] == "cadastrar") :
     endif;
  elseif ($_GET["opcao"] == "alterar") :
     $conteudo = buscarConteudoCurricularPorId($_GET["ppccod"], $_GET["discod"]);
-    $ppc = buscarPpcPorId($conteudo["ppccod"]);
-    $disciplina = buscarDisciplinaPorId($conteudo["discod"]);
     $eixotematico = buscarEixoTemPorId($conteudo["eixtcod"]);
-    $ppcs = buscarPpcsExceto($ppc["ppccod"]);
-    $disciplinas = buscarDisciplinasExceto($disciplina["discod"]);
     $eixostematicos = buscarEixosTemExceto($eixotematico["eixtcod"]);
     ?>
 		<h2>Alteração de conteúdo curricular</h2>
@@ -341,7 +341,7 @@ if ($_GET["opcao"] == "cadastrar") :
     if (! array_key_exists("ppccod", $_POST) && ! array_key_exists("discod", $_POST) && ! array_key_exists("eixtcod", $_POST) && ! array_key_exists("contfase", $_POST))
         return;
     try {
-        if (atualizarConteudoCurricular($ppc["ppccod"], $disciplina["discod"], $_POST["eixtcod"], $_POST["contfase"])) {
+        if (atualizarConteudoCurricular($conteudo["ppccod"], $conteudo["discod"], $_POST["eixtcod"], $_POST["contfase"])) {
             echo "<h1>Conteúdo curricular atualizado com êxito!</h1><br>";
             echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para consultar novamente os conteúdos curriculares</a><br>";
         }
@@ -352,7 +352,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $conteudo = buscarConteudoCurricularPorId($_GET["ppccod"], $_GET["discod"]);
     $ppc = buscarPpcPorId($conteudo["ppccod"]);
     $disciplina = buscarDisciplinaPorId($conteudo["discod"]);
-    $eixotematico = buscarEixoTematicoPorId($conteudo["eixtcod"]);
+    $eixotematico = buscarEixoTemPorId($conteudo["eixtcod"]);
     ?>
 	<h2>Exclusão de conteúdo curricular</h2>
 		<br>
