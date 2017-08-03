@@ -107,8 +107,81 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 	<?php
     endif;
-endif;
+elseif ($_GET["opcao"] == "alterar"):
+$certificacao = buscarCertPorId($_GET["cercod"]);
 ?>
+<h2>Alteração de certificação</h2><br>
+<form action="" method="post">
+			<div class="form-group">
+				<label for="cerdes">Descritivo da certificação: </label> <input
+					type="text" id="cerdes" name="cerdes" class="form-control" value="<?=$certificacao['cerdes']; ?>">
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="cerreq">Requisitos da certificação: </label>
+				<textarea rows="3" cols="3" id="cerreq" name="cerreq"
+					class="form-control">
+					<?=$certificacao["cerreq"]; ?>
+					</textarea>
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="cerch">Carga horária da certificação: </label> <input
+					type="number" id="cerch" name="cerch" class="form-control" value="<?=$certificacao['cerch']; ?>">
+			</div>
+			<br>
+			<div class="form-group">
+				<input type="submit" class="btn btn-success" value="alterar">
+			</div>
+			<br>
+		</form>
+			<?php
+    if (! array_key_exists("cerdes", $_POST) && ! array_key_exists("cerreq", $_POST) && ! array_key_exists("cerch", $_POST))
+        return;
+    try {
+        if (atualizarCert($certificacao["cercod"], $_POST["cerdes"], $_POST["cerreq"], $_POST["cerch"])) {
+            echo "<h1>Certificação atualizada com êxito!</h1><br>";
+            echo "<a href= 'gerenciacertificacao.php?opcao=consultar'>Clique aqui para voltar à tela de consulta de certificações</a><br>";
+        }
+    } catch (PDOException $e) {
+     echo $e->getMessage();
+    }
+    elseif ($_GET["opcao"] == "excluir"):
+    $certificacao = buscarCertPorId($_GET["cercod"]);
+    ?>
+    <h2>Exclusão da certificação</h2><br>
+    <form action= "" method = "post">
+    <div class= "form-group" style= "resize: both;">
+        <p>
+    Você está prestes a excluir a certificação com o descritivo: <?=$certificacao["cerdes"]; ?>, com <?=$certificacao["cerch"]; ?> horas.<br>
+    Você tem certeza de que deseja executar esta operação?<br>
+    Após a confirmação, esta operação não poderá ser desfeita.
+    </p>
+    </div><br>
+<div class= "form-group">
+<input type= "submit" name= "escolha" class= "btn btn-success" value= "sim">
+</div><br>
+<div class= "form-group">
+<input type= "submit" name= "escolha" class= "btn btn-success" value= "não">
+</div><br>
+    </form>
+    <?php
+    if (!array_key_exists("escolha", $_POST))
+        return;
+    if ($_POST["escolha"] == "sim") {
+    try {
+        if (excluirCert($certificacao["cercod"])) {
+            echo "<h1>Certificação excluída com êxito!</h1><br>";
+            echo "<a href= 'gerenciacertificacao.php?opcao=consultar'>Clique aqui para voltar à tela de consulta de certificações</a><br>";
+        }
+    } catch (PDOException $e) {
+    echo $e->getMessage();    
+    }    
+    } else {
+        header("Location: gerenciacertificacao.php?opcao=consultar");
+    }
+    endif;
+    ?>
 	</div>
 </body>
 </html>

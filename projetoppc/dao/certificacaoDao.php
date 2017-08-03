@@ -34,7 +34,7 @@ function excluirCert($cercod, &$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $delcert = $conn->prepare("delete from certificacao where cercod = :cercod");
     $delcert->bindParam(":cercod", $cercod);
-    $resultado = $insercaocert->execute();
+    $resultado = $delcert->execute();
     desconectarDoBanco($conn);
     return $resultado;
 }
