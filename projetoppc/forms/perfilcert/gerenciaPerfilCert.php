@@ -128,6 +128,56 @@ if ($_GET["opcao"] == "cadastrar") :
     } catch (PDOException $e) {
 	    echo $e->getMessage();
 	}
+	elseif ($_GET["opcao"] == "consultar"):
+	$ppcs = buscarPpcs();
+	$competencias = buscarCompetencias();
+	$certificacoes = buscarCert();
+	?>
+	<h2>Consulta de perfis de certificação de término de curso</h2><br>
+	<form action= "" method= "post">
+	<div class= "form-group">
+	<label for= "ppccod">Selecione o ppc</label>
+	<select id= "ppccod" name= "ppccod" class= "form-control">
+	<?php
+	foreach ($ppcs as $ppc):
+	?>
+	<option value= "<?=$ppc['ppccod']; ?>"><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></option>
+	<?php
+	endforeach;
+	?>
+	</select>
+	</div><br>
+	<div class= "form-group">
+	<label for= "compcod">Selecione a competência</label>
+	<select id= "compcod" name= "compcod" class= "form-control">
+	<?php
+	foreach ($competencias as $competencia):
+	?>
+	<option value= "<?=$competencia['compcod']; ?>"><?=$competencia["compdes"]; ?></option>
+	<?php
+	endforeach;
+	?>
+	</select>
+	</div><br>
+	<div class= "form-group">
+	<label for= "cercod">Selecione a certificação</label>
+	<select id= "cercod" name= "cercod" class= "form-control">
+	<?php
+	foreach ($certificacoes as $cert):
+	?>
+	<option value= "<?=$cert['cercod']; ?>"><?=$cert["cerdes"]; ?></option>
+	<?php
+	endforeach;
+	?>
+	</select>
+	</div><br>
+	<div class= "form-group">
+	<input type= "submit" value= "enviar" class= "btn btn-success">
+	</div><br>
+	</form>
+	<?php
+	if (!array_key_exists("escolha", $_POST))
+	    return;
 	endif;
 	?>
 	</div>
