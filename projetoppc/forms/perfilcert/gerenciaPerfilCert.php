@@ -136,6 +136,18 @@ if ($_GET["opcao"] == "cadastrar") :
 	<h2>Consulta de perfis de certificação de término de curso</h2><br>
 	<form action= "" method= "post">
 	<div class= "form-group">
+	<label>Selecione a opção: </label><br>
+	<label class= "form-check">Selecionar perfil de certificação de curso por ppc:
+	<input type= "radio" name= "escolha" id= "opt1" class= "form-check" value= "ppc">
+	</label><br>
+	<label class= "label-check">Selecionar perfil de certificação de curso por competência:
+	<input type= "radio" name= "escolha" id= "opt2" class= "form-check" value= "competencia">
+	</label><br>
+	<label class= "form-check">Selecionar perfil de certificação de curso por certificação:
+	<input type= "radio" name= "escolha" id= "opt3" class= "form-check" value= "cert">
+	</label>
+	</div><br>
+	<div class= "form-group">
 	<label for= "ppccod">Selecione o ppc</label>
 	<select id= "ppccod" name= "ppccod" class= "form-control">
 	<?php
@@ -178,8 +190,171 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
 	if (!array_key_exists("escolha", $_POST))
 	    return;
-	endif;
+	$opcao = $_POST["escolha"];
+	if ($opcao == "ppc"):
+	$perfis = buscarPerfilCertPorPpc($_POST["ppccod"]);
+	$ppc = buscarPpcPorId($_POST["ppccod"]);
+	$totalperfilcert = count($perfis);
+	if ($totalperfilcert > 0):
 	?>
+	<h2>Número de perfis de Certificação de curso encontrados com este ppc: <?=$totalperfilcert; ?></h2><br>
+	<h2><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></h2><br>
+	<table class= "table table-bordered" style= "resize: both;">
+	<thead>
+	<tr>
+	<th>Competência</th>
+	<th>Certificação</th>
+	<th colspan= "2">Ação</th>
+	</tr>
+	</thead>
+	<tbody>
+	<?php
+	foreach ($perfis as $perfil):
+	$competencia = buscarCompetenciaPorId($perfil["compcod"]);
+	$certificacao = buscarCertPorId($perfil["cercod"]);
+	?>
+	<tr>
+	<td><?=$competencia["compdes"]; ?></td>
+	<td><?=$certificacao["cerdes"]; ?></td>
+		<td>
+	<a href= "gerenciaperfilcert.php?opcao=excluir&ppccod=<?=$perfil['ppccod']; ?>&compcod=<?=$perfil['compcod']; ?>&cercod=<?=$perfil['cercod']; ?>">excluir perfil de certificação de curso</a>
+	</td>
+	</tr>
+	<?php
+	endforeach;
+	?>
+	</tbody>
+	</table>
+	<?php
+	else:
+	?>
+	<h1>Nenhum perfil de certificação de término de curso cadastrado com este ppc</h1><br>
+	<p>Clique no link acima para cadastrar um novo perfil de certificação de Término de curso</p>
+	<?php
+	endif;
+	elseif ($opcao == "competencia"):
+	$perfis = buscarPerfilCertPorCompetencia($_POST["compcod"]);
+	$competencia = buscarCompetenciaPorId($_POST["compcod"]);
+	$totalperfilcert = count($perfis);
+	if ($totalperfilcert > 0):
+	?>
+	<h2>Número de perfis de certificação de término de curso encontrados com esta competência: <?=$totalperfilcert; ?></h2><br>
+	<h2><?=$competencia["compdes"]; ?></h2><br>
+	<table class= "table table-bordered" style= "resize: both;">
+	<thead>
+	<tr>
+	<th>ppc</th>
+	<th>Certificação</th>
+	<th colspan= "2">Ação</th>
+	</tr>
+	</thead>
+	<tbody>
+	<?php
+	foreach ($perfis as $perfil):
+	$ppc = buscarPpcPorId($perfil["ppccod"]);
+	$certificacao = buscarCertPorId($perfil["cercod"]);
+	?>
+	<tr>
+	<td><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></td>
+	<td><?=$certificacao["cerdes"]; ?></td>
+	<td>
+	<a href= "gerenciaperfilcert.php?opcao=excluir&ppccod=<?=$perfil['ppccod']; ?>&compcod=<?=$perfil['compcod']; ?>&cercod=<?=$perfil['cercod']; ?>">excluir perfil de certificação de curso</a>
+	</td>
+	</tr>
+	<?php
+	endforeach;
+	?>
+	</tbody>
+	</table>
+	<?php
+	else:
+	?>
+	<h1>Nenhum perfil de certificação de término de curso cadastrado com esta competência</h1><br>
+	<p>Clique no link acima para cadastrar um novo perfil de certificação de Término de curso</p>
+	<?php
+	endif;
+	elseif ($opcao == "cert"):
+	$perfis = buscarPerfilCertPorCertificacao($_POST["cercod"]);
+	$certificacao = buscarCertPorId($_POST["cercod"]);
+	$totalperfilcert = count($perfis);
+	if ($totalperfilcert > 0):
+	?>
+	<h2>Número de perfis de certificação de término de curso encontrados com esta certificação: <?=$totalperfilcert; ?></h2><br>
+	<h2><?=$certificacao["cerdes"]; ?></h2><br>
+	<table class= "table table-bordered" style= "resize: both;">
+	<thead>
+	<tr>
+	<th>ppc</th>
+	<th>Competência</th>
+	<th colspan= "2">Ação</th>
+	</tr>
+	</thead>
+	<tbody>
+	<?php
+	foreach ($perfis as $perfil):
+	$ppc = buscarPpcPorId($perfil["ppccod"]);
+	$competencia = buscarCompetenciaPorId($perfil["compcod"]);
+	?>
+	<tr>
+	<td><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></td>
+	<td><?=$competencia["compdes"]; ?></td>
+	<td>
+	<a href= "gerenciaperfilcert.php?opcao=excluir&ppccod=<?=$perfil['ppccod']; ?>&compcod=<?=$perfil['compcod']; ?>&cercod=<?=$perfil['cercod']; ?>">excluir perfil de certificação de curso</a>
+	</td>
+	</tr>
+	<?php
+	endforeach;
+	?>
+	</tbody>
+	</table>
+	<?php
+	else:
+	?>
+	<h1>Nenhum perfil de certificação de término de curso cadastrado com esta competência</h1><br>
+	<p>Clique no link acima para cadastrar um novo perfil de certificação de Término de curso</p>
+	<?php
+	endif;
+	endif;
+	elseif ($_GET["opcao"] == "excluir"):
+	$perfil = buscarPerfilCertPorId($_GET["ppccod"], $_GET["compcod"], $_GET["cercod"]);
+	$ppc = buscarPpcPorId($perfil["ppccod"]);
+	$competencia = buscarCompetenciaPorId($perfil["compcod"]);
+	$certificacao = buscarCertPorId($perfil["cercod"]);
+		?>
+		<h2>Exclusão de perfil de certificação de curso</h2><br>
+		<form action= "" method= "post">
+		<div class= "form-group">
+		<p>
+		Você está prestes a excluir um perfil de certificação de curso, pertencente ao <?=$ppc["curnome"]; ?>, com a competência <?=$competencia["compdes"]; ?>, com a certificação <?=$certificacao["cerdes"]; ?>.<br>
+		Você gostaria de executar esta operação?<br>
+		Ao executar esta operação, ela não poderá ser desfeita.
+		</p>
+		</div><br>
+		<div class= "form-group">
+		<input type= "submit" name= "escolha" value= "sim" class= "btn btn-success">
+		</div><br>
+		<div class= "form-group">
+		<input type= "submit" name= "escolha" value= "não" class= "btn btn-success">
+		</div>
+		</form>
+		<?php
+		if (!array_key_exists("escolha", $_POST))
+		    return;
+		if ($_POST["escolha"] == "sim") {
+		    try {
+		        if (excluirPerfilCert($perfil["ppccod"], $perfil["compcod"], $perfil["cercod"])) {
+		            echo "<h1>Perfil de certificação de curso excluído com êxito!</h1><br>";
+		            echo "<a href= 'gerenciaperfilcert.php?opcao=consultar'>Clique aqui para voltar à tela de consulta de perfil de certificação de curso</a><br>";
+		        }
+		    } catch (PDOException $e) {
+		        echo $e->getMessage();
+		    }
+		} else {
+		    header("Location: gerenciaPerfilCert.php?opcao=consultar");
+		}
+		endif;
+		?>
+		
 	</div>
 </body>
 </html>
