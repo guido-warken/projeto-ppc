@@ -17,6 +17,7 @@ require_once 'c:\wamp64\www\projetoppc\dao\certificacaoDao.php';
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src= "../../js/filtroperfilcert.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -26,7 +27,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $competencias = buscarCompetencias();
     $certificacoes = buscarCert();
     ?>
-	<h2>Cadastro de perfil de certificação de término de curso</h2>
+	<h2>Cadastro de perfil de certificação de curso</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
@@ -133,21 +134,22 @@ if ($_GET["opcao"] == "cadastrar") :
 	$competencias = buscarCompetencias();
 	$certificacoes = buscarCert();
 	?>
-	<h2>Consulta de perfis de certificação de término de curso</h2><br>
+	<h2>Consulta de perfis de certificação de curso</h2><br>
+	<a href= "gerenciaperfilcert.php?opcao=cadastrar">Novo perfil de certificação de curso</a><br>
 	<form action= "" method= "post">
 	<div class= "form-group">
 	<label>Selecione a opção: </label><br>
-	<label class= "form-check">Selecionar perfil de certificação de curso por ppc:
-	<input type= "radio" name= "escolha" id= "opt1" class= "form-check" value= "ppc">
+	<label class= "label-check">Selecionar perfil de certificação de curso por ppc:
+	<input type= "radio" name= "escolha" id= "opt1" class= "form-check" value= "ppc" onclick= "gerenciarFiltro()">
 	</label><br>
 	<label class= "label-check">Selecionar perfil de certificação de curso por competência:
-	<input type= "radio" name= "escolha" id= "opt2" class= "form-check" value= "competencia">
+	<input type= "radio" name= "escolha" id= "opt2" class= "form-check" value= "competencia" onclick= "gerenciarFiltro()">
 	</label><br>
-	<label class= "form-check">Selecionar perfil de certificação de curso por certificação:
-	<input type= "radio" name= "escolha" id= "opt3" class= "form-check" value= "cert">
+	<label class= "label-check">Selecionar perfil de certificação de curso por certificação:
+	<input type= "radio" name= "escolha" id= "opt3" class= "form-check" value= "cert" onclick= "gerenciarFiltro()">
 	</label>
 	</div><br>
-	<div class= "form-group">
+	<div class= "form-group" id= "div-ppc">
 	<label for= "ppccod">Selecione o ppc</label>
 	<select id= "ppccod" name= "ppccod" class= "form-control">
 	<?php
@@ -158,8 +160,8 @@ if ($_GET["opcao"] == "cadastrar") :
 	endforeach;
 	?>
 	</select>
-	</div><br>
-	<div class= "form-group">
+	</div>
+	<div class= "form-group" id= "div-competencia">
 	<label for= "compcod">Selecione a competência</label>
 	<select id= "compcod" name= "compcod" class= "form-control">
 	<?php
@@ -170,8 +172,8 @@ if ($_GET["opcao"] == "cadastrar") :
 	endforeach;
 	?>
 	</select>
-	</div><br>
-	<div class= "form-group">
+	</div>
+	<div class= "form-group" id= "div-cert">
 	<label for= "cercod">Selecione a certificação</label>
 	<select id= "cercod" name= "cercod" class= "form-control">
 	<?php
@@ -238,7 +240,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	$totalperfilcert = count($perfis);
 	if ($totalperfilcert > 0):
 	?>
-	<h2>Número de perfis de certificação de término de curso encontrados com esta competência: <?=$totalperfilcert; ?></h2><br>
+	<h2>Número de perfis de certificação de curso encontrados com esta competência: <?=$totalperfilcert; ?></h2><br>
 	<h2><?=$competencia["compdes"]; ?></h2><br>
 	<table class= "table table-bordered" style= "resize: both;">
 	<thead>
@@ -279,7 +281,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	$totalperfilcert = count($perfis);
 	if ($totalperfilcert > 0):
 	?>
-	<h2>Número de perfis de certificação de término de curso encontrados com esta certificação: <?=$totalperfilcert; ?></h2><br>
+	<h2>Número de perfis de certificação de curso encontrados com esta certificação: <?=$totalperfilcert; ?></h2><br>
 	<h2><?=$certificacao["cerdes"]; ?></h2><br>
 	<table class= "table table-bordered" style= "resize: both;">
 	<thead>

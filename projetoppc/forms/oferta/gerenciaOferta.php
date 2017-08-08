@@ -137,8 +137,8 @@ if ($_GET["opcao"] == "cadastrar") :
 					unidades SENAC por ppc: <input type="radio" name="escolha"
 					class="form-check" value="ppc" id="opt1"
 					onclick="gerenciarFiltro()">
-				</label><br> <label class="label-check">Listar ppcs por unidades SENAC:
-					<input type="radio" name="escolha" class="form-check"
+				</label><br> <label class="label-check">Listar ppcs por unidades
+					SENAC: <input type="radio" name="escolha" class="form-check"
 					value="unidade" id="opt2" onclick="gerenciarFiltro()">
 				</label>
 			</div>
@@ -165,13 +165,12 @@ if ($_GET["opcao"] == "cadastrar") :
      elseif (count($ppcs) == 0) :
         ?>
 	<h1>Nenhum ppc cadastrado no sistema</h1>
-				<br> <a href="../ppc/gerenciaPpc.php?opcao=cadastrar">Cadastrar um novo
-					ppc</a><br>
+				<br> <a href="../ppc/gerenciaPpc.php?opcao=cadastrar">Cadastrar um
+					novo ppc</a><br>
 	<?php
     endif;
     ?>
 	</div>
-			<br>
 			<div class="form-group" id="div-unidade">
 	<?php
     if (count($unidades) > 0) :
@@ -193,10 +192,9 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
      elseif (count($unidades) == 0) :
         ?>
-	<h1>Nenhuma unidade SENAC cadastrada no
-					sistema</h1>
-				<br> <a href="../unidade/gerenciaUnidade.php?opcao=cadastrar">Cadastrar uma nova
-					unidade SENAC</a><br>
+	<h1>Nenhuma unidade SENAC cadastrada no sistema</h1>
+				<br> <a href="../unidade/gerenciaUnidade.php?opcao=cadastrar">Cadastrar
+					uma nova unidade SENAC</a><br>
 	<?php
     endif;
     ?>
@@ -212,104 +210,134 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     $opcao = $_POST["escolha"];
     $ofertas = [];
-    if ($opcao == "ppc"):
+    if ($opcao == "ppc") :
         $ofertas = buscarOfertasPorPpc($_POST["ppccod"]);
-    $ppc = buscarPpcPorId($_POST["ppccod"]);
-    $totalofertas = count($ofertas);
-    if ($totalofertas > 0):
+        $ppc = buscarPpcPorId($_POST["ppccod"]);
+        $totalofertas = count($ofertas);
+        if ($totalofertas > 0) :
+            ?>
+    <h2>Número de unidades que o fertam este ppc: <?=$totalofertas; ?></h2>
+		<br>
+		<p>Clique em uma unidade abaixo para visualizar a sua oferta do ppc</p>
+		<br>
+		<ol class="list-group">
+<?php
+            foreach ($ofertas as $oferta) :
+                $unidade = buscarUnidadePorId($oferta["unicod"]);
+                ?>
+<li class="list-group-item"><a
+				href="gerenciaOferta.php?opcao=ler&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>"><?=$unidade["uninome"]; ?></a>
+			</li>
+<?php
+            endforeach
+            ;
+            ?>
+</ol>
+<?php
+        else :
+            ?>
+<h1>Nenhuma oferta encontrada com este ppc</h1>
+		<br>
+		<p>Clique no link acima para cadastrar uma nova oferta</p>
+		<br>
+<?php
+        endif;
+     elseif ($opcao == "unidade") :
+        $ofertas = buscarOfertasPorUnidade($_POST["unicod"]);
+        $unidade = buscarUnidadePorId($_POST["unicod"]);
+        $totalofertas = count($ofertas);
+        if ($totalofertas > 0) :
+            ?>
+<h2>Número de ppcs ofertados na unidade SENAC <?=$unidade["uninome"]; ?>: <?=$totalofertas; ?></h2>
+		<br>
+		<p>Clique em um ppc abaixo para visualizar a sua oferta</p>
+		<br>
+		<ol class="list-group">
+<?php
+            foreach ($ofertas as $oferta) :
+                $ppc = buscarPpcPorId($oferta["ppccod"]);
+                ?>
+<li class="list-group-item"><a
+				href="gerenciaOferta.php?opcao=ler&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>"><?=$ppc["ppcanoini"];?> - <?=$ppc["curnome"]; ?></a>
+			</li>
+<?php
+            endforeach
+            ;
+            ?>
+</ol>
+<?php
+        else :
+            ?>
+<h1>Nenhuma oferta cadastrada com esta unidade SENAC</h1>
+		<br>
+		<p>Clique no link acima para cadastrar uma nova oferta</p>
+		<br>
+<?php
+        endif;
+    endif;
+ elseif ($_GET["opcao"] == "ler") :
+    $oferta = buscarOfertaPorId($_GET["ppccod"], $_GET["unicod"]);
+    $ppc = buscarPpcPorId($oferta["ppccod"]);
+    $unidade = buscarUnidadePorId($oferta["unicod"]);
     ?>
-    <h2>Número de unidades que o fertam este ppc: <?=$totalofertas; ?></h2><br>
-    <p>Clique em uma unidade abaixo para visualizar a sua oferta do ppc</p><br>
-<ol class = "list-group">
-<?php
-foreach ($ofertas as $oferta):
-$unidade = buscarUnidadePorId($oferta["unicod"]);
-?>
-<li class = "list-group-item">
-<a href= "gerenciaOferta.php?opcao=ler&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>"><?=$unidade["uninome"]; ?></a>
-</li>
-<?php
-endforeach;
-?>
-</ol>
-<?php
-else:
-?>
-<h1>Nenhuma oferta encontrada com este ppc</h1><br>
-<p>Clique no link acima para cadastrar uma nova oferta</p><br>
-<?php
-endif;
-elseif ($opcao == "unidade"):
-$ofertas = buscarOfertasPorUnidade($_POST["unicod"]);
-$unidade = buscarUnidadePorId($_POST["unicod"]);
-$totalofertas = count($ofertas);
-if ($totalofertas > 0):
-?>
-<h2>Número de ppcs ofertados na unidade SENAC <?=$unidade["uninome"]; ?>: <?=$totalofertas; ?></h2><br>
-<p>Clique em um ppc abaixo para visualizar a sua oferta </p><br>
-<ol class = "list-group">
-<?php
-foreach ($ofertas as $oferta):
-$ppc = buscarPpcPorId($oferta["ppccod"]);
-?>
-<li class = "list-group-item">
-<a href= "gerenciaOferta.php?opcao=ler&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>"><?=$ppc["ppcanoini"];?> - <?=$ppc["curnome"]; ?></a>
-</li>
-<?php
-endforeach;
-?>
-</ol>
-<?php
-else:
-?>
-<h1>Nenhuma oferta cadastrada com esta unidade SENAC</h1><br>
-<p>Clique no link acima para cadastrar uma nova oferta</p><br>
-<?php
-endif;
-endif;
-elseif ($_GET["opcao"] == "ler"):
-$oferta = buscarOfertaPorId($_GET["ppccod"], $_GET["unicod"]);
-$ppc = buscarPpcPorId($oferta["ppccod"]);
-$unidade = buscarUnidadePorId($oferta["unicod"]);
-?>
-<h2><?=$unidade["uninome"]; ?>, <?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></h2><br>
-<div style="resize: both;">
-<h2>Ano de vigência do ppc</h2><br>
-<p><?=$ppc["ppcanoini"]; ?></p>
-</div><br>
-<div style="resize: both;">
-<h2>unidade SENAC</h2><br>
-<p><?=$unidade["uninome"]; ?></p>
-</div><br>
-<div style="resize: both;">
-<h2>curso</h2><br>
-<p><?=$ppc["curnome"]; ?></p>
-</div><br>
-<div style="resize: both;">
-<h2>Contexto educacional</h2><br>
-<p><?=$oferta["ofecont"]; ?></p>
-</div><br>
-<div style="resize: both;">
-<h2>Número de vagas matutinas</h2><br>
-<p><?=$oferta["ofevagasmat"]; ?></p>
-</div><br>
-<div style="resize: both;">
-<h2>Número de vagas vespertinas</h2><br>
-<p><?=$oferta["ofevagasvesp"]; ?></p>
-</div><br>
-<div style="resize: both;">
-<h2>Número de vagas noturnas</h2><br>
-<p><?=$oferta["ofevagasnot"]; ?></p>
-</div><br>
-<div style="resize: both;">
-<a href = "gerenciaOferta.php?opcao=alterar&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>">Alterar conteúdo</a>
-</div>
-<div style="resize: both;">
-<a href = "gerenciaOferta.php?opcao=excluir&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>">excluir oferta de ppc</a>
-</div>
-<div style="resize: both;">
-<a href = "gerenciaOferta.php?opcao=consultar">Voltar à tela de consulta de ofertas</a>
-</div>
+<h2><?=$unidade["uninome"]; ?>, <?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></h2>
+		<br>
+		<div style="resize: both;">
+			<h2>Ano de vigência do ppc</h2>
+			<br>
+			<p><?=$ppc["ppcanoini"]; ?></p>
+		</div>
+		<br>
+		<div style="resize: both;">
+			<h2>unidade SENAC</h2>
+			<br>
+			<p><?=$unidade["uninome"]; ?></p>
+		</div>
+		<br>
+		<div style="resize: both;">
+			<h2>curso</h2>
+			<br>
+			<p><?=$ppc["curnome"]; ?></p>
+		</div>
+		<br>
+		<div style="resize: both;">
+			<h2>Contexto educacional</h2>
+			<br>
+			<p><?=$oferta["ofecont"]; ?></p>
+		</div>
+		<br>
+		<div style="resize: both;">
+			<h2>Número de vagas matutinas</h2>
+			<br>
+			<p><?=$oferta["ofevagasmat"]; ?></p>
+		</div>
+		<br>
+		<div style="resize: both;">
+			<h2>Número de vagas vespertinas</h2>
+			<br>
+			<p><?=$oferta["ofevagasvesp"]; ?></p>
+		</div>
+		<br>
+		<div style="resize: both;">
+			<h2>Número de vagas noturnas</h2>
+			<br>
+			<p><?=$oferta["ofevagasnot"]; ?></p>
+		</div>
+		<br>
+		<div style="resize: both;">
+			<a
+				href="gerenciaOferta.php?opcao=alterar&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>">Alterar
+				conteúdo</a>
+		</div>
+		<div style="resize: both;">
+			<a
+				href="gerenciaOferta.php?opcao=excluir&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>">excluir
+				oferta de ppc</a>
+		</div>
+		<div style="resize: both;">
+			<a href="gerenciaOferta.php?opcao=consultar">Voltar à tela de
+				consulta de ofertas</a>
+		</div>
 		<?php
  elseif ($_GET["opcao"] == "alterar") :
     $oferta = buscarOfertaPorId($_GET["ppccod"], $_GET["unicod"]);
