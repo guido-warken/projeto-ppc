@@ -48,4 +48,12 @@ function rotas($pagina) {
         break;
     }
 }
+
+function active($pagina, $opcao, $link = "", $selecionada = "") {
+    if ($pagina == $link && $opcao == $selecionada) {
+        return 'class= "active"';
+    }
+    return '';
+}
+
 ?>
