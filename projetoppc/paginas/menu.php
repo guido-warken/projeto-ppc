@@ -113,7 +113,7 @@
 						<?php
     
     echo active($pagina, $opcao, "perfil", "consultar");
-    ?><a
+    ?>><a
 						href="?pagina=perfil&opcao=consultar">Consultar</a></li>
 				</ul></li>
 			<li class="dropdown"><a class="dropdown-toggle"

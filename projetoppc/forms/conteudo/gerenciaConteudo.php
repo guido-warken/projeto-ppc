@@ -5,21 +5,7 @@ require_once 'c:\wamp64\www\projetoppc\dao\ppcDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\eixoTematicoDao.php';
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gerenciamento de conteúdo curricular</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src= "../../js/filtroconteudo.js"></script>
-</head>
-<body>
+<script src= "js/filtroconteudo.js"></script>
 	<div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
@@ -394,5 +380,3 @@ if ($_GET["opcao"] == "cadastrar") :
 endif;
 ?>
 	</div>
-</body>
-</html>
