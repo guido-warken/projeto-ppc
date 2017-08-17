@@ -157,8 +157,7 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
 			</select>
 			</div>
-			<br>
-			<div class="form-group" id="div-disciplina">
+						<div class="form-group" id="div-disciplina">
 				<label for="discod">Selecione a disciplina: </label> <select
 					name="discod" id="discod" class="form-control">
 			<?php
