@@ -3,7 +3,7 @@ require_once 'c:\wamp64\www\projetoppc\dao\cursoDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\ppcDao.php';
 $conn = conectarAoBanco("localhost", "dbdep", "root", "");
 ?>
-
+<script src="js/redirectppc.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
@@ -344,6 +344,7 @@ elseif ($_GET["opcao"] == "ler") :
         }
     } else {
         echo "<p>Ok, o ppc não será excluído.</p>";
+        echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Clique aqui para voltar à tela de consulta de ppc</button>";
     }
 endif;
 ?>
