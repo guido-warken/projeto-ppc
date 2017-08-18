@@ -1,21 +1,7 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\eixoTematicoDao.php';
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gerenciamento de eixos temáticos</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body>
+<script src="js/redirecteixotem.js"></script>
 	<div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
@@ -29,7 +15,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" class="btn btn-success" value="salvar">
+				<input type="submit" class="btn btn-default" value="salvar">
 			</div>
 			<br>
 		</form>
@@ -39,7 +25,7 @@ if ($_GET["opcao"] == "cadastrar") :
     try {
         if (inserirEixoTem($_POST["eixtdes"])) {
             echo "<h1>Eixo Temático cadastrado com êxito!</h1><br>";
-            echo "<a href= 'gerenciaEixoTematico.php?opcao=consultar'>Clique aqui para consultar os eixos temáticos cadastrados</a><br>";
+            echo "<a href= '?pagina=eixotem&opcao=consultar'>Clique aqui para consultar os eixos temáticos cadastrados</a><br>";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
@@ -48,7 +34,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $eixostematicos = buscarEixosTem();
     ?>
 	<h2>Consultando os eixos temáticos</h2>
-		<br> <a href="gerenciaEixoTematico.php?opcao=cadastrar">Novo eixo
+		<br> <a href="?pagina=eixotem&opcao=cadastrar">Novo eixo
 			temático</a><br>
 	<?php
     if (count($eixostematicos) > 0) :
@@ -70,10 +56,10 @@ if ($_GET["opcao"] == "cadastrar") :
 	<tr>
 					<td><?=$eixo["eixtdes"]; ?></td>
 					<td><a
-						href="gerenciaEixoTematico.php?opcao=alterar&eixtcod=<?=$eixo['eixtcod']; ?>">Alterar
+						href="?pagina=eixotem&opcao=alterar&eixtcod=<?=$eixo['eixtcod']; ?>">Alterar
 							dados</a></td>
 					<td><a
-						href="gerenciaEixoTematico.php?opcao=excluir&eixtcod=<?=$eixo['eixtcod']; ?>">Excluir
+						href="?pagina=eixotem&opcao=excluir&eixtcod=<?=$eixo['eixtcod']; ?>">Excluir
 							eixo temático</a></td>
 				</tr>
 	<?php
@@ -85,7 +71,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-	<h1>Nenhum eixo temático cadastrado no sistema</h1>
+	<h1 class="text-warning">Nenhum eixo temático cadastrado no sistema</h1>
 		<br>
 		<p>Clique no link acima para cadastrar um novo eixo temático</p>
 		<br>
@@ -104,7 +90,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" class="btn btn-success" value="alterar">
+				<input type="submit" class="btn btn-default" value="alterar">
 			</div>
 			<br>
 		</form>
@@ -113,8 +99,8 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     try {
         if (atualizarEixoTem($eixotematico["eixtcod"], $_POST["eixtdes"])) {
-            echo "<h1>Eixo temático atualizado com êxito!</h1><br>";
-            echo "<a href= 'gerenciaEixoTematico.php?opcao=consultar'>Clique aqui para consultar novamente os eixos temáticos</a><br>";
+            echo "<h1 class= 'text-success'>Eixo temático atualizado com êxito!</h1><br>";
+            echo "<a href= '?pagina=eixotem&opcao=consultar'>Clique aqui para consultar novamente os eixos temáticos</a><br>";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
@@ -126,7 +112,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
-				<p>
+				<p class="text-warning">
 	Você está prestes a excluir o eixo temático <?=$eixotematico["eixtdes"]; ?>.<br>
 					Você realmente deseja executar esta operação?<br> Após a
 					confirmação, esta operação não poderá ser desfeita.
@@ -135,12 +121,12 @@ if ($_GET["opcao"] == "cadastrar") :
 			<br>
 			<div class="form-group">
 				<input type="submit" name="escolha" value="sim"
-					class="btn btn-success">
+					class="btn btn-default">
 			</div>
 			<br>
 			<div class="form-group">
 				<input type="submit" name="escolha" value="não"
-					class="btn btn-success">
+					class="btn btn-default">
 			</div>
 			<br>
 		</form>
@@ -149,15 +135,16 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     if ($_POST["escolha"] == "sim") {
         try {
-            if (excluirEixoTematico($eixotematico["eixtcod"])) {
-                echo "<h1>Eixo temático excluído com êxito!</h1><br>";
-                echo "<a href= 'gerenciaEixoTematico.php?opcao=consultar'>Clique aqui para consultar novamente os eixos temáticos</a><br>";
+            if (excluirEixoTem($eixotematico["eixtcod"])) {
+                echo "<h1 class= 'text-success'>Eixo temático excluído com êxito!</h1><br>";
+                echo "<a href= '?pagina=eixotem&opcao=consultar'>Clique aqui para consultar novamente os eixos temáticos</a><br>";
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
     } else {
-        header("Location: gerenciaEixoTematico.php?opcao=consultar");
+        echo "<p>Ok, o eixo temático não será excluído.</p><br>";
+        echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Voltar à tela de consulta de eixos temáticos</button><br>";
     }
 endif;
 ?>

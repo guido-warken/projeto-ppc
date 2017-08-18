@@ -1,7 +1,7 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\eixoTecDao.php';
 ?>
-
+<script src="js/redirecteixotec.js"></script>
 	<div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
@@ -24,7 +24,7 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     try {
         if (inserirEixoTec($_POST["eixdesc"])) {
-            echo "<h1 class= 'text=warning'>Eixo tecnológico cadastrado com êxito!</h1><br>";
+            echo "<h1 class= 'text-success'>Eixo tecnológico cadastrado com êxito!</h1><br>";
             echo "<a href= '?pagina=eixotec&opcao=consultar'>Clique aqui para consultar os eixos tecnológicos cadastrados</a><br>";
         }
     } catch (PDOException $e) {
@@ -72,7 +72,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<?php
     else :
         ?>
-		<h1>Nenhum eixo tecnológico cadastrado no sistema.</h1>
+		<h1 class="text-warning">Nenhum eixo tecnológico cadastrado no sistema.</h1>
 		<br>
 		<p>Clique no link acima para cadastrar um novo eixo tecnológico.</p>
 		<br>
