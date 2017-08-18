@@ -2,20 +2,6 @@
 require_once 'c:\wamp64\www\projetoppc\dao\eixoTecDao.php';
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gerenciamento de eixos tecnológicos</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body>
 	<div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
@@ -29,7 +15,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" value="salvar" class="btn btn-success">
+				<input type="submit" value="salvar" class="btn btn-default">
 			</div>
 			<br>
 		</form>
@@ -38,8 +24,8 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     try {
         if (inserirEixoTec($_POST["eixdesc"])) {
-            echo "<h1>Eixo tecnológico cadastrado com êxito!</h1><br>";
-            echo "<a href= 'gerenciaEixoTec.php?opcao=consultar'>Clique aqui para consultar os eixos tecnológicos cadastrados</a><br>";
+            echo "<h1 class= 'text=warning'>Eixo tecnológico cadastrado com êxito!</h1><br>";
+            echo "<a href= '?pagina=eixotec&opcao=consultar'>Clique aqui para consultar os eixos tecnológicos cadastrados</a><br>";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
@@ -49,7 +35,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $totaleixostec = count($eixostec);
     ?>
 	<h2>Consulta de eixos tecnológicos</h2>
-		<br> <a href="gerenciaEixoTec.php?opcao=cadastrar">Novo eixo
+		<br> <a href="?pagina=eixotec&opcao=cadastrar">Novo eixo
 			tecnológico</a><br>
 	<?php
     if ($totaleixostec > 0) :
@@ -71,10 +57,10 @@ if ($_GET["opcao"] == "cadastrar") :
 		<tr>
 					<td><?=$eixotec["eixdesc"]; ?></td>
 					<td><a
-						href="gerenciaEixoTec.php?opcao=alterar&eixcod=<?=$eixotec['eixcod']; ?>">Alterar
+						href="?pagina=eixotec&opcao=alterar&eixcod=<?=$eixotec['eixcod']; ?>">Alterar
 							dados</a></td>
 					<td><a
-						href="gerenciaEixoTec.php?opcao=excluir&eixcod=<?=$eixotec['eixcod']; ?>">Excluir
+						href="?pagina=eixotec&opcao=excluir&eixcod=<?=$eixotec['eixcod']; ?>">Excluir
 							eixo tecnológico</a></td>
 				</tr>
 		<?php
@@ -105,7 +91,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" value="alterar" class="btn btn-success">
+				<input type="submit" value="alterar" class="btn btn-default">
 			</div>
 			<br>
 		</form>
@@ -114,8 +100,8 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     try {
         if (atualizarEixoTec($eixotec["eixcod"], $_POST["eixdesc"])) {
-            echo "<h1>Eixo Tecnológico atualizado com êxito!</h1><br>";
-            echo "<a href= 'gerenciaEixoTec.php?opcao=consultar'>Clique aqui para consultar novamente os eixos tecnológicos</a><br>";
+            echo "<h1 class= 'text-success'>Eixo Tecnológico atualizado com êxito!</h1><br>";
+            echo "<a href= '?pagina=eixotec&opcao=consultar'>Clique aqui para consultar novamente os eixos tecnológicos</a><br>";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
@@ -127,7 +113,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
-				<p>
+				<p class="text-info">
 	Você está prestes a excluir o eixo tecnológico <?=$eixotec["eixdesc"]; ?>.<br>
 					Você tem certeza de que deseja executar esta operação?<br> Após a
 					confirmação, esta ação não poderá ser desfeita.
@@ -136,12 +122,12 @@ if ($_GET["opcao"] == "cadastrar") :
 			<br>
 			<div class="form-group">
 				<input type="submit" name="escolha" value="sim"
-					class="btn btn-success">
+					class="btn btn-default">
 			</div>
 			<br>
 			<div class="form-group">
 				<input type="submit" name="escolha" value="não"
-					class="btn btn-success">
+					class="btn btn-default">
 			</div>
 			<br>
 		</form>
@@ -150,18 +136,17 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     if ($_POST["escolha"] == "sim") {
         try {
-            if (excluirEixoTecnologico($eixotec["eixcod"])) {
-                echo "<h1>Eixo tecnológico excluído com êxito!</h1><br>";
-                echo "<a href= 'gerenciaEixoTec.php?opcao=consultar'>Clique aqui para consultar novamente os eixos tecnológicos</a><br>";
+            if (excluirEixoTec($eixotec["eixcod"])) {
+                echo "<h1 class= 'text-success'>Eixo tecnológico excluído com êxito!</h1><br>";
+                echo "<a href= '?pagina=eixotec&opcao=consultar'>Clique aqui para consultar novamente os eixos tecnológicos</a><br>";
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
     } else {
-        header("Location: gerenciaEixoTec.php?opcao=consultar");
+        echo "<p>Ok, o eixo tecnológico não será excluído.</p><br>";
+        echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Voltar à tela de consulta de eixos tecnológicos</button>";
     }
 endif;
 ?>
 	</div>
-</body>
-</html>
