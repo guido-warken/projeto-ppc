@@ -1,7 +1,7 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\competenciaDao.php';
 ?>
-
+<script src= "js/redirectcompetencia.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
@@ -108,11 +108,11 @@ if ($_GET["opcao"] == "cadastrar") :
  elseif ($_GET["opcao"] == "excluir") :
     $competencia = buscarCompetenciaPorId($_GET["compcod"]);
     ?>
-	<h2>Exclusão de competência</h2>
+	<h2 class= "text-center">Exclusão de competência</h2>
 	<br>
 	<form action="" method="post">
 		<div class="form-group">
-			<p>
+			<p class= "text-warning">
 	Você está prestes a excluir a competência <?=$competencia["compdes"]; ?>. <br>Tem
 				certeza de que deseja executar esta operação?<br> Após a
 				confirmação, esta operação não poderá ser desfeita.
@@ -121,12 +121,12 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<div class="form-group">
 			<input type="submit" value="sim" name="escolha"
-				class="btn btn-success">
+				class="btn btn-default">
 		</div>
 		<br>
 		<div class="form-group">
 			<input type="submit" value="não" name="escolha"
-				class="btn btn-success">
+				class="btn btn-default">
 		</div>
 		<br>
 	</form>
@@ -136,14 +136,15 @@ if ($_GET["opcao"] == "cadastrar") :
     if ($_POST["escolha"] == "sim") {
         try {
             if (excluirCompetencia($competencia["compcod"])) {
-                echo "<h1>Competência excluída com êxito!</h1><br>";
-                echo "<a href= 'gerenciaCompetencia.php?opcao=consultar'>Voltar à tela de competências</a><br>";
+                echo "<h1 class= 'text-success'>Competência excluída com êxito!</h1><br>";
+                echo "<a href= '?pagina=competencia&opcao=consultar'>Voltar à tela de competências</a><br>";
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-    } elseif ($_POST["escolha"] == "não") {
-        header("Location: gerenciaCompetencia.php?opcao=consultar");
+    } else {
+        echo "<p>Ok, a competência não será excluída</p><br>";
+        echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Voltar à tela de consulta de competências</button><br>";
     }
 endif;
 ?>
