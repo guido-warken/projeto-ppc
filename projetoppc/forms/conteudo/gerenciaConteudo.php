@@ -6,20 +6,23 @@ require_once 'c:\wamp64\www\projetoppc\dao\eixoTematicoDao.php';
 ?>
 
 <script src= "js/filtroconteudo.js"></script>
+<script src="js/redirectconteudo.js"></script>
 	<div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
+$ppcs = buscarPpcs();
+$disciplinas = buscarDisciplinas();
+$eixostematicos = buscarEixosTem();
     ?>
-	<h2>Cadastro de conteúdo curricular</h2>
+	<h2 class="text-center">Cadastro de conteúdo curricular</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
 	<?php
-    $ppcs = buscarPpcs();
-    $totalppcs = count($ppcs);
+        $totalppcs = count($ppcs);
     if ($totalppcs > 0) :
         ?>
-	<label for="ppccod">Selecione o ppc: </label> <select
+	<label for="ppccod">Selecione o <abbr class="text-uppercase">ppc</abbr>: </label> <select
 					class="form-control" id="ppccod" name="ppccod">
 	<?php
         foreach ($ppcs as $ppc) :
@@ -35,8 +38,8 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-	<h1>Nenhum ppc cadastrado no sistema</h1>
-				<br> <a href="../ppc/gerenciappc.php?opcao=cadastrar">Clique aqui
+	<h1 class="text-warning">Nenhum <abbr class="text-center">ppc</abbr> cadastrado no sistema</h1>
+				<br> <a href="?pagina=ppc&opcao=cadastrar">Clique aqui
 					para cadastrar um ppc</a><br>
 	<?php
     endif;
@@ -45,7 +48,6 @@ if ($_GET["opcao"] == "cadastrar") :
 			<br>
 			<div class="form-group">
 	<?php
-    $disciplinas = buscarDisciplinas();
     $totaldisciplinas = count($disciplinas);
     if ($totaldisciplinas > 0) :
         ?>
@@ -65,8 +67,8 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-	<h1>Nenhuma disciplina cadastrada no sistema</h1>
-				<br> <a href="../disciplina/gerenciaDisciplina.php?opcao=cadastrar">Clique
+	<h1 class="text-warning">Nenhuma disciplina cadastrada no sistema</h1>
+				<br> <a href="?pagina=disciplina&opcao=cadastrar">Clique
 					aqui para cadastrar uma disciplina</a><br>
 	<?php
     endif;
@@ -75,7 +77,6 @@ if ($_GET["opcao"] == "cadastrar") :
 			<br>
 			<div class="form-group">
 	<?php
-    $eixostematicos = buscarEixosTem();
     $totaleixostematicos = count($eixostematicos);
     if ($totaleixostematicos > 0) :
         ?>
@@ -95,9 +96,9 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-	<h1>Nenhum eixo temático cadastrado no sistema</h1>
+	<h1 class="text-warning">Nenhum eixo temático cadastrado no sistema</h1>
 				<br> <a
-					href="../eixotematico/gerenciaEixoTematico.php?opcao=cadastrar">Clique
+					href="?pagina=eixotem&opcao=cadastrar">Clique
 					aqui para cadastrar um eixo temático</a><br>
 	<?php
     endif;
@@ -105,12 +106,12 @@ if ($_GET["opcao"] == "cadastrar") :
 	</div>
 			<br>
 			<div class="form-group">
-				<label for="contfase">Número da fase da disciplina: </label> <input
+				<label for="contfase">fase da disciplina: </label> <input
 					type="number" id="contfase" name="contfase" class="form-control">
 			</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" value="salvar">
+				<input type="submit" value="salvar" class="btn btn-default">
 			</div>
 			<br>
 		</form>
@@ -119,8 +120,8 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     try {
         if (inserirConteudoCurricular($_POST["ppccod"], $_POST["discod"], $_POST["eixtcod"], $_POST["contfase"])) {
-            echo "<h1>Conteúdo curricular cadastrado com êxito!</h1><br>";
-            echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para consultar os conteúdos curriculares cadastrados no sistema</a><br>";
+            echo "<h1 class= 'text-success'>Conteúdo curricular cadastrado com êxito!</h1><br>";
+            echo "<a href= '?pagina=conteudo&opcao=consultar'>Clique aqui para consultar os conteúdos curriculares cadastrados no sistema</a><br>";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
@@ -129,13 +130,13 @@ if ($_GET["opcao"] == "cadastrar") :
     $ppcs = buscarPpcs();
     $disciplinas = buscarDisciplinas();
     ?>
-		<h2>Exibição dos conteúdos curriculares</h2>
-		<br> <a href="gerenciaConteudo.php?opcao=cadastrar">Novo conteúdo
+		<h2 class="text-center">Exibição dos conteúdos curriculares</h2>
+		<br> <a href="?pagina=conteudo&opcao=cadastrar">Novo conteúdo
 			curricular</a><br>
 		<form action="" method="post">
 			<label>Selecione a opção: </label><br>
 			<div class="form-group">
-				<label class="label-check">Pesquisar conteúdo curricular por ppc: <input
+				<label class="label-check">Pesquisar conteúdo curricular por <abbr class="text-uppercase">ppc</abbr>: <input
 					type="radio" name="escolha" value="ppc" id="opt1"
 					class="form-check" onclick= "gerenciarFiltro()">
 				</label><br> <label class="label-check">Pesquisar conteúdo
@@ -145,7 +146,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 			<br>
 			<div class="form-group" id="div-ppc">
-				<label for="ppccod">Selecione o ppc: </label> <select name="ppccod"
+				<label for="ppccod">Selecione o <abbr class="text-uppercase">ppc</abbr>: </label> <select name="ppccod"
 					id="ppccod" class="form-control">
 			<?php
     foreach ($ppcs as $ppc) :
@@ -172,7 +173,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" value="enviar">
+				<input type="submit" value="enviar" class="btn btn-default">
 			</div>
 		</form>
 						<?php
@@ -185,9 +186,9 @@ if ($_GET["opcao"] == "cadastrar") :
         $totalconteudos = count($conteudos);
         if ($totalconteudos > 0) :
             ?>
-<h2><?= $ppc["ppcanoini"]; ?> - <?= $ppc["curnome"]; ?></h2>
+<h2 class="text-center"><?= $ppc["ppcanoini"]; ?> - <?= $ppc["curnome"]; ?></h2>
 		<table class="table table-bordered" style="resize: both;">
-			<caption>Disciplinas por ppc</caption>
+			<caption>Disciplinas por <abbr class="text-uppercase">ppc</abbr></caption>
 			<thead>
 				<tr>
 					<th>Disciplina</th>
@@ -207,10 +208,10 @@ if ($_GET["opcao"] == "cadastrar") :
 					<td><?=$eixotematico["eixtdes"]; ?></td>
 					<td><?=$conteudo["contfase"]; ?>ª</td>
 					<td><a
-						href="gerenciaConteudo.php?opcao=alterar&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Alterar
+						href="?pagina=conteudo&opcao=alterar&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Alterar
 							dados</a></td>
 					<td><a
-						href="gerenciaConteudo.php?opcao=excluir&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Excluir
+						href="?pagina=conteudo&opcao=excluir&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Excluir
 							conteudo curricular</a></td>
 				</tr>
 		<?php
@@ -222,10 +223,12 @@ if ($_GET["opcao"] == "cadastrar") :
 		<?php
         else :
             ?>
-		<h1>Nenhum conteúdo curricular cadastrado com este ppc</h1>
+            <div class="text-warning">
+        <h1>Nenhum conteúdo curricular cadastrado com este <abbr class="text-center">ppc</abbr></h1>
 		<br>
-		<p>Clique no link acima para cadastrar um conteúdo curricular</p>
-		<br>
+		<p>Clique no link acima para cadastrar um conteúdo curricular</p>    
+            </div>
+				<br>
 		<?php
         endif;
      elseif ($opcao == "disciplina") :
@@ -234,13 +237,13 @@ if ($_GET["opcao"] == "cadastrar") :
         $totalconteudos = count($conteudos);
         if ($totalconteudos > 0) :
             ?>
-		<h2><?=$disciplina["disnome"] ?></h2>
+		<h2 class="text-center"><?=$disciplina["disnome"] ?></h2>
 		<br>
 		<table class="table table-bordered" style="resize: both;">
-			<caption>Ppcs por disciplina</caption>
+			<caption><abbr class="text-uppercase">ppc</abbr>s por disciplina</caption>
 			<thead>
 				<tr>
-					<th>ano de vigência do ppc</th>
+					<th>ano de vigência do <abbr class="text-uppercase">ppc</abbr></th>
 					<th>Nome do curso</th>
 					<th colspan="3">Ação</th>
 				</tr>
@@ -254,13 +257,13 @@ if ($_GET["opcao"] == "cadastrar") :
 					<td><?=$ppc["ppcanoini"]; ?></td>
 					<td><?=$ppc["curnome"]; ?></td>
 					<td>
-					<a href= "../ppc/gerenciappc.php?opcao=ler&ppccod=<?=$ppc['ppccod']; ?>">Visualizar PPC</a>
+					<a href= "?pagina=ppc&opcao=ler&ppccod=<?=$ppc['ppccod']; ?>">Visualizar <abbr class="text-uppercase">ppc</abbr></a>
 					</td>
 					<td><a
-						href="gerenciaConteudo.php?opcao=alterar&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Alterar
+						href="?pagina=conteudo&opcao=alterar&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Alterar
 							dados</a></td>
 					<td><a
-						href="gerenciaConteudo.php?opcao=excluir&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Excluir
+						href="?pagina=conteudo&opcao=excluir&ppccod=<?=$conteudo['ppccod']; ?>&discod=<?=$conteudo['discod']; ?>">Excluir
 							conteudo curricular</a></td>
 				</tr>
 		<?php
@@ -272,10 +275,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		<?php
         else :
             ?>
-		<h1>Nenhum conteúdo curricular cadastrado com esta disciplina</h1>
+            <div class="text-warning">
+        <h1>Nenhum conteúdo curricular cadastrado com esta disciplina</h1>
 		<br>
-		<p>Clique no link acima para cadastrar um novo conteúdo curricular</p>
-		<?php
+		<p>Clique no link acima para cadastrar um novo conteúdo curricular</p>    
+            </div>
+            <br>
+				<?php
         endif;
     endif;
  elseif ($_GET["opcao"] == "alterar") :
@@ -283,7 +289,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $eixotematico = buscarEixoTemPorId($conteudo["eixtcod"]);
     $eixostematicos = buscarEixosTemExceto($eixotematico["eixtcod"]);
     ?>
-		<h2>Alteração de conteúdo curricular</h2>
+		<h2 class="text-center">Alteração de conteúdo curricular</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
@@ -318,7 +324,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" value="alterar">
+				<input type="submit" value="alterar" class="btn btn-default">
 			</div>
 			<br>
 		</form>
@@ -327,8 +333,8 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     try {
         if (atualizarConteudoCurricular($conteudo["ppccod"], $conteudo["discod"], $_POST["eixtcod"], $_POST["contfase"])) {
-            echo "<h1>Conteúdo curricular atualizado com êxito!</h1><br>";
-            echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para consultar novamente os conteúdos curriculares</a><br>";
+            echo "<h1 class= 'text-success'>Conteúdo curricular atualizado com êxito!</h1><br>";
+            echo "<a href= '?pagina=conteudo&opcao=consultar'>Clique aqui para consultar novamente os conteúdos curriculares</a><br>";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
@@ -339,24 +345,24 @@ if ($_GET["opcao"] == "cadastrar") :
     $disciplina = buscarDisciplinaPorId($conteudo["discod"]);
     $eixotematico = buscarEixoTemPorId($conteudo["eixtcod"]);
     ?>
-	<h2>Exclusão de conteúdo curricular</h2>
+	<h2 class="text-center">Exclusão de conteúdo curricular</h2>
 		<br>
 		<form action="" method="post">
 			<div class="form-group">
-				<p>
-	Você está prestes a excluir o conteudo curricular, referente ao ppc do curso <?=$ppc["curnome"]; ?>, com ano inicial de vigência em <?=$ppc["ppcanoini"]; ?>, com a disciplina <?=$disciplina["disnome"]; ?>, dada na <?=$conteudo["contfase"]; ?>ª fase.<br>
+				<p class="text-warning">
+	Você está prestes a excluir o conteudo curricular, referente ao <abbr class="text-uppercase">ppc</abbr> do curso <?=$ppc["curnome"]; ?>, com ano inicial de vigência em <?=$ppc["ppcanoini"]; ?>, com a disciplina <?=$disciplina["disnome"]; ?>, dada na <?=$conteudo["contfase"]; ?>ª fase.<br>
 					Você tem certeza de que deseja executar esta operação?<br> Após a
 					confirmação, esta operação não poderá ser desfeita.
 				</p>
 			</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" name="escolha" class="btn btn-success"
+				<input type="submit" name="escolha" class="btn btn-default"
 					value="sim">
 			</div>
 			<br>
 			<div class="form-group">
-				<input type="submit" name="escolha" class="btn btn-success"
+				<input type="submit" name="escolha" class="btn btn-default"
 					value="não">
 			</div>
 			<br>
@@ -367,14 +373,15 @@ if ($_GET["opcao"] == "cadastrar") :
     if ($_POST["escolha"] == "sim") {
         try {
             if (excluirConteudoCurricular($conteudo["ppccod"], $conteudo["discod"])) {
-                echo "<h1>Conteúdo curricular excluído com êxito!</h1><br>";
-                echo "<a href= 'gerenciaConteudo.php?opcao=consultar'>Clique aqui para voltar à tela de consulta de conteúdos curriculares</a><br>";
+                echo "<h1 class= 'text-success'>Conteúdo curricular excluído com êxito!</h1><br>";
+                echo "<a href= '?pagina=conteudo&opcao=consultar'>Clique aqui para voltar à tela de consulta de conteúdos curriculares</a><br>";
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
     } else {
-        header("Location: gerenciaConteudo.php?opcao=consultar");
+        echo "<p>Ok, o conteúdo curricular não será excluído</p><br>";
+        echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Voltar à tela de consulta de conteúdos curriculares</button><br>";
     }
 endif;
 ?>
