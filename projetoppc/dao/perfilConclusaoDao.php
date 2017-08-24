@@ -89,4 +89,26 @@ function buscarPerfilConclusaoPorId($ppccod, $compcod, &$conn = null)
     return $perfil;
 }
 
+function buscarPerfilConclusaoPorCompetencia($compcod, &$conn = null)
+{
+    $perfil = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultaperfil = $conn->prepare("select * from perfilconclusao where compcod = :compcod ");
+    $consultaperfil->bindParam(":compcod", $compcod);
+    if ($consultaperfil->execute()) {
+        $numregistros = $consultaperfil->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $perfil[$i] = $consultaperfil->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $perfil;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $perfil;
+}
+
 ?>
