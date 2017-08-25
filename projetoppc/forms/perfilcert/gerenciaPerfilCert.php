@@ -150,7 +150,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</label>
 		</div>
 		<br>
-		<div class="form-group" id="div-ppc">
+		<div class="form-group" id="div-ppc" hidden="true">
 			<label for="ppccod">Selecione o <abbr class="text-uppercase">ppc</abbr>:
 			</label> <select id="ppccod" name="ppccod" class="form-control">
 	<?php
@@ -163,7 +163,7 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
 	</select>
 		</div>
-		<div class="form-group" id="div-competencia">
+		<div class="form-group" id="div-competencia" hidden="true">
 			<label for="compcod">Selecione a competência</label> <select
 				id="compcod" name="compcod" class="form-control">
 	<?php
@@ -176,7 +176,7 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
 	</select>
 		</div>
-		<div class="form-group" id="div-cert">
+		<div class="form-group" id="div-cert" hidden="true">
 			<label for="cercod">Selecione a certificação</label> <select
 				id="cercod" name="cercod" class="form-control">
 	<?php
@@ -191,20 +191,21 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="enviar" class="btn btn-default">
+			<input type="submit" value="enviar" class="btn btn-default" name="bt-form-escolha">
 		</div>
 		<br>
 	</form>
 	<?php
-    if (! array_key_exists("escolha", $_POST))
-        return;
-    $opcao = $_POST["escolha"];
+	if (!array_key_exists("bt-form-escolha", $_POST)):
+	    return;
+	else :
+	$opcao = isset($_POST["escolha"]) ? $_POST["escolha"] : "";
     if ($opcao == "ppc") :
         $perfis = buscarPerfilCertPorPpc($_POST["ppccod"]);
         $ppc = buscarPpcPorId($_POST["ppccod"]);
         $totalperfilcert = count($perfis);
         ?>
-		<h2 class="text-center" text-primary bg-primary><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></h2>
+		<h2 class="text-center text-primary bg-primary"><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></h2>
 	<br>
 		<?php
         if ($totalperfilcert > 0) :
@@ -356,7 +357,7 @@ if ($_GET["opcao"] == "cadastrar") :
             ?>
 	<div class="text-warning bg-info">
 		<h1 class="text-center">Nenhum perfil de certificação de término de curso cadastrado com
-			esta competência</h1>
+			esta certificação</h1>
 		<br>
 		<p>Clique no link acima para cadastrar um novo perfil de certificação
 			de Término de curso</p>
@@ -366,14 +367,14 @@ if ($_GET["opcao"] == "cadastrar") :
         endif;
     else :
         ?>
-			<div class="text-danger bg-danger">
+			<div class="text-warning">
 		<p>
-			Impossível de pesquisar os perfis de certificação de curso.<br> Por
-			favor, selecione uma opção marcando uma das três opções acima.
+			Por favor, selecione uma opção marcando uma das três opções acima.
 		</p>
 	</div>
 	<br>
 		<?php
+    endif;
     endif;
  elseif ($_GET["opcao"] == "excluir") :
     $perfil = buscarPerfilCertPorId($_GET["ppccod"], $_GET["compcod"], $_GET["cercod"]);
