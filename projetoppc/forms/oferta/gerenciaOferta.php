@@ -5,22 +5,24 @@ require_once 'c:\wamp64\www\projetoppc\dao\unidadeDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\cursoDao.php';
 ?>
 
-<script src= "js/filtrooferta.js"></script>
+<script src="js/filtrooferta.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
+    $ppcs = buscarPpcs();
+    $unidades = buscarUnidades();
     ?>
-	<h2>Cadastro de oferta de curso</h2>
+	<h2 class="text-center text-primary bg-primary">Cadastro de oferta de
+		curso</h2>
 	<br>
 	<form action="" method="post">
 		<div class="form-group">
 	<?php
-    $ppcs = buscarPpcs();
-    $unidades = buscarUnidades();
-    if (count($ppcs) > 0) :
+    $totalppcs = count($ppcs);
+    if ($totalppcs > 0) :
         ?>
-		<label for="ppccod">Selecione o ppc: </label> <select
-				class="form-control" id="ppccod" name="ppccod">
+		<label for="ppccod">Selecione o <abbr class="text-uppercase">ppc</abbr>:
+			</label> <select class="form-control" id="ppccod" name="ppccod">
 		<?php
         foreach ($ppcs as $ppc) :
             ?>
@@ -33,11 +35,14 @@ if ($_GET["opcao"] == "cadastrar") :
         ?>
 		</select>
 		<?php
-     elseif (count($ppcs) == 0) :
+    else :
         ?>
-		<h1>Nenhum ppcCadastrado</h1>
-			<br> <a href="../ppc/gerenciaPpc.php?opcao=cadastrar">Clique aqui
-				para cadastrar um novo Ppc</a><br>
+        <div class="text-warning bg-info">
+				<h1 class="text-center">Nenhum ppcCadastrado</h1>
+				<br> <a href="?pagina=ppc&opcao=cadastrar">Clique aqui para
+					cadastrar um novo Ppc</a>
+			</div>
+			<br>
 		<?php
     endif;
     ?>
@@ -45,7 +50,8 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<div class="form-group">
 	<?php
-    if (count($unidades) > 0) :
+    $totalunidades = count($unidades);
+    if ($totalunidades > 0) :
         ?>
 	<label>Selecione a unidade SENAC de oferta: </label> <select
 				class="form-control" id="unicod" name="unicod">
@@ -61,11 +67,14 @@ if ($_GET["opcao"] == "cadastrar") :
         ?>
 	</select>
 	<?php
-     elseif (count($unidades) == 0) :
+    else :
         ?>
-	<h1>Nenhuma unidade SENAC cadastrada</h1>
-			<br> <a href="../unidade/gerenciaUnidade.php?opcao=cadastrar">Clique
-				aqui para cadastrar uma nova unidade SENAC</a><br>
+        <div class="text-warning bg-info">
+				<h1>Nenhuma unidade SENAC cadastrada</h1>
+				<br> <a href="?pagina=unidade&opcao=cadastrar">Clique aqui para
+					cadastrar uma nova unidade SENAC</a>
+			</div>
+			<br>
 	<?php
     endif;
     ?>
@@ -96,27 +105,42 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="salvar" class="btn btn-success">
+			<input type="submit" value="salvar" class="btn btn-success"
+				name="bt-form-salvar">
 		</div>
 		<br>
 	</form>
 	<?php
-    if (! array_key_exists("ppccod", $_POST) && ! array_key_exists("unicod", $_POST) && ! array_key_exists("ofecont", $_POST) && ! array_key_exists("ofevagasmat", $_POST) && ! array_key_exists("ofevagasvesp", $_POST) && ! array_key_exists("ofevagasnot", $_POST))
+    if (! array_key_exists("bt-form-salvar", $_POST)) :
         return;
-    try {
-        if (inserirOferta($_POST["ppccod"], $_POST["unicod"], $_POST["ofecont"], $_POST["ofevagasmat"], $_POST["ofevagasvesp"], $_POST["ofevagasnot"])) {
-            echo "<h1>Oferta cadastrada com êxito!</h1><br>";
-            echo "<a href = 'gerenciaOferta.php?opcao=consultar'>Clique aqui para ver as ofertas de curso cadastradas</a><br>";
+    else :
+        $ppccod = isset($_POST["ppccod"]) ? $_POST["ppccod"] : "";
+        $unicod = isset($_POST["unicod"]) ? $_POST["unicod"] : "";
+        $ofecont = isset($_POST["ofecont"]) ? $_POST["ofecont"] : "";
+        $ofevagasmat = isset($_POST["ofevagasmat"]) ? $_POST["ofevagasmat"] : "";
+        $ofevagasvesp = isset($_POST["ofevagasvesp"]) ? $_POST["ofevagasvesp"] : "";
+        $ofevagasnot = isset($_POST["ofevagasnot"]) ? $_POST["ofevagasnot"] : "";
+        if (empty($ofecont) || empty($ofevagasmat) || empty($ofevagasvesp) || empty($ofevagasnot)) :
+            echo "<div class= 'text-danger'>";
+            echo "<p>Dados incorretos.<br> Um ou mais campos do formulário de cadastro de oferta de curso não foram preenchidos corretamente.<br> Preencha corretamente o formulário e clique no botão salvar.</p><br>";
+            echo "</div>";
+        endif;
+        
+        try {
+            if (inserirOferta($ppccod, $unicod, $ofecont, $ofevagasmat, $ofevagasvesp, $ofevagasnot)) {
+                echo "<h1 class= 'text-success'>Oferta cadastrada com êxito!</h1><br>";
+                echo "<a href = '?pagina=oferta&opcao=consultar'>Clique aqui para ver as ofertas de curso cadastradas</a><br>";
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
+    endif;
  elseif ($_GET["opcao"] == "consultar") :
     $ppcs = buscarPpcs();
     $unidades = buscarUnidades();
     ?>
-	<h2>Consulta de oferta</h2>
-	<br> <a href="gerenciaOferta.php?opcao=cadastrar">Nova oferta</a><br>
+	<h2 class="text-center text-primary bg-primary">Consulta de oferta</h2>
+	<br> <a href="?pagina=oferta&opcao=cadastrar">Nova oferta</a><br>
 	<form action="" method="post">
 		<div class="form-group">
 			<label>Selecione a opção: </label><br> <label class="label-check">Listar
@@ -128,7 +152,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</label>
 		</div>
 		<br>
-		<div class="form-group" id="div-ppc">
+		<div class="form-group" id="div-ppc" hidden="true">
 	<?php
     if (count($ppcs) > 0) :
         ?>
