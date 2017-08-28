@@ -3,15 +3,15 @@ require_once 'c:\wamp64\www\projetoppc\dao\eixoTecDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\cursoDao.php';
 $conn = conectarAoBanco("localhost", "dbdep", "root", "");
 ?>
-<script src= "js/redirectcurso.js"></script>
+<script src="js/redirectcurso.js"></script>
 <div class="container">
 <?php
 if ($_GET["opcao"] == "cadastrar") :
     $eixostec = buscarEixosTec();
     ?>
-<form action="" method="post">
-		<h2>Cadastro de cursos</h2>
-		<br>
+    <h2 class="text-center text-primary bg-primary">Cadastro de cursos</h2>
+	<br>
+	<form action="" method="post">
 		<div class="form-group">
 			<label for="curnome">Nome do curso: </label> <input type="text"
 				class="form-control" name="curnome" id="curnome">
@@ -42,24 +42,43 @@ if ($_GET["opcao"] == "cadastrar") :
 <?php
     else :
         ?>
-<h1>Nenhum eixo tecnológico cadastrado no sistema</h1>
-			<br> <a href="../eixotec/gerenciaEixoTec.php?opcao=cadastrar">Cadastrar
-				um novo eixo tecnológico</a><br>
+        <div class="text-warning bg-info">
+				<h1 class="text-center">Nenhum eixo tecnológico cadastrado no
+					sistema</h1>
+				<br> <a href="?pagina=eixotec&opcao=cadastrar">Cadastrar um novo
+					eixo tecnológico</a>
+			</div>
+			<br>
 <?php
     endif;
     ?>
 			</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="salvar">
+			<input type="submit" class="btn btn-default" value="salvar"
+				name="bt-form-salvar">
 		</div>
 		<br>
 	</form>
 <?php
-    if (! array_key_exists("curnome", $_POST) && ! array_key_exists("curtit", $_POST) && ! array_key_exists("eixcod", $_POST))
+    if (! array_key_exists("bt-form-salvar", $_POST))
         return;
+    $curnome = isset($_POST["curnome"]) ? $_POST["curnome"] : "";
+    $curtit = isset($_POST["curtit"]) ? $_POST["curtit"] : "";
+    $eixcod = isset($_POST["eixcod"]) ? $_POST["eixcod"] : "";
+    if (empty($curnome) || empty($curtit)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "Um ou mais campos do formulário de cadastro de cursos não foram preenchidos corretamente.<br>";
+        echo "Por favor, preencha novamente o formulário e clique no botão salvar";
+        echo "</p>";
+        echo "</div>";
+        exit();
+    endif;
+    
     try {
-        if (inserirCurso($_POST["curnome"], $_POST["curtit"], $_POST["eixcod"], $conn)) {
+        if (inserirCurso($curnome, $curtit, $eixcod, $conn)) {
             echo "<h1 class= 'text-success'>Curso cadastrado com êxito!</h1><br>";
             echo "<a href='?pagina=curso&opcao=consultar'>Clique aqui para consultar os cursos cadastrados</a><br>";
         }
@@ -69,7 +88,8 @@ if ($_GET["opcao"] == "cadastrar") :
     }
  elseif ($_GET["opcao"] == "consultar") :
     ?>
-	<h2>Consultando os cursos cadastrados</h2>
+	<h2 class="text-center text-primary bg-primary">Consultando os cursos
+		cadastrados</h2>
 	<br> <a href="?pagina=curso&opcao=cadastrar">Cadastrar mais um curso</a>
 	<br> <br>
 	<?php
@@ -77,7 +97,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $totalcursos = count($cursos);
     if ($totalcursos > 0) :
         ?>
-	<h2>Número de cursos encontrados: <?= $totalcursos; ?></h2>
+	<h2 class="text-center text-info">Número de cursos encontrados: <?= $totalcursos; ?></h2>
 	<br>
 	<table class="table table-bordered">
 		<caption>Cursos</caption>
@@ -114,9 +134,11 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-	<h1>Nenhum curso cadastrado no momento.</h1>
-	<br>
-	<p>Clique no link acima para cadastrar um novo curso.</p>
+        <div class="text-warning">
+		<h1 class="text-center">Nenhum curso cadastrado no momento.</h1>
+		<br>
+		<p>Clique no link acima para cadastrar um novo curso.</p>
+	</div>
 	<br>
 	<?php
     endif;
@@ -125,7 +147,8 @@ if ($_GET["opcao"] == "cadastrar") :
     $eixotec = buscarEixoTecPorId($curso["eixcod"], $conn);
     $eixostec = buscarEixosTecExceto($eixotec["eixcod"], $conn);
     ?>
-	<h2>Alteração dos dados do curso selecionado</h2>
+	<h2 class="text-center text-primary bg-primary">Alteração dos dados do
+		curso selecionado</h2>
 	<br>
 	<form action="" method="post">
 		<div class="form-group">
@@ -166,16 +189,31 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="alterar">
+			<input type="submit" class="btn btn-default" value="alterar"
+				name="bt-form-alterar">
 		</div>
 		<br>
 	</form>
 	<?php
-    if (! array_key_exists("curnome", $_POST) && ! array_key_exists("curtit", $_POST) && ! array_key_exists("eixcod", $_POST))
+    if (! array_key_exists("bt-form-alterar", $_POST))
         return;
+    $curnome = isset($_POST["curnome"]) ? $_POST["curnome"] : "";
+    $curtit = isset($_POST["curtit"]) ? $_POST["curtit"] : "";
+    $eixcod = isset($_POST["eixcod"]) ? $_POST["eixcod"] : "";
+    if (empty($curnome) || empty($curtit)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "Um ou mais campos do formulário de alteração de cursos não foram preenchidos corretamente.<br>";
+        echo "Por favor, preencha novamente o formulário e clique no botão salvar";
+        echo "</p>";
+        echo "</div>";
+        exit();
+    endif;
+    
     try {
         if (atualizarCurso($_POST["curnome"], $_POST["curtit"], $_POST["eixcod"], $curso["curcod"], $conn)) {
-            echo "<h1>Curso atualizado com êxito!</h1><br>";
+            echo "<h1 class='text-success'>Curso atualizado com êxito!</h1><br>";
             echo "<a href = '?pagina=curso&opcao=consultar'>Voltar à consulta de cursos</a><br>";
         }
     } catch (PDOException $e) {
@@ -184,7 +222,8 @@ if ($_GET["opcao"] == "cadastrar") :
  elseif ($_GET["opcao"] == "excluir") :
     $curso = buscarCursoPorId($_GET["curcod"], $conn);
     ?>
-	<h2>Exclusão do curso selecionado</h2>
+	<h2 class="text-center text-primary bg-primary">Exclusão do curso
+		selecionado</h2>
 	<br>
 	<form action="" method="post">
 		<div class="form-group">
@@ -220,7 +259,7 @@ if ($_GET["opcao"] == "cadastrar") :
         }
     else :
         echo "<p>Ok, o curso não será excluído</p><br>";
-    echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Voltar à tela de consulta de cursos</button><br>";
+        echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Voltar à tela de consulta de cursos</button><br>";
     endif;
 endif;
 ?>
