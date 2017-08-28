@@ -5,6 +5,7 @@ require_once 'c:\wamp64\www\projetoppc\dao\unidadeDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\cursoDao.php';
 ?>
 
+<script src="js/redirectoferta.js"></script>
 <script src="js/filtrooferta.js"></script>
 <div class="container">
 	<?php
@@ -105,7 +106,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="salvar" class="btn btn-success"
+			<input type="submit" value="salvar" class="btn btn-default"
 				name="bt-form-salvar">
 		</div>
 		<br>
@@ -120,13 +121,21 @@ if ($_GET["opcao"] == "cadastrar") :
         $ofevagasmat = isset($_POST["ofevagasmat"]) ? $_POST["ofevagasmat"] : "";
         $ofevagasvesp = isset($_POST["ofevagasvesp"]) ? $_POST["ofevagasvesp"] : "";
         $ofevagasnot = isset($_POST["ofevagasnot"]) ? $_POST["ofevagasnot"] : "";
-        if (empty($ofecont) || empty($ofevagasmat) || empty($ofevagasvesp) || empty($ofevagasnot)) :
+        $oferta = buscarOfertaPorId($ppccod, $unicod);
+        if (empty($ofecont) || ! is_numeric($ofevagasmat) || ! is_numeric($ofevagasvesp) || ! is_numeric($ofevagasnot)) :
             echo "<div class= 'text-danger'>";
             echo "<p>Dados incorretos.<br> Um ou mais campos do formulário de cadastro de oferta de curso não foram preenchidos corretamente.<br> Preencha corretamente o formulário e clique no botão salvar.</p><br>";
             echo "</div>";
+            exit();
         endif;
-        
-        try {
+        if (! empty($oferta)) :
+        echo "<div class='text-danger'>";
+        echo "<p>Já existe uma oferta cadastrada com o <abbr class='text-uppercase'>ppc</abbr> e com a unidade SENAC informados</p><br>";
+        echo "<p>Por favor, selecione outro <abbr class='text-uppercase'>ppc</abbr> e outra unidade SENAC</p>";
+        echo "</div>";
+        exit();
+        endif;
+                        try {
             if (inserirOferta($ppccod, $unicod, $ofecont, $ofevagasmat, $ofevagasvesp, $ofevagasnot)) {
                 echo "<h1 class= 'text-success'>Oferta cadastrada com êxito!</h1><br>";
                 echo "<a href = '?pagina=oferta&opcao=consultar'>Clique aqui para ver as ofertas de curso cadastradas</a><br>";
@@ -154,9 +163,10 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<div class="form-group" id="div-ppc" hidden="true">
 	<?php
-    if (count($ppcs) > 0) :
+	$totalppcs = count($ppcs);
+    if ($totalppcs > 0) :
         ?>
-	<label for="ppccod">Selecione o ppc: </label> <select
+	<label for="ppccod">Selecione o <abbr class="text-uppercase">ppc</abbr>: </label> <select
 				class="form-control" name="ppccod" id="ppccod">
 				<option value="selecione">selecione</option>
 	<?php
@@ -171,18 +181,22 @@ if ($_GET["opcao"] == "cadastrar") :
         ?>
 	</select>
 	<?php
-     elseif (count($ppcs) == 0) :
+     else :
         ?>
-	<h1>Nenhum ppc cadastrado no sistema</h1>
-			<br> <a href="../ppc/gerenciaPpc.php?opcao=cadastrar">Cadastrar um
-				novo ppc</a><br>
+        <div class="text-warning bg-info">
+    <h1 class="text-center">Nenhum <abbr class="text-uppercase">ppc</abbr> cadastrado no sistema</h1>
+			<br> <a href="?pagina=ppc&opcao=cadastrar">Cadastrar um
+				novo <abbr class="text-uppercase">ppc</abbr></a>    
+        </div>
+	<br>
 	<?php
     endif;
     ?>
 	</div>
-		<div class="form-group" id="div-unidade">
+		<div class="form-group" id="div-unidade" hidden="true">
 	<?php
-    if (count($unidades) > 0) :
+	$totalunidades = count($unidades);
+    if ($totalunidades > 0) :
         ?>
 	<label for="unicod">Selecione a unidade SENAC: </label> <select
 				class="form-control" name="unicod" id="unicod">
@@ -199,43 +213,48 @@ if ($_GET["opcao"] == "cadastrar") :
         ?>
 	</select>
 	<?php
-     elseif (count($unidades) == 0) :
+     else :
         ?>
-	<h1>Nenhuma unidade SENAC cadastrada no sistema</h1>
-			<br> <a href="../unidade/gerenciaUnidade.php?opcao=cadastrar">Cadastrar
-				uma nova unidade SENAC</a><br>
+        <div class="text-warning bg-info">
+    <h1 class="text-center">Nenhuma unidade SENAC cadastrada no sistema</h1>
+			<br> <a href="?pagina=unidade&opcao=cadastrar">Cadastrar
+				uma nova unidade SENAC</a>    
+        </div>
+	<br>
 	<?php
     endif;
     ?>
 	</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="enviar" class="btn btn-success">
+			<input type="submit" value="enviar" class="btn btn-default" name="bt-form-escolha">
 		</div>
 		<br>
 	</form>
 	<?php
-    if (! array_key_exists("escolha", $_POST))
+    if (! array_key_exists("bt-form-escolha", $_POST)) :
         return;
-    $opcao = $_POST["escolha"];
-    $ofertas = [];
-    if ($opcao == "ppc") :
+    else :
+    $opcao = isset($_POST["escolha"]) ? $_POST["escolha"] : "";
+        if ($opcao == "ppc") :
         $ofertas = buscarOfertasPorPpc($_POST["ppccod"]);
         $ppc = buscarPpcPorId($_POST["ppccod"]);
         $totalofertas = count($ofertas);
         if ($totalofertas > 0) :
             ?>
-    <h2>Número de unidades que o fertam este ppc: <?=$totalofertas; ?></h2>
+            <div class="text-info">
+    <h2 class="text-center">Número de unidades que ofertam este <abbr class="text-uppercase">ppc</abbr>: <?=$totalofertas; ?></h2>
 	<br>
-	<p>Clique em uma unidade abaixo para visualizar a sua oferta do ppc</p>
-	<br>
+	<p>Clique em uma unidade abaixo para visualizar a sua oferta do <abbr class="text-uppercase">ppc</abbr></p>
+	            </div>
+    <br>
 	<ol class="list-group">
 <?php
             foreach ($ofertas as $oferta) :
                 $unidade = buscarUnidadePorId($oferta["unicod"]);
                 ?>
 <li class="list-group-item"><a
-			href="gerenciaOferta.php?opcao=ler&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>"><?=$unidade["uninome"]; ?></a>
+			href="?pagina=oferta&opcao=ler&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>"><?=$unidade["uninome"]; ?></a>
 		</li>
 <?php
             endforeach
@@ -245,9 +264,11 @@ if ($_GET["opcao"] == "cadastrar") :
 <?php
         else :
             ?>
-<h1>Nenhuma oferta encontrada com este ppc</h1>
+            <div class="text-warning bg-info">
+<h1 class="text-center">Nenhuma oferta encontrada com este <abbr class="text-uppercase">ppc</abbr></h1>
 	<br>
-	<p>Clique no link acima para cadastrar uma nova oferta</p>
+	<p>Clique no link acima para cadastrar uma nova oferta</p>            
+            </div>
 	<br>
 <?php
         endif;
@@ -257,9 +278,11 @@ if ($_GET["opcao"] == "cadastrar") :
         $totalofertas = count($ofertas);
         if ($totalofertas > 0) :
             ?>
-<h2>Número de ppcs ofertados na unidade SENAC <?=$unidade["uninome"]; ?>: <?=$totalofertas; ?></h2>
+            <div class="text-info">
+<h2 class="text-center">Número de <abbr class="text-uppercase">ppc</abbr>s ofertados na unidade SENAC <?=$unidade["uninome"]; ?>: <?=$totalofertas; ?></h2>
 	<br>
-	<p>Clique em um ppc abaixo para visualizar a sua oferta</p>
+		<p>Clique em um <abbr class="text-uppercase">ppc</abbr> abaixo para visualizar a sua oferta</p>
+            </div>
 	<br>
 	<ol class="list-group">
 <?php
@@ -267,7 +290,7 @@ if ($_GET["opcao"] == "cadastrar") :
                 $ppc = buscarPpcPorId($oferta["ppccod"]);
                 ?>
 <li class="list-group-item"><a
-			href="gerenciaOferta.php?opcao=ler&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>"><?=$ppc["ppcanoini"];?> - <?=$ppc["curnome"]; ?></a>
+			href="?pagina=oferta&opcao=ler&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>"><?=$ppc["ppcanoini"];?> - <?=$ppc["curnome"]; ?></a>
 		</li>
 <?php
             endforeach
@@ -277,22 +300,33 @@ if ($_GET["opcao"] == "cadastrar") :
 <?php
         else :
             ?>
-<h1>Nenhuma oferta cadastrada com esta unidade SENAC</h1>
+            <div class="text-warning">
+<h1 class="text-center">Nenhuma oferta cadastrada com esta unidade SENAC</h1>
 	<br>
-	<p>Clique no link acima para cadastrar uma nova oferta</p>
+	<p>Clique no link acima para cadastrar uma nova oferta</p>            
+            </div>
 	<br>
 <?php
         endif;
-    endif;
- elseif ($_GET["opcao"] == "ler") :
-    $oferta = buscarOfertaPorId($_GET["ppccod"], $_GET["unicod"]);
-    $ppc = buscarPpcPorId($oferta["ppccod"]);
-    $unidade = buscarUnidadePorId($oferta["unicod"]);
-    ?>
-<h2><?=$unidade["uninome"]; ?>, <?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></h2>
+    else :
+        ?>
+        <div class="text-danger">
+        <p>
+        Impossível de pesquisar as ofertas. Por favor, selecione uma das duas opções acima. 
+        </p>
+        </div><br>
+        <?php
+        endif;
+        endif;
+        elseif ($_GET["opcao"] == "ler") :
+        $oferta = buscarOfertaPorId($_GET["ppccod"], $_GET["unicod"]);
+        $ppc = buscarPpcPorId($oferta["ppccod"]);
+        $unidade = buscarUnidadePorId($oferta["unicod"]);
+        ?>
+<h2 class="text-center text-primary bg-primary"><?=$unidade["uninome"]; ?>, <?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></h2>
 	<br>
 	<div style="resize: both;">
-		<h2>Ano de vigência do ppc</h2>
+		<h2>Ano de vigência do <abbr class="text-uppercase">ppc</abbr></h2>
 		<br>
 		<p><?=$ppc["ppcanoini"]; ?></p>
 	</div>
@@ -335,23 +369,23 @@ if ($_GET["opcao"] == "cadastrar") :
 	<br>
 	<div style="resize: both;">
 		<a
-			href="gerenciaOferta.php?opcao=alterar&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>">Alterar
+			href="?pagina=oferta&opcao=alterar&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>">Alterar
 			conteúdo</a>
 	</div>
 	<div style="resize: both;">
 		<a
-			href="gerenciaOferta.php?opcao=excluir&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>">excluir
-			oferta de ppc</a>
+			href="?pagina=oferta&opcao=excluir&ppccod=<?=$oferta['ppccod']; ?>&unicod=<?=$oferta['unicod']; ?>">excluir
+			oferta de <abbr class="text-uppercase">ppc</abbr></a>
 	</div>
 	<div style="resize: both;">
-		<a href="gerenciaOferta.php?opcao=consultar">Voltar à tela de consulta
+		<a href="?pagina=oferta&opcao=consultar">Voltar à tela de consulta
 			de ofertas</a>
 	</div>
 		<?php
  elseif ($_GET["opcao"] == "alterar") :
     $oferta = buscarOfertaPorId($_GET["ppccod"], $_GET["unicod"]);
     ?>
-	<h2>Alteração de oferta de cursos</h2>
+	<h2 class="text-center text-primary bg-primary">Alteração de oferta de cursos</h2>
 	<br>
 	<form action="" method="post">
 		<div class="form-group">
@@ -381,33 +415,44 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="alterar">
+			<input type="submit" value="alterar" class="btn btn-default" name="bt-form-alterar">
 		</div>
 		<br>
 	</form>
 		<?php
-    if (! array_key_exists("ppccod", $_POST) && ! array_key_exists("unicod", $_POST) && ! array_key_exists("ofecont", $_POST) && ! array_key_exists("ofevagasmat", $_POST) && ! array_key_exists("ofevagasvesp", $_POST) && ! array_key_exists("ofevagasnot", $_POST))
-        return;
-    try {
-        if (atualizarOferta($_POST["ppccod"], $_POST["unicod"], $_POST["ofecont"], $_POST["ofevagasmat"], $_POST["ofevagasvesp"], $_POST["ofevagasnot"])) {
-            echo "<h1>Oferta atualizada com êxito!</h1><br>";
-            echo "<a href= 'gerenciaOferta.php?opcao=consultar'>Voltar à tela de consulta de ofertas</a>";
+		if (! array_key_exists("bt-form-alterar", $_POST)) :
+		return;
+		else :
+		$ofecont = isset($_POST["ofecont"]) ? $_POST["ofecont"] : "";
+		$ofevagasmat = isset($_POST["ofevagasmat"]) ? $_POST["ofevagasmat"] : "";
+		$ofevagasvesp = isset($_POST["ofevagasvesp"]) ? $_POST["ofevagasvesp"] : "";
+		$ofevagasnot = isset($_POST["ofevagasnot"]) ? $_POST["ofevagasnot"] : "";
+				if (empty($ofecont) || ! is_numeric($ofevagasmat) || ! is_numeric($ofevagasvesp) || ! is_numeric($ofevagasnot)) :
+		echo "<div class= 'text-danger'>";
+		echo "<p>Dados incorretos.<br> Um ou mais campos do formulário de alteração de oferta de curso não foram preenchidos corretamente.<br> Preencha corretamente o formulário e clique no botão salvar.</p><br>";
+		echo "</div>";
+		exit();
+		endif;
+		    try {
+        if (atualizarOferta($oferta["ppccod"], $oferta["unicod"], $ofecont, $ofevagasmat, $ofevagasvesp, $ofevagasnot)) {
+            echo "<h1 class='text-success'>Oferta atualizada com êxito!</h1><br>";
+            echo "<a href= '?pagina=oferta&opcao=consultar'>Voltar à tela de consulta de ofertas</a>";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
+    endif;
  elseif ($_GET["opcao"] == "excluir") :
     $oferta = buscarOfertaPorId($_GET["ppccod"], $_GET["unicod"]);
     $unidade = buscarUnidadePorId($oferta["unicod"]);
     $ppc = buscarPpcPorId($oferta["ppccod"]);
-    $curso = buscarCursoPorId($ppc["curcod"]);
     ?>
-	<h2>Exclusão de oferta de curso</h2>
+	<h2 class="text-center text-primary bg-primary">Exclusão de oferta de curso</h2>
 	<br>
 	<form action="" method="post">
 		<div class="form-group">
-			<p>
-	Você está prestes a excluir a oferta do curso <?=$curso["curnome"]; ?>, com o ppc do ano de <?=$ppc["ppcanoini"]; ?>, na unidade SENAC <?=$unidade["uninome"]; ?>.<br>
+			<p class="text-warning">
+	Você está prestes a excluir a oferta do curso <?=$ppc["curnome"]; ?>, com o <abbr class="text-uppercase">ppc</abbr> do ano de <?=$ppc["ppcanoini"]; ?>, na unidade SENAC <?=$unidade["uninome"]; ?>.<br>
 				Você tem certeza de que deseja executar esta operação?<br> Após a
 				confirmação, a operação não poderá ser desfeita.
 			</p>
@@ -415,12 +460,12 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<div class="form-group">
 			<input type="submit" name="escolha" value="sim"
-				class="btn btn-success">
+				class="btn btn-default">
 		</div>
 		<br>
 		<div class="form-group">
 			<input type="submit" name="escolha" value="não"
-				class="btn btn-success">
+				class="btn btn-default">
 		</div>
 		<br>
 	</form>
@@ -430,14 +475,15 @@ if ($_GET["opcao"] == "cadastrar") :
     if ($_POST["escolha"] == "sim") {
         try {
             if (excluirOferta($oferta["ppccod"], $oferta["unicod"])) {
-                echo "<h1>Oferta excluída com êxito!</h1><br>";
-                echo "<a href= 'gerenciaOferta.php?opcao=consultar'>Voltar à tela de consulta de oferta</a><br>";
+                echo "<h1 class='text-success'>Oferta excluída com êxito!</h1><br>";
+                echo "<a href= '?pagina=oferta&opcao=consultar'>Voltar à tela de consulta de oferta</a><br>";
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
     } else {
-        header("Location: gerenciaOferta.php?opcao=consultar");
+        echo "<p>Ok, a oferta não será excluída.</p><br>";
+        echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Voltar à tela de consulta de ofertas de <abbr class='text-uppercase'>ppc</abbr></button><br>";
     }
 endif;
 ?>
