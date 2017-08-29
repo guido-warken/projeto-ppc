@@ -7,10 +7,13 @@ $conn = conectarAoBanco("localhost", "dbdep", "root", "");
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
+    $cursos = buscarCursos($conn);
     ?>
-		<form action="" method="post">
-		<h2>Cadastro de PPC</h2>
-		<br>
+    <h2 class="text-center text-primary bg-primary">
+		Cadastro de <abbr class="text-uppercase">ppc</abbr>
+	</h2>
+	<br>
+	<form action="" method="post">
 		<div class="form-group">
 			<label>Selecione a modalidade do curso: </label><br> <label>presencial
 				<input class="form-check" type="radio" name="ppcmodal"
@@ -27,7 +30,9 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="ppcdesc">Descreva a estrutura curricular do PPC: </label>
+			<label for="ppcdesc">Descreva a estrutura curricular do <abbr
+				class="text-uppercase">ppc</abbr>:
+			</label>
 			<textarea rows="3" cols="3" id="ppcdesc" name="ppcdesc"
 				class="form-control"></textarea>
 		</div>
@@ -40,11 +45,12 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<div class="form-group">
 			<?php
-    $cursos = buscarCursos($conn);
-    if (count($cursos) > 0) :
+    $totalcursos = count($cursos);
+    if ($totalcursos > 0) :
         ?>
-				<label for="curcod">Selecione o curso vinculado ao PPC: </label> <select
-				class="form-control" name="curcod" id="curcod">
+				<label for="curcod">Selecione o curso vinculado ao <abbr
+				class="text-uppercase">ppc</abbr>:
+			</label> <select class="form-control" name="curcod" id="curcod">
 			<?php
         foreach ($cursos as $curso) :
             ?>
@@ -57,11 +63,14 @@ if ($_GET["opcao"] == "cadastrar") :
         ?>
 			</select>
 			<?php
-     elseif (count($cursos) == 0) :
+    else :
         ?>
-						<h1>Nenhum curso cadastrado.</h1>
-			<br> <a href="../curso/gerenciaCurso.php?opcao=cadastrar">Clique aqui
-				para cadastrar um novo curso</a><br>
+        <div class="text-warning bg-info">
+				<h1 class="text-center">Nenhum curso cadastrado.</h1>
+				<br> <a href="?pagina=curso&opcao=cadastrar">Clique aqui para
+					cadastrar um novo curso</a>
+			</div>
+			<br>
 						<?php
     endif;
     ?>
@@ -73,33 +82,75 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="salvar" class="btn btn-default">
+			<input type="submit" value="salvar" class="btn btn-default"
+				name="bt-form-salvar">
 		</div>
 		<br>
 	</form>
 		<?php
-    if (! array_key_exists("ppcmodal", $_POST) && ! array_key_exists("ppcobj", $_POST) && ! array_key_exists("ppcdesc", $_POST) && ! array_key_exists("ppcestagio", $_POST) && ! array_key_exists("curcod", $_POST) && ! array_key_exists("ppcanoini", $_POST))
+    if (! array_key_exists("bt-form-salvar", $_POST))
         return;
+    $ppcmodal = isset($_POST["ppcmodal"]) ? $_POST["ppcmodal"] : "";
+    $ppcobj = isset($_POST["ppcobj"]) ? $_POST["ppcobj"] : "";
+    $ppcdesc = isset($_POST["ppcdesc"]) ? $_POST["ppcdesc"] : "";
+    $ppcestagio = isset($_POST["ppcestagio"]) ? $_POST["ppcestagio"] : "";
+    $curcod = isset($_POST["curcod"]) ? $_POST["curcod"] : "";
+    $ppcanoini = isset($_POST["ppcanoini"]) ? $_POST["ppcanoini"] : "";
+    $ppcs = ! empty($curcod) ? buscarPpcsPorCurso($curcod) : [];
+    if (empty($ppcmodal) || empty($ppcobj) || empty($ppcdesc) || empty($ppcestagio) || empty($curcod) || ! is_numeric($ppcanoini)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "Um ou mais campos do formulário de cadastro de <abbr class='text-uppercase'>ppc</abbr> não foram preenchidos corretamente.<br>";
+        echo "Por favor, preencha novamente o formulário e clique no botão salvar.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
+    
+    if (! empty($ppcs)) :
+        foreach ($ppcs as $ppc) :
+            if ($ppc["ppcanoini"] == $ppcanoini) :
+                echo "<div class='text-danger'>";
+                echo "<p>";
+                echo "Já existe um <abbr class='text-uppercase'>ppc</abbr> cadastrado com este ano, referente ao curso " . $ppc["curnome"] . ".<br>";
+                echo "por favor, selecione outro ano de vigência para o <abbr class='text-uppercase'>ppc</abbr> a ser cadastrado.";
+                echo "</p>";
+                echo "</div>";
+                echo "<br>";
+                break;
+    endif;
+            
+        endforeach
+        ;
+        return;
+    endif;
+    
     try {
-        if (inserirPpc($_POST["ppcmodal"], $_POST["ppcobj"], $_POST["ppcdesc"], $_POST["ppcestagio"], $_POST["curcod"], $_POST["ppcanoini"], $conn)) {
-            echo "<h1 class= 'text-success'>Ppc cadastrado com êxito!</h1><br>";
+        if (inserirPpc($ppcmodal, $ppcobj, $ppcdesc, $ppcestagio, $curcod, $ppcanoini, $conn)) {
+            echo "<h1 class= 'text-success'><abbr class='text-uppercase'>ppc</abbr> cadastrado com êxito!</h1><br>";
             echo "<a href= '?pagina=ppc&opcao=consultar'>Clique aqui para visualizar os Ppcs cadastrados</a><br>";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
  elseif ($_GET["opcao"] == "consultar") :
+    $cursos = buscarCursos($conn);
     ?>
-		<h2>Consultando os PPCs cadastrados</h2>
+		<h2 class="text-center text-primary bg-primary">
+		Consultando os <abbr class="text-uppercase">ppc</abbr>s cadastrados
+	</h2>
 	<br> <a href="?pagina=ppc&opcao=cadastrar">Novo ppc</a><br>
 	<form action="" method="post">
 		<div class="form-group">
 			<?php
-    $cursos = buscarCursos($conn);
-    if (count($cursos) > 0) :
+    $totalcursos = count($cursos);
+    if ($totalcursos > 0) :
         ?>
-				<label for="curcod">Selecione o curso para visualizar os PPCs: </label>
-			<select class="form-control" name="curcod" id="curcod">
+				<label for="curcod">Selecione o curso para visualizar os <abbr
+				class="text-uppercase">ppc</abbr>s:
+			</label> <select class="form-control" name="curcod" id="curcod">
 <?php
         foreach ($cursos as $curso) :
             ?>
@@ -112,28 +163,34 @@ if ($_GET["opcao"] == "cadastrar") :
         ?>
 				</select>
 <?php
-     elseif (count($cursos) == 0) :
+    else :
         ?>
-<h1>Não há cursos cadastrados</h1>
-			<br> <a href="?pagina=curso&opcao=cadastrar">Clique aqui para
-				cadastrar um curso</a><br>
+        <div class="text-warning bg-info">
+				<h1 class="text-center">Nenhum curso cadastrado</h1>
+				<br> <a href="?pagina=curso&opcao=cadastrar">Clique aqui para
+					cadastrar um curso</a>
+			</div>
+			<br>
 <?php
     endif;
     ?>
 			</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="enviar">
+			<input type="submit" class="btn btn-default" value="enviar"
+				name="bt-form-consultar">
 		</div>
 		<br>
 	</form>
 		<?php
-    if (! array_key_exists("curcod", $_POST))
+    if (! array_key_exists("bt-form-consultar", $_POST))
         return;
-    $ppcsPorCurso = buscarPpcsPorCurso($_POST["curcod"], $conn);
-    if (count($ppcsPorCurso) > 0) :
+    $curcod = isset($_POST["curcod"]) ? $_POST["curcod"] : "";
+    $ppcs = empty($curcod) ? buscarPpcsPorCurso($curcod, $conn) : [];
+    $totalppcs = count($ppcs);
+    if ($totalppcs > 0) :
         ?>
-		<h2>Número de PPcs encontrados: <?=count($ppcsPorCurso); ?></h2>
+		<h2 class="text-center text-info">Número de PPcs encontrados: <?=$totalppcs; ?></h2>
 	<br>
 	<p>Clique em um dos PPCs abaixo para ler seu conteúdo.</p>
 	<br>
@@ -152,9 +209,17 @@ if ($_GET["opcao"] == "cadastrar") :
 		<?php
     else :
         ?>
-		<h1>Não há nenhum ppc cadastrado com este curso</h1>
-	<br>
-	<p>Clique no link acima para cadastrar um novo ppc</p>
+        <div class="text-warning bg-info">
+		<h1 class="text-center">
+			Nenhum <abbr class="text-uppercase">ppc</abbr> cadastrado com este
+			curso
+		</h1>
+		<br>
+		<p>
+			Clique no link acima para cadastrar um novo <abbr
+				class="text-uppercase">ppc</abbr>
+		</p>
+	</div>
 	<br>
 		<?php
     endif;
@@ -162,7 +227,7 @@ if ($_GET["opcao"] == "cadastrar") :
 elseif ($_GET["opcao"] == "ler") :
     $ppc = buscarPpcPorId($_GET["ppccod"], $conn);
     ?>
-	<h1><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></h1>
+	<h1 class="text-center text-primary bg-primary"><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></h1>
 	<br>
 	<div style="resize: both;">
 		<h2>Modalidade do ppc:</h2>
@@ -202,11 +267,14 @@ elseif ($_GET["opcao"] == "ler") :
 		<a href="?pagina=ppc&opcao=excluir&ppccod=<?=$ppc['ppccod']; ?>">Excluir
 			ppc</a>
 	</div>
+	<br>
 					<?php
  elseif ($_GET["opcao"] == "alterar") :
     $ppc = buscarPpcPorId($_GET["ppccod"], $conn);
+    $curso = buscarCursoPorId($ppc["curcod"], $conn);
+    $cursos = buscarCursosExceto($curso["curcod"], $conn);
     ?>
-	<h2>Alteração de ppc</h2>
+	<h2 class="text-center">Alteração de ppc</h2>
 	<br>
 	<form action="" method="post">
 		<div class="form-group">
@@ -257,17 +325,14 @@ elseif ($_GET["opcao"] == "ler") :
 		</div>
 		<br>
 		<div class="form-group">
-			<?php
-    $curso = buscarCursoPorId($ppc["curcod"], $conn);
-    ?>
-				<label for="curcod">Selecione o curso vinculado ao PPC: </label> <select
+			<label for="curcod">Selecione o curso vinculado ao PPC: </label> <select
 				class="form-control" name="curcod" id="curcod">
 				<option value="<?= $curso['curcod']; ?>" selected="selected">
 			<?=$curso["curnome"]; ?>
 			</option>
 			<?php
-    $cursos = buscarCursosExceto($curso["curcod"], $conn);
-    if (count($cursos) > 0) :
+    $totalcursos = count($cursos);
+    if ($totalcursos > 0) :
         foreach ($cursos as $curso) :
             ?>
 			<option value="<?=$curso['curcod']; ?>">
@@ -283,22 +348,42 @@ elseif ($_GET["opcao"] == "ler") :
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="ppcanoini">Ano de início de vigência do ppc: </label> <input
-				type="number" name="ppcanoini" id="ppcanoini"
+			<label for="ppcanoini">Ano de início de vigência do <abbr
+				class="text-center">ppc</abbr>:
+			</label> <input type="number" name="ppcanoini" id="ppcanoini"
 				value="<?=$ppc['ppcanoini']; ?>">
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="alterar" class="btn btn-success">
+			<input type="submit" value="alterar" class="btn btn-default"
+				name="bt-form-alterar">
 		</div>
 		<br>
 	</form>
 		<?php
-    if (! array_key_exists("ppcmodal", $_POST) && ! array_key_exists("ppcobj", $_POST) && ! array_key_exists("ppcdesc", $_POST) && ! array_key_exists("ppcestagio", $_POST) && ! array_key_exists("curcod", $_POST) && ! array_key_exists("ppcanoini", $_POST))
+    if (! array_key_exists("bt-form-alterar", $_POST))
         return;
+    $ppcmodal = isset($_POST["ppcmodal"]) ? $_POST["ppcmodal"] : "";
+    $ppcobj = isset($_POST["ppcobj"]) ? $_POST["ppcobj"] : "";
+    $ppcdesc = isset($_POST["ppcdesc"]) ? $_POST["ppcdesc"] : "";
+    $ppcestagio = isset($_POST["ppcestagio"]) ? $_POST["ppcestagio"] : "";
+    $curcod = isset($_POST["curcod"]) ? $_POST["curcod"] : "";
+    $ppcanoini = isset($_POST["ppcanoini"]) ? $_POST["ppcanoini"] : "";
+    if (empty($ppcmodal) || empty($ppcobj) || empty($ppcdesc) || empty($ppcestagio) || empty($curcod) || ! is_numeric($ppcanoini)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "Um ou mais campos do formulário de cadastro de <abbr class='text-uppercase'>ppc</abbr> não foram preenchidos corretamente.<br>";
+        echo "Por favor, preencha novamente o formulário e clique no botão salvar.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+        endif;
+    
     try {
-        if (atualizarPpc($_POST["curcod"], $_POST["ppcmodal"], $_POST["ppcobj"], $_POST["ppcdesc"], $_POST["ppcestagio"], $_GET["ppccod"], $_POST["ppcanoini"], $conn)) {
-            echo "<h1 class= 'text-success'>PPC alterado com êxito! </h1><br>";
+        if (atualizarPpc($curcod, $ppcmodal, $ppcobj, $ppcdesc, $ppcestagio, $ppc["ppccod"], $ppcanoini, $conn)) {
+            echo "<h1 class= 'text-success'><abbr class='text-uppercase'>ppc</abbr> alterado com êxito! </h1><br>";
             echo "<a href= '?pagina=ppc&opcao=consultar'>Voltar à tela de consulta de ppc</a><br>";
         }
     } catch (PDOException $e) {
@@ -308,7 +393,7 @@ elseif ($_GET["opcao"] == "ler") :
     $ppc = buscarPpcPorId($_GET["ppccod"], $conn);
     $curso = buscarCursoPorId($ppc["curcod"], $conn);
     ?>
-	<h2>Exclusão de ppc</h2>
+	<h2 class="text-center text-primary bg-primary">Exclusão de ppc</h2>
 	<br>
 	<form action="" method="post">
 		<div class="form-group">
