@@ -101,4 +101,44 @@ function buscarCursosExceto($curcod, &$conn = null)
     return $informacoescurso;
 }
 
+function buscarCursoPorNome($curnome, &$conn = null)
+{
+    $informacoescurso = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultacurso = $conn->prepare("select * from curso where curnome = :curnome");
+    $consultacurso->bindParam(":curnome", $curnome);
+    if ($consultacurso->execute()) {
+        $numregistros = $consultacurso->rowCount();
+        if ($numregistros == 1) {
+            $informacoescurso = $consultacurso->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoescurso;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoescurso;
+}
+
+function buscarCursoPorTitulacao($curtit, &$conn = null)
+{
+    $informacoescurso = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultacurso = $conn->prepare("select * from curso where curtit = :curtit");
+    $consultacurso->bindParam(":curtit", $curtit);
+    if ($consultacurso->execute()) {
+        $numregistros = $consultacurso->rowCount();
+        if ($numregistros == 1) {
+            $informacoescurso = $consultacurso->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoescurso;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoescurso;
+}
+
 ?>

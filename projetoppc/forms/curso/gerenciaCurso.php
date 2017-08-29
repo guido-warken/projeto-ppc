@@ -66,15 +66,37 @@ if ($_GET["opcao"] == "cadastrar") :
     $curnome = isset($_POST["curnome"]) ? $_POST["curnome"] : "";
     $curtit = isset($_POST["curtit"]) ? $_POST["curtit"] : "";
     $eixcod = isset($_POST["eixcod"]) ? $_POST["eixcod"] : "";
+    $curso = ! empty($curnome) ? buscarCursoPorNome($curnome) : [];
+    if (! empty($curso)) :
+    echo "<div class='text-danger'>";
+    echo "<p>";
+    echo "Já existe um curso cadastrado com este nome.<br>";
+    echo "Por favor, informe um novo nome de curso.</p>";
+    echo "</div>";
+    echo "<br>";
+    return;
+    endif;
     if (empty($curnome) || empty($curtit)) :
         echo "<div class='text-danger'>";
         echo "<p>";
         echo "Dados incorretos.<br>";
         echo "Um ou mais campos do formulário de cadastro de cursos não foram preenchidos corretamente.<br>";
-        echo "Por favor, preencha novamente o formulário e clique no botão salvar";
+        echo "Por favor, preencha novamente o formulário e clique no botão salvar.";
         echo "</p>";
         echo "</div>";
-        exit();
+        echo "<br>";
+        return;
+    endif;
+    $curso = ! empty($curtit) ? buscarCursoPorTitulacao($curtit) : [];
+    if (! empty($curso)) :
+    echo "<div class='text-danger'>";
+    echo "<p>";
+    echo "Já existe um curso cadastrado com esta titulação.<br>";
+    echo "Por favor, informe uma nova titulação para o curso a ser cadastrado.";
+    echo "</p>";
+    echo "</div>";
+    echo "<br>";
+    return;
     endif;
     
     try {
@@ -208,7 +230,8 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "Por favor, preencha novamente o formulário e clique no botão salvar";
         echo "</p>";
         echo "</div>";
-        exit();
+        echo "<br>";
+        return;
     endif;
     
     try {
