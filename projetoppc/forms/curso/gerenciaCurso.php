@@ -4,6 +4,7 @@ require_once 'c:\wamp64\www\projetoppc\dao\cursoDao.php';
 $conn = conectarAoBanco("localhost", "dbdep", "root", "");
 ?>
 <script src="js/redirectcurso.js"></script>
+<script src="js/validaformcurso.js"></script>
 <div class="container">
 <?php
 if ($_GET["opcao"] == "cadastrar") :
@@ -11,7 +12,7 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
     <h2 class="text-center text-primary bg-primary">Cadastro de cursos</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="curnome">Nome do curso: </label> <input type="text"
 				class="form-control" name="curnome" id="curnome">
@@ -68,14 +69,15 @@ if ($_GET["opcao"] == "cadastrar") :
     $eixcod = isset($_POST["eixcod"]) ? $_POST["eixcod"] : "";
     $curso = ! empty($curnome) ? buscarCursoPorNome($curnome) : [];
     if (! empty($curso)) :
-    echo "<div class='text-danger'>";
-    echo "<p>";
-    echo "Já existe um curso cadastrado com este nome.<br>";
-    echo "Por favor, informe um novo nome de curso.</p>";
-    echo "</div>";
-    echo "<br>";
-    return;
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Já existe um curso cadastrado com este nome.<br>";
+        echo "Por favor, informe um novo nome de curso.</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
     endif;
+    
     if (empty($curnome) || empty($curtit)) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -87,16 +89,17 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "<br>";
         return;
     endif;
+    
     $curso = ! empty($curtit) ? buscarCursoPorTitulacao($curtit) : [];
     if (! empty($curso)) :
-    echo "<div class='text-danger'>";
-    echo "<p>";
-    echo "Já existe um curso cadastrado com esta titulação.<br>";
-    echo "Por favor, informe uma nova titulação para o curso a ser cadastrado.";
-    echo "</p>";
-    echo "</div>";
-    echo "<br>";
-    return;
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Já existe um curso cadastrado com esta titulação.<br>";
+        echo "Por favor, informe uma nova titulação para o curso a ser cadastrado.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
     endif;
     
     try {

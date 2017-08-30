@@ -25,22 +25,28 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<div class="form-group">
 			<label for="ppcobj">Objetivo do plano pedagógico do curso: </label>
-			<textarea rows="3" cols="3" class="form-control" id="ppcobj"
-				name="ppcobj"></textarea>
+			<spam>*</spam>
+			<textarea rows="3" cols="3" class="form-control text-danger"
+				id="ppcobj" name="ppcobj" placeholder="Objetivo do PPC" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="ppcdesc">Descreva a estrutura curricular do <abbr
 				class="text-uppercase">ppc</abbr>:
 			</label>
+			<spam>*</spam>
 			<textarea rows="3" cols="3" id="ppcdesc" name="ppcdesc"
-				class="form-control"></textarea>
+				class="form-control text-danger"
+				placeholder="Estrutura curricular do PPC" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="ppcestagio">Descreva o estágio do curso: </label>
+			<label for="ppcestagio">Descreva o estágio do <abbr
+				class="text-uppercase">ppc</abbr>:
+			</label>
+			<spam>*</spam>
 			<textarea rows="3" cols="3" id="ppcestagio" name="ppcestagio"
-				class="form-control"></textarea>
+				class="form-control" placeholder="Estágio do PPC" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
@@ -77,8 +83,10 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 		<br>
 		<div class="form-group">
-			<label for="ppcanoini">Ano de início de vigência do ppc: </label> <input
-				type="number" name="ppcanoini" id="ppcanoini">
+			<label for="ppcanoini">Ano de início de vigência do <abbr
+				class="text-uppercase">ppc</abbr>:
+			</label> <input type="number" name="ppcanoini" id="ppcanoini"
+				class="form-control text-danger" placeholder="<?=date("Y"); ?>">
 		</div>
 		<br>
 		<div class="form-group">
@@ -373,7 +381,7 @@ elseif ($_GET["opcao"] == "ler") :
         echo "<div class='text-danger'>";
         echo "<p>";
         echo "Dados incorretos.<br>";
-        echo "Um ou mais campos do formulário de cadastro de <abbr class='text-uppercase'>ppc</abbr> não foram preenchidos corretamente.<br>";
+        echo "Um ou mais campos do formulário de alteração de <abbr class='text-uppercase'>ppc</abbr> não foram preenchidos corretamente.<br>";
         echo "Por favor, preencha novamente o formulário e clique no botão salvar.";
         echo "</p>";
         echo "</div>";
