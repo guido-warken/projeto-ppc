@@ -4,6 +4,7 @@ require_once 'c:\wamp64\www\projetoppc\dao\ppcDao.php';
 $conn = conectarAoBanco("localhost", "dbdep", "root", "");
 ?>
 <script src="js/redirectppc.js"></script>
+<script src="js/validaformppc.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
@@ -13,38 +14,38 @@ if ($_GET["opcao"] == "cadastrar") :
 		Cadastro de <abbr class="text-uppercase">ppc</abbr>
 	</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label>Selecione a modalidade do curso: </label><br> <label>presencial
 				<input class="form-check" type="radio" name="ppcmodal"
-				value="presencial">
+				value="presencial" id="opt1">
 			</label><br> <label>À distância<input class="form-check" type="radio"
-				name="ppcmodal" value="À distância">
+				name="ppcmodal" value="À distância" id="opt2">
 			</label>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="ppcobj">Objetivo do plano pedagógico do curso: </label>
-			<spam>*</spam>
-			<textarea rows="3" cols="3" class="form-control text-danger"
-				id="ppcobj" name="ppcobj" placeholder="Objetivo do PPC" required></textarea>
+			<span>*</span>
+			<textarea rows="3" cols="3" class="form-control" id="ppcobj"
+				name="ppcobj" placeholder="Objetivo do PPC" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="ppcdesc">Descreva a estrutura curricular do <abbr
 				class="text-uppercase">ppc</abbr>:
 			</label>
-			<spam>*</spam>
+			<span>*</span>
 			<textarea rows="3" cols="3" id="ppcdesc" name="ppcdesc"
-				class="form-control text-danger"
-				placeholder="Estrutura curricular do PPC" required></textarea>
+				class="form-control" placeholder="Estrutura curricular do PPC"
+				required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="ppcestagio">Descreva o estágio do <abbr
 				class="text-uppercase">ppc</abbr>:
 			</label>
-			<spam>*</spam>
+			<span>*</span>
 			<textarea rows="3" cols="3" id="ppcestagio" name="ppcestagio"
 				class="form-control" placeholder="Estágio do PPC" required></textarea>
 		</div>
@@ -85,8 +86,10 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="ppcanoini">Ano de início de vigência do <abbr
 				class="text-uppercase">ppc</abbr>:
-			</label> <input type="number" name="ppcanoini" id="ppcanoini"
-				class="form-control text-danger" placeholder="<?=date("Y"); ?>">
+			</label>
+			<span>*</span>
+			<input type="number" name="ppcanoini" id="ppcanoini"
+				class="form-control">
 		</div>
 		<br>
 		<div class="form-group">
@@ -104,7 +107,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $ppcestagio = isset($_POST["ppcestagio"]) ? $_POST["ppcestagio"] : "";
     $curcod = isset($_POST["curcod"]) ? $_POST["curcod"] : "";
     $ppcanoini = isset($_POST["ppcanoini"]) ? $_POST["ppcanoini"] : "";
-    $ppcs = ! empty($curcod) ? buscarPpcsPorCurso($curcod) : [];
+    $ppcs = ! empty($curcod) ? buscarPpcsPorCurso($curcod, $conn) : [];
     if (empty($ppcmodal) || empty($ppcobj) || empty($ppcdesc) || empty($ppcestagio) || empty($curcod) || ! is_numeric($ppcanoini)) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -127,18 +130,19 @@ if ($_GET["opcao"] == "cadastrar") :
                 echo "</p>";
                 echo "</div>";
                 echo "<br>";
-                break;
-    endif;
+                return;
+                    endif;
             
         endforeach
         ;
-        return;
-    endif;
+                    endif;
     
     try {
         if (inserirPpc($ppcmodal, $ppcobj, $ppcdesc, $ppcestagio, $curcod, $ppcanoini, $conn)) {
             echo "<h1 class= 'text-success'><abbr class='text-uppercase'>ppc</abbr> cadastrado com êxito!</h1><br>";
             echo "<a href= '?pagina=ppc&opcao=consultar'>Clique aqui para visualizar os Ppcs cadastrados</a><br>";
+        } else {
+            echo "Não deu pra salvar";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
@@ -194,7 +198,7 @@ if ($_GET["opcao"] == "cadastrar") :
     if (! array_key_exists("bt-form-consultar", $_POST))
         return;
     $curcod = isset($_POST["curcod"]) ? $_POST["curcod"] : "";
-    $ppcs = empty($curcod) ? buscarPpcsPorCurso($curcod, $conn) : [];
+    $ppcs = ! empty($curcod) ? buscarPpcsPorCurso($curcod, $conn) : [];
     $totalppcs = count($ppcs);
     if ($totalppcs > 0) :
         ?>
@@ -204,7 +208,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<br>
 	<ol class="list-group">
 		<?php
-        foreach ($ppcsPorCurso as $ppc) :
+        foreach ($ppcs as $ppc) :
             ?>
 		<li class="list-group-item"><a
 			href="?pagina=ppc&opcao=ler&ppccod=<?=$ppc['ppccod']; ?>"><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></a>
@@ -284,7 +288,7 @@ elseif ($_GET["opcao"] == "ler") :
     ?>
 	<h2 class="text-center">Alteração de ppc</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label>Selecione a modalidade do curso: </label> <br>
 				<?php
@@ -310,24 +314,28 @@ elseif ($_GET["opcao"] == "ler") :
 		<br>
 		<div class="form-group">
 			<label for="ppcobj">Objetivo do plano pedagógico do curso: </label>
+			<spam>*</spam>
 			<textarea rows="3" cols="3" class="form-control" id="ppcobj"
-				name="ppcobj">
+				name="ppcobj" placeholder="Objetivo do ppc" required>
 					<?=$ppc["ppcobj"]; ?>
 					</textarea>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="ppcdesc">Descreva a estrutura curricular do PPC: </label>
+			<spam>*</spam>
 			<textarea rows="3" cols="3" id="ppcdesc" name="ppcdesc"
-				class="form-control">
+				class="form-control" placeholder="Estrutura curricular do PPC"
+				required>
 					<?=$ppc["ppcdesc"]; ?>
 					</textarea>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="ppcestagio">Descreva o estágio do curso: </label>
+			<spam>*</spam>
 			<textarea rows="3" cols="3" id="ppcestagio" name="ppcestagio"
-				class="form-control">
+				class="form-control" placeholder="estágio do PPC" required>
 					<?=$ppc["ppcestagio"]; ?>
 					</textarea>
 		</div>
@@ -358,7 +366,9 @@ elseif ($_GET["opcao"] == "ler") :
 		<div class="form-group">
 			<label for="ppcanoini">Ano de início de vigência do <abbr
 				class="text-center">ppc</abbr>:
-			</label> <input type="number" name="ppcanoini" id="ppcanoini"
+			</label>
+			<spam>*</spam>
+			<input type="number" name="ppcanoini" id="ppcanoini"
 				value="<?=$ppc['ppcanoini']; ?>">
 		</div>
 		<br>

@@ -175,7 +175,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<h2 class="text-center text-primary bg-primary">Alteração dos dados do
 		curso selecionado</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="curnome">Nome do curso: </label> <input type="text"
 				class="form-control" name="curnome" id="curnome"
