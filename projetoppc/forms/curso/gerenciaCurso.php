@@ -204,7 +204,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="curtit">Titulação obtida no término do curso: <span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" name="curtit"
-				id="curtit" style="color: red;" required>
+				id="curtit" style="color: red;" onfocus="formatarCampo()" required>
 				<?= $curso["curtit"]; ?>
 				</textarea>
 		</div>

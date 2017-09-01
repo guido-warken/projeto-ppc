@@ -21,3 +21,12 @@ function validarFormulario() {
 		return false;
 	}
 }
+
+function formatarCampo() {
+	var curtit = document.getElementById("curtit");
+	var content = curtit.innerHTML;
+	if (content.search(/\t+/g, 0) != -1) {
+		content = content.replace(/\t+/g, "");
+		curtit.innerHTML = content;
+	}
+}

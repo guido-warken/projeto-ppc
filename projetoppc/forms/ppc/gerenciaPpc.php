@@ -351,7 +351,7 @@ elseif ($_GET["opcao"] == "ler") :
 				<span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" id="ppcobj"
 				name="ppcobj" placeholder="Objetivo do ppc" style="color: red;"
-				required>
+				onfocus="formatarCampo()" required>
 					<?=$ppc["ppcobj"]; ?>
 					</textarea>
 		</div>

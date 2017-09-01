@@ -53,3 +53,24 @@ function validarConsulta() {
 		return false;
 	}
 }
+
+function formatarCampo() {
+	var ppcObj = document.getElementById("ppcobj");
+	var ppcDesc = document.getElementById("ppcdesc");
+	var ppcEstagio = document.getElementById("ppcestagio");
+	var contentPpcDesc = ppcDesc.innerHTML;
+	var contentPpcObj = ppcObj.innerHTML;
+	var contentPpcEstagio = ppcEstagio.innerHTML;
+	if (contentPpcDesc.search(/\t+/g, 0) != -1) {
+		contentPpcDesc = contentPpcDesc.replace(/\t+/g, "");
+		ppcDesc.innerHTML = contentPpcDesc;
+	}
+	if (contentPpcObj.search(/\t+/g, 0) != -1) {
+		contentPpcObj = contentPpcObj.replace(/\t+/g, "");
+		ppcObj.innerHTML = contentPpcObj;
+	}
+	if (contentPpcEstagio.search(/\t+/g, 0) != -1) {
+		contentPpcEstagio = contentPpcEstagio.replace(/\t+/g, "");
+		ppcEstagio.innerHTML = contentPpcEstagio;
+	}
+}
