@@ -15,39 +15,46 @@ if ($_GET["opcao"] == "cadastrar") :
 	</h2>
 	<br>
 	<form action="" method="post" onsubmit="return validarFormulario()">
+		<p>
+			Para cadastrar um <abbr class="text-uppercase">ppc</abbr>, preencha
+			corretamente os campos pintados de vermelho, e marcados com um
+			asterisco.
+		</p>
+		<br>
 		<div class="form-group">
-			<label>Selecione a modalidade do curso: </label><br> <label>presencial
-				<input class="form-check" type="radio" name="ppcmodal"
-				value="presencial" id="opt1">
+			<label>Selecione a modalidade do <abbr class="text-uppercase">ppc</abbr>:
+				<span>*</span>
+			</label><br> <label>presencial <input class="form-check" type="radio"
+				name="ppcmodal" value="presencial" id="opt1" style="color: red;">
 			</label><br> <label>À distância<input class="form-check" type="radio"
-				name="ppcmodal" value="À distância" id="opt2">
+				name="ppcmodal" value="À distância" id="opt2" style="color: red;">
 			</label>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="ppcobj">Objetivo do plano pedagógico do curso: </label>
-			<span>*</span>
+			<label for="ppcobj">Objetivo do <abbr class="text-uppercase">ppc</abbr>:
+				<span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" id="ppcobj"
-				name="ppcobj" placeholder="Objetivo do PPC" required></textarea>
-		</div>
-		<br>
-		<div class="form-group">
-			<label for="ppcdesc">Descreva a estrutura curricular do <abbr
-				class="text-uppercase">ppc</abbr>:
-			</label>
-			<span>*</span>
-			<textarea rows="3" cols="3" id="ppcdesc" name="ppcdesc"
-				class="form-control" placeholder="Estrutura curricular do PPC"
+				name="ppcobj" placeholder="Objetivo do PPC" style="color: red;"
 				required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="ppcestagio">Descreva o estágio do <abbr
-				class="text-uppercase">ppc</abbr>:
+			<label for="ppcdesc">Descreva a estrutura curricular do <abbr
+				class="text-uppercase">ppc</abbr>: <span>*</span>
 			</label>
-			<span>*</span>
+			<textarea rows="3" cols="3" id="ppcdesc" name="ppcdesc"
+				class="form-control" placeholder="Estrutura curricular do PPC"
+				style="color: red;" required></textarea>
+		</div>
+		<br>
+		<div class="form-group">
+			<label for="ppcestagio">Descreva o estágio do <abbr
+				class="text-uppercase">ppc</abbr>: <span>*</span>
+			</label>
 			<textarea rows="3" cols="3" id="ppcestagio" name="ppcestagio"
-				class="form-control" placeholder="Estágio do PPC" required></textarea>
+				class="form-control" placeholder="Estágio do PPC"
+				style="color: red;" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
@@ -56,8 +63,10 @@ if ($_GET["opcao"] == "cadastrar") :
     if ($totalcursos > 0) :
         ?>
 				<label for="curcod">Selecione o curso vinculado ao <abbr
-				class="text-uppercase">ppc</abbr>:
-			</label> <select class="form-control" name="curcod" id="curcod">
+				class="text-uppercase">ppc</abbr>: <span>*</span>
+			</label> <select class="form-control" name="curcod" id="curcod"
+				style="color: red">
+				<option value="-1">selecione</option>
 			<?php
         foreach ($cursos as $curso) :
             ?>
@@ -85,11 +94,9 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<div class="form-group">
 			<label for="ppcanoini">Ano de início de vigência do <abbr
-				class="text-uppercase">ppc</abbr>:
-			</label>
-			<span>*</span>
-			<input type="number" name="ppcanoini" id="ppcanoini"
-				class="form-control">
+				class="text-uppercase">ppc</abbr>: <span>*</span>
+			</label> <input type="number" name="ppcanoini" id="ppcanoini"
+				class="form-control" style="color: red;" required>
 		</div>
 		<br>
 		<div class="form-group">
@@ -108,12 +115,22 @@ if ($_GET["opcao"] == "cadastrar") :
     $curcod = isset($_POST["curcod"]) ? $_POST["curcod"] : "";
     $ppcanoini = isset($_POST["ppcanoini"]) ? $_POST["ppcanoini"] : "";
     $ppcs = ! empty($curcod) ? buscarPpcsPorCurso($curcod, $conn) : [];
-    if (empty($ppcmodal) || empty($ppcobj) || empty($ppcdesc) || empty($ppcestagio) || empty($curcod) || ! is_numeric($ppcanoini)) :
+    if (empty($ppcmodal) || empty($ppcobj) || empty($ppcdesc) || empty($ppcestagio) || ! is_numeric($ppcanoini)) :
         echo "<div class='text-danger'>";
         echo "<p>";
         echo "Dados incorretos.<br>";
         echo "Um ou mais campos do formulário de cadastro de <abbr class='text-uppercase'>ppc</abbr> não foram preenchidos corretamente.<br>";
         echo "Por favor, preencha novamente o formulário e clique no botão salvar.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
+    
+    if ($curcod == - 1) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Por favor, selecione um curso.";
         echo "</p>";
         echo "</div>";
         echo "<br>";
@@ -154,15 +171,17 @@ if ($_GET["opcao"] == "cadastrar") :
 		Consultando os <abbr class="text-uppercase">ppc</abbr>s cadastrados
 	</h2>
 	<br> <a href="?pagina=ppc&opcao=cadastrar">Novo ppc</a><br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarConsulta()">
 		<div class="form-group">
 			<?php
     $totalcursos = count($cursos);
     if ($totalcursos > 0) :
         ?>
 				<label for="curcod">Selecione o curso para visualizar os <abbr
-				class="text-uppercase">ppc</abbr>s:
-			</label> <select class="form-control" name="curcod" id="curcod">
+				class="text-uppercase">ppc</abbr>s: <span>*</span>
+			</label> <select class="form-control" name="curcod" id="curcod"
+				style="color: red;">
+				<option value="-1">Selecione</option>
 <?php
         foreach ($cursos as $curso) :
             ?>
@@ -242,13 +261,17 @@ elseif ($_GET["opcao"] == "ler") :
 	<h1 class="text-center text-primary bg-primary"><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></h1>
 	<br>
 	<div style="resize: both;">
-		<h2>Modalidade do ppc:</h2>
+		<h2>
+			Modalidade do <abbr class="text-uppercase">ppc</abbr>:
+		</h2>
 		<br>
 		<p><?=$ppc["ppcmodal"]; ?></p>
 	</div>
 	<br>
 	<div style="resize: both;">
-		<h2>Objetivo do ppc:</h2>
+		<h2>
+			Objetivo do <abbr class="text-uppercase">ppc</abbr>:
+		</h2>
 		<br>
 		<pre>
 		<?=$ppc["ppcobj"]; ?>
@@ -256,7 +279,9 @@ elseif ($_GET["opcao"] == "ler") :
 	</div>
 	<br>
 	<div style="resize: both;">
-		<h2>Descrição da estrutura curricular do ppc:</h2>
+		<h2>
+			Descrição da estrutura curricular do <abbr class="text-uppercase">ppc</abbr>:
+		</h2>
 		<br>
 		<pre>
 		<?=$ppc["ppcdesc"]; ?>
@@ -264,7 +289,9 @@ elseif ($_GET["opcao"] == "ler") :
 	</div>
 	<br>
 	<div style="resize: both;">
-		<h2>Normas de estágio do ppc:</h2>
+		<h2>
+			Normas de estágio do <abbr class="text-uppercase">ppc</abbr>:
+		</h2>
 		<br>
 		<pre>
 	<?=$ppc["ppcestagio"]; ?>	
@@ -286,7 +313,12 @@ elseif ($_GET["opcao"] == "ler") :
     $curso = buscarCursoPorId($ppc["curcod"], $conn);
     $cursos = buscarCursosExceto($curso["curcod"], $conn);
     ?>
-	<h2 class="text-center">Alteração de ppc</h2>
+	<h2 class="text-center text-primary bg-primary">Alteração de ppc</h2>
+	<br>
+	<p class="text-info">
+		Para alterar um <abbr class="text-uppercase">ppc</abbr>, preencha os
+		campos pintados em vermelho, e marcados com um asterisco.
+	</p>
 	<br>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
@@ -295,17 +327,19 @@ elseif ($_GET["opcao"] == "ler") :
     if ($ppc["ppcmodal"] == "presencial") :
         ?>
 				<label>presencial <input class="form-check" type="radio"
-				name="ppcmodal" value="presencial" checked="checked">
+				name="ppcmodal" value="presencial" checked="checked"
+				style="color: red;" id="opt1">
 			</label><br> <label>À distância<input class="form-check" type="radio"
-				name="ppcmodal" value="À distância">
+				name="ppcmodal" value="À distância" style="color: red;" id="opt2">
 			</label>
 				<?php
      elseif ($ppc["ppcmodal"] == "À distância") :
         ?>
 				<label>presencial <input class="form-check" type="radio"
-				name="ppcmodal" value="presencial">
+				name="ppcmodal" value="presencial" style="color: red;" id="opt1">
 			</label><br> <label>À distância<input class="form-check" type="radio"
-				name="ppcmodal" value="À distância" checked="checked">
+				name="ppcmodal" value="À distância" checked="checked"
+				style="color: red" id="opt2">
 			</label>
 				<?php
     endif;
@@ -313,36 +347,39 @@ elseif ($_GET["opcao"] == "ler") :
 			</div>
 		<br>
 		<div class="form-group">
-			<label for="ppcobj">Objetivo do plano pedagógico do curso: </label>
-			<spam>*</spam>
+			<label for="ppcobj">Objetivo do <abbr class="text-uppercase">ppc</abbr>:
+				<span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" id="ppcobj"
-				name="ppcobj" placeholder="Objetivo do ppc" required>
+				name="ppcobj" placeholder="Objetivo do ppc" style="color: red;"
+				required>
 					<?=$ppc["ppcobj"]; ?>
 					</textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="ppcdesc">Descreva a estrutura curricular do PPC: </label>
-			<spam>*</spam>
+			<label for="ppcdesc">Descreva a estrutura curricular do <abbr
+				class="text-uppercase">ppc</abbr>: <span>*</span></label>
 			<textarea rows="3" cols="3" id="ppcdesc" name="ppcdesc"
 				class="form-control" placeholder="Estrutura curricular do PPC"
-				required>
+				style="color: red;" required>
 					<?=$ppc["ppcdesc"]; ?>
 					</textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="ppcestagio">Descreva o estágio do curso: </label>
-			<spam>*</spam>
+			<label for="ppcestagio">Descreva o estágio do <abbr
+				class="text-uppercase">ppc</abbr>: <span>*</span></label>
 			<textarea rows="3" cols="3" id="ppcestagio" name="ppcestagio"
-				class="form-control" placeholder="estágio do PPC" required>
+				class="form-control" placeholder="estágio do PPC"
+				style="color: red;" required>
 					<?=$ppc["ppcestagio"]; ?>
 					</textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="curcod">Selecione o curso vinculado ao PPC: </label> <select
-				class="form-control" name="curcod" id="curcod">
+			<label for="curcod">Selecione o curso vinculado ao <abbr
+				class="text-uppercase">ppc</abbr>: <span>*</span></label> <select
+				class="form-control" name="curcod" id="curcod" style="color: red">
 				<option value="<?= $curso['curcod']; ?>" selected="selected">
 			<?=$curso["curnome"]; ?>
 			</option>
@@ -365,11 +402,10 @@ elseif ($_GET["opcao"] == "ler") :
 		<br>
 		<div class="form-group">
 			<label for="ppcanoini">Ano de início de vigência do <abbr
-				class="text-center">ppc</abbr>:
-			</label>
-			<spam>*</spam>
-			<input type="number" name="ppcanoini" id="ppcanoini"
-				value="<?=$ppc['ppcanoini']; ?>">
+				class="text-center">ppc</abbr>: <span>*</span>
+			</label> <input type="number" name="ppcanoini" id="ppcanoini"
+				value="<?=$ppc['ppcanoini']; ?>" class="form-control"
+				style="color: red;">
 		</div>
 		<br>
 		<div class="form-group">

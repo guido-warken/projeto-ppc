@@ -7,6 +7,7 @@ function validarFormulario() {
 	var ppcObj = document.getElementById("ppcobj");
 	var ppcDesc = document.getElementById("ppcdesc");
 	var ppcEstagio = document.getElementById("ppcestagio");
+	var curcod = document.getElementById("curcod");
 	var ppcanoini = document.getElementById("ppcanoini");
 	if (ppcObj.value.length == 0) {
 		alert("O campo objetivo do PPC deve ser preenchido corretamente.");
@@ -23,6 +24,11 @@ function validarFormulario() {
 		ppcEstagio.focus();
 		return false;
 	}
+	if (curcod.value == "-1") {
+		alert("Por favor, selecione um curso.");
+		curcod.focus();
+		return false;
+	}
 	if (!isChecked(opcao1) && !isChecked(opcao2)) {
 		alert("Selecione uma das duas opções para a modalidade do PPC.");
 		opcao1.focus();
@@ -37,4 +43,13 @@ function validarFormulario() {
 
 function isChecked(componente) {
 	return componente.checked;
+}
+
+function validarConsulta() {
+	var curcod = document.getElementById("curcod");
+	if (curcod.value == "-1") {
+		alert("Por favor, selecione um curso.");
+		curcod.focus();
+		return false;
+	}
 }

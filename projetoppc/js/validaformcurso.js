@@ -16,7 +16,7 @@ function validarFormulario() {
 		return false;
 	}
 	if (eixcod.value == "-1") {
-		alert("Por favor, selecione um curso.");
+		alert("Por favor, selecione um eixo tecnológico.");
 		eixcod.focus();
 		return false;
 	}

@@ -192,7 +192,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<h2 class="text-center text-primary bg-primary">Alteração dos dados do
 		curso selecionado</h2>
 	<br>
-	<p>Para alterar os dados do curso, altere os valores dos campos
+	<p class="text-info">Para alterar os dados do curso, altere os valores dos campos
 		marcados com um asterisco, e pintados de vermelho.</p>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
