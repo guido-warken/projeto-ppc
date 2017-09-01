@@ -12,16 +12,21 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
     <h2 class="text-center text-primary bg-primary">Cadastro de cursos</h2>
 	<br>
+	<p class="text-info">Para cadastrar um curso, preencha os campos
+		marcados com um asterisco e pintados em vermelho.</p>
+	<br>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
-			<label for="curnome">Nome do curso: </label> <input type="text"
-				class="form-control" name="curnome" id="curnome">
+			<label for="curnome">Nome do curso: <span>*</span></label> <input
+				type="text" class="form-control" name="curnome" id="curnome"
+				style="color: red;" placeholder="Nome do curso" required>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="curtit">Titulação obtida no término do curso: </label>
+			<label for="curtit">Titulação obtida no término do curso: <span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" name="curtit"
-				id="curtit"></textarea>
+				id="curtit" placeholder="Titulação obtida no término do curso"
+				style="color: red;" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
@@ -29,8 +34,10 @@ if ($_GET["opcao"] == "cadastrar") :
     $totaleixostec = count($eixostec);
     if ($totaleixostec > 0) :
         ?>
-				<label for="eixcod">Selecione o eixo tecnológico: </label> <select
-				class="form-control" name="eixcod" id="eixcod">
+				<label for="eixcod">Selecione o eixo tecnológico: <span>*</span></label>
+			<select class="form-control" name="eixcod" id="eixcod"
+				style="color: red;">
+				<option value="-1">Selecione</option>
 <?php
         foreach ($eixostec as $eixotec) :
             ?>
@@ -102,6 +109,16 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     endif;
     
+    if ($eixcod == - 1) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Selecione o eixo tecnológico vinculado ao curso a ser cadastrado.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
+    
     try {
         if (inserirCurso($curnome, $curtit, $eixcod, $conn)) {
             echo "<h1 class= 'text-success'>Curso cadastrado com êxito!</h1><br>";
@@ -159,7 +176,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-        <div class="text-warning">
+        <div class="text-warning bg-info">
 		<h1 class="text-center">Nenhum curso cadastrado no momento.</h1>
 		<br>
 		<p>Clique no link acima para cadastrar um novo curso.</p>
@@ -175,24 +192,27 @@ if ($_GET["opcao"] == "cadastrar") :
 	<h2 class="text-center text-primary bg-primary">Alteração dos dados do
 		curso selecionado</h2>
 	<br>
+	<p>Para alterar os dados do curso, altere os valores dos campos
+		marcados com um asterisco, e pintados de vermelho.</p>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
-			<label for="curnome">Nome do curso: </label> <input type="text"
-				class="form-control" name="curnome" id="curnome"
-				value="<?=$curso['curnome']; ?>">
+			<label for="curnome">Nome do curso: <span>*</span></label> <input
+				type="text" class="form-control" name="curnome" id="curnome"
+				value="<?=$curso['curnome']; ?>" style="color: red;" required>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="curtit">Titulação obtida no término do curso: </label>
+			<label for="curtit">Titulação obtida no término do curso: <span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" name="curtit"
-				id="curtit">
+				id="curtit" style="color: red;" required>
 				<?= $curso["curtit"]; ?>
 				</textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="eixcod">Altere o eixo tecnológico: </label> <select
-				class="form-control" name="eixcod" id="eixcod">
+			<label for="eixcod">Altere o eixo tecnológico: <span>*</span></label>
+			<select class="form-control" name="eixcod" id="eixcod"
+				style="color: red;">
 				<option value="<?= $eixotec['eixcod']; ?>" selected="selected">
 	<?=$eixotec["eixdesc"]; ?>
 	</option>
