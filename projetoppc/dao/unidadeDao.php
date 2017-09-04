@@ -119,4 +119,24 @@ function buscarUnidadesExceto($unicod, &$conn = null)
     return $informacoesunidade;
 }
 
+function buscarUnidadePorNome($uninome, $conn = null)
+{
+    $informacoesunidade = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultaunidade = $conn->prepare("select * from unidadesenac where uninome = :uninome");
+    $consultaunidade->bindParam(":uninome", $uninome);
+    if ($consultaunidade->execute()) {
+        $numregistros = $consultaunidade->rowCount();
+        if ($numregistros == 1) {
+            $informacoesunidade = $consultaunidade->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesunidade;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoesunidade;
+}
+
 ?>

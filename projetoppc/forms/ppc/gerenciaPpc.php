@@ -14,14 +14,14 @@ if ($_GET["opcao"] == "cadastrar") :
 		Cadastro de <abbr class="text-uppercase">ppc</abbr>
 	</h2>
 	<br>
-	<form action="" method="post" onsubmit="return validarFormulario()">
-		<p>
-			Para cadastrar um <abbr class="text-uppercase">ppc</abbr>, preencha
+	<p class="text-info">
+	Para cadastrar um <abbr class="text-uppercase">ppc</abbr>, preencha
 			corretamente os campos pintados de vermelho, e marcados com um
 			asterisco.
 		</p>
 		<br>
-		<div class="form-group">
+	<form action="" method="post" onsubmit="return validarFormulario()">
+									<div class="form-group">
 			<label>Selecione a modalidade do <abbr class="text-uppercase">ppc</abbr>:
 				<span>*</span>
 			</label><br> <label>presencial <input class="form-check" type="radio"
@@ -217,13 +217,26 @@ if ($_GET["opcao"] == "cadastrar") :
     if (! array_key_exists("bt-form-consultar", $_POST))
         return;
     $curcod = isset($_POST["curcod"]) ? $_POST["curcod"] : "";
+    if ($curcod == - 1) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Por favor, selecione um curso para visualizar os <abbr class='text-uppercase'>ppc</abbr>s vinculados.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
+    
     $ppcs = ! empty($curcod) ? buscarPpcsPorCurso($curcod, $conn) : [];
     $totalppcs = count($ppcs);
     if ($totalppcs > 0) :
         ?>
 		<h2 class="text-center text-info">Número de PPcs encontrados: <?=$totalppcs; ?></h2>
 	<br>
-	<p>Clique em um dos PPCs abaixo para ler seu conteúdo.</p>
+	<p>
+		Clique em um dos <abbr class="text-uppercase">ppc</abbr>s abaixo para
+		ler seu conteúdo.
+	</p>
 	<br>
 	<ol class="list-group">
 		<?php
