@@ -2,6 +2,7 @@
 require_once 'c:\wamp64\www\projetoppc\dao\unidadeDao.php';
 ?>
 <script src="js/redirectunidade.js"></script>
+<script src="js/validaformunidade.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
@@ -14,12 +15,12 @@ if ($_GET["opcao"] == "cadastrar") :
 		preencha os campos pintados de vermelhos, e marcados com um asterisco.
 	</p>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="uninome">Nome da unidade <abbr class="text-uppercase">senac</abbr>:
 				<span>*</span></label> <input type="text" name="uninome"
 				id="uninome" class="form-control"
-				placeholder="nome da unidade SENAC" style="color: red;" required>
+				placeholder="nome da unidade SENAC" style="color: red;" oninput="formatarValor()" required>
 		</div>
 		<br>
 		<div class="form-group">
@@ -125,12 +126,12 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     $unidade = buscarUnidadePorId($_GET["unicod"]);
     ?>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="validarFormulario()">
 		<div class="form-group">
 			<label for="uninome">Nome da unidade <abbr class="text-uppercase">senac</abbr>:
 				<span>*</span></label> <input type="text" name="uninome"
 				id="uninome" class="form-control" value="<?=$unidade["uninome"]; ?>"
-				placeholder="Nome da unidade SENAC" style="color: red;" required>
+				placeholder="Nome da unidade SENAC" style="color: red;" oninput="formatarValor()" required>
 		</div>
 		<br>
 		<div class="form-group">
