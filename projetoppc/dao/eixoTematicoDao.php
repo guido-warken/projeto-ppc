@@ -98,4 +98,24 @@ function buscarEixosTemExceto($eixtcod, &$conn = null)
     return $informacoeseixotematico;
 }
 
+function buscarEixoTemPorDescricao($eixtdes, &$conn = null)
+{
+    $informacoeseixotematico = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultaeixotematico = $conn->prepare("select * from eixotematico where eixtdes = :eixtdes");
+    $consultaeixotematico->bindParam(":eixtdes", $eixtdes);
+    if ($consultaeixotematico->execute()) {
+        $numregistros = $consultaeixotematico->rowCount();
+        if ($numregistros == 1) {
+            $informacoeseixotematico = $consultaeixotematico->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoeseixotematico;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoeseixotematico;
+}
+
 ?>
