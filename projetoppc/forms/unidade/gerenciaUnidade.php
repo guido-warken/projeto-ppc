@@ -20,7 +20,8 @@ if ($_GET["opcao"] == "cadastrar") :
 			<label for="uninome">Nome da unidade <abbr class="text-uppercase">senac</abbr>:
 				<span>*</span></label> <input type="text" name="uninome"
 				id="uninome" class="form-control"
-				placeholder="nome da unidade SENAC" style="color: red;" oninput="formatarValor()" required>
+				placeholder="nome da unidade SENAC" style="color: red;"
+				oninput="formatarValor()" required>
 		</div>
 		<br>
 		<div class="form-group">
@@ -50,6 +51,17 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "<p>";
         echo "Já existe uma unidade <abbr class='text-uppercase'>senac</abbr> cadastrada com este nome.<br>";
         echo "Por favor, preencha o nome da nova unidade com outro nome.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
+    
+    if (preg_match("/[0-9]+/", $uninome) == 1) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "O nome da unidade <abbr class='text-uppercase'>senac</abbr> não pode conter caracteres numéricos.<br>";
+        echo "Preencha novamente o campo.";
         echo "</p>";
         echo "</div>";
         echo "<br>";
@@ -131,7 +143,8 @@ if ($_GET["opcao"] == "cadastrar") :
 			<label for="uninome">Nome da unidade <abbr class="text-uppercase">senac</abbr>:
 				<span>*</span></label> <input type="text" name="uninome"
 				id="uninome" class="form-control" value="<?=$unidade["uninome"]; ?>"
-				placeholder="Nome da unidade SENAC" style="color: red;" oninput="formatarValor()" required>
+				placeholder="Nome da unidade SENAC" style="color: red;"
+				oninput="formatarValor()" required>
 		</div>
 		<br>
 		<div class="form-group">
@@ -149,6 +162,17 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "<div class='text-danger'>";
         echo "<p>";
         echo "Por favor, preencha o nome da unidade <abbr class='text-uppercase'>senac</abbr> no campo acima.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+        endif;
+    
+    if (preg_match("/[0-9]+/", $uninome) == 1) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "O nome da unidade <abbr class='text-uppercase'>senac</abbr> não pode conter caracteres numéricos.<br>";
+        echo "Preencha novamente o campo.";
         echo "</p>";
         echo "</div>";
         echo "<br>";

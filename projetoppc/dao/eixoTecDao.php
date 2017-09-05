@@ -98,4 +98,24 @@ function buscarEixosTecExceto($eixcod, &$conn = null)
     return $informacoeseixotec;
 }
 
+function buscarEixoTecPorDescricao($eixdesc, &$conn = null)
+{
+    $informacoeseixotec = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultaeixotec = $conn->prepare("select * from eixotec where eixdesc = :eixdesc");
+    $consultaeixotec->bindParam(":eixdesc", $eixdesc);
+    if ($consultaeixotec->execute()) {
+        $numregistros = $consultaeixotec->rowCount();
+        if ($numregistros == 1) {
+            $informacoeseixotec = $consultaeixotec->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoeseixotec;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoeseixotec;
+}
+
 ?>
