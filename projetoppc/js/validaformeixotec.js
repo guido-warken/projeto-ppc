@@ -18,14 +18,5 @@ function validarFormulario() {
 function formatarValor() {
 	var eixdesc = document.getElementById("eixdesc");
 	var contentEixdesc = eixdesc.value;
-	for (var i = 0; i < contentEixdesc.length; i++) {
-		if (i == 0) {
-			contentEixdesc = contentEixdesc.replace(contentEixdesc.charAt(i),
-					contentEixdesc.charAt(i).toUpperCase());
-			continue;
-		}
-		contentEixdesc = contentEixdesc.replace(contentEixdesc.charAt(i),
-				contentEixdesc.charAt(i).toLowerCase());
-	}
-	eixdesc.value = contentEixdesc;
+	eixdesc.value = contentEixdesc.toUpperCase();
 }

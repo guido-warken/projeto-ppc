@@ -190,8 +190,8 @@ if ($_GET["opcao"] == "cadastrar") :
  elseif ($_GET["opcao"] == "excluir") :
     ?>
 		<h2 class="text-center text-primary bg-primary">
-		Exclusão da unidade <abbr class="text-uppercase">senac 
-	
+		Exclusão da unidade <abbr class="text-uppercase">senac</abbr>
+
 	</h2>
 	<br>
 		<?php
