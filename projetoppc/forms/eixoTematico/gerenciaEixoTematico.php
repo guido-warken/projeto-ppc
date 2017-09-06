@@ -2,6 +2,7 @@
 require_once 'c:\wamp64\www\projetoppc\dao\eixoTematicoDao.php';
 ?>
 <script src="js/redirecteixotem.js"></script>
+<script src="js/validaformeixotem.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
@@ -12,11 +13,12 @@ if ($_GET["opcao"] == "cadastrar") :
 	<p class="text-info">Para cadastrar um eixo temático, preencha os
 		campos pintados em vermelho e marcados com um asterisco.</p>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
-			<label for="eixtdes">Eixo temático: </label> <input type="text"
-				name="eixtdes" id="eixtdes" class="form-control"
-				placeholder="Eixo Temático" style="color: red;">
+			<label for="eixtdes">Eixo temático: <span>*</span></label> <input
+				type="text" name="eixtdes" id="eixtdes" class="form-control"
+				placeholder="Eixo Temático" style="color: red;"
+				oninput="formatarValor()" required>
 		</div>
 		<br>
 		<div class="form-group">
@@ -72,14 +74,15 @@ if ($_GET["opcao"] == "cadastrar") :
     }
  elseif ($_GET["opcao"] == "consultar") :
     $eixostematicos = buscarEixosTem();
+    $totaleixostem = count($eixostematicos);
     ?>
 	<h2 class="text-center text-primary bg-primary">Consultando os eixos
 		temáticos</h2>
 	<br> <a href="?pagina=eixotem&opcao=cadastrar">Novo eixo temático</a><br>
 	<?php
-    if (count($eixostematicos) > 0) :
+    if ($totaleixostem > 0) :
         ?>
-	<h2 class="text-center text-info">Número de eixos temáticos encontrados: <?=count($eixostematicos); ?></h2>
+	<h2 class="text-center text-info">Número de eixos temáticos encontrados: <?=$totaleixostem; ?></h2>
 	<br>
 	<table class="table table-bordered">
 		<caption>Eixos Temáticos</caption>
@@ -111,9 +114,11 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-	<h1 class="text-warning">Nenhum eixo temático cadastrado no sistema</h1>
-	<br>
-	<p>Clique no link acima para cadastrar um novo eixo temático</p>
+        <div class="text-warning">
+		<h1 class="text-center">Nenhum eixo temático cadastrado no sistema</h1>
+		<br>
+		<p>Clique no link acima para cadastrar um novo eixo temático</p>
+	</div>
 	<br>
 	<?php
     endif;
@@ -122,21 +127,48 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
 	<h2>Alteração do eixo temático selecionado</h2>
 	<br>
-	<form action="" method="post">
+	<p class="text-info">Para alterar um eixo temático, preencha os campos
+		pintados em vermelho, e marcados com um asterisco.</p>
+	<br>
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
-			<label for="eixtdes">Eixo temático: </label> <input type="text"
-				name="eixtdes" id="eixtdes" class="form-control"
-				value="<?=$eixotematico['eixtdes'] ?>">
+			<label for="eixtdes">Eixo temático: <span>*</span></label> <input
+				type="text" name="eixtdes" id="eixtdes" class="form-control"
+				value="<?=$eixotematico['eixtdes'] ?>" style="color: red;"
+				oninput="formatarValor()" required>
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="alterar">
+			<input type="submit" class="btn btn-default" value="alterar"
+				name="bt-form-alterar">
 		</div>
 		<br>
 	</form>
 	<?php
-    if (! array_key_exists("eixtdes", $_POST))
+    if (! array_key_exists("bt-form-alterar", $_POST))
         return;
+    $eixtdes = isset($_POST["eixtdes"]) ? $_POST["eixtdes"] : "";
+    if (empty($eixtdes)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Preencha o campo do eixo temático.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+        endif;
+    
+    if (preg_match("/[0-9]/", $eixtdes) == 1) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "O eixo temático não pode conter números.<br>";
+        echo "Preencha novamente o formulário.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+        endif;
+    
     try {
         if (atualizarEixoTem($eixotematico["eixtcod"], $_POST["eixtdes"])) {
             echo "<h1 class= 'text-success'>Eixo temático atualizado com êxito!</h1><br>";
