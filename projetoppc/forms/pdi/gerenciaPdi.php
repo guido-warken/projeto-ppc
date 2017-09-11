@@ -58,7 +58,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="pdianoini">Ano inicial do <abbr class="text-uppercase">pdi</abbr>:
 				<span>*</span></label> <input type="number" name="pdianoini"
-				id="pdianoini" class="form-control" maxlength="4"
+				id="pdianoini" class="form-control" min="1980" max="2017"
 				style="color: red;" required>
 		</div>
 		<br>
@@ -66,7 +66,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			<label for="pdianofim">Ano de finalização do <abbr
 				class="text-uppercase">pdi</abbr>: <span>*</span></label> <input
 				type="number" class="form-control" id="pdianofim" name="pdianofim"
-				maxlength="4" style="color: red;">
+				min="1984" max="2030" style="color: red;" required>
 		</div>
 		<br>
 		<div class="form-group">
@@ -161,7 +161,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $unidades = buscarUnidadesPorPdi();
     ?>
 	<h2 class="text-center text-primary bg-primary">
-		Consulta de <abbr class="text-uppercase">pdi</abbr>abbr>
+		Consulta de <abbr class="text-uppercase">pdi</abbr>
 	</h2>
 	<br> <a href="?pagina=pdi&opcao=cadastrar">Novo <abbr
 		class="text-uppercase">pdi</abbr></a><br>
@@ -224,7 +224,8 @@ if ($_GET["opcao"] == "cadastrar") :
     $totalpdis = count($pdis);
     if ($totalpdis > 0) :
         ?>
-			<h2 class="text-center text-info">Número de Pdis encontrados: <?=count($pdis); ?></h2>
+			<h2 class="text-center text-info">
+		Número de <abbr class="text-uppercase">pdi</abbr>s encontrados: <?=count($pdis); ?></h2>
 	<br>
 	<p>
 		Clique em um <abbr class="text-uppercase">pdi</abbr> para visualizar
@@ -252,41 +253,47 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
 		<h2 class="text-center text-primary bg-primary"><?=$unidade["uninome"]; ?></h2>
 	<br>
-	<h2>Ano inicial do Pdi</h2>
-	<br>
-	<p>
+	<div class="text-info">
+		<h2 class="text-center">
+			Ano inicial do <abbr class="text-uppercase">pdi</abbr>
+		</h2>
+		<br>
+		<p>
 		<?=$pdi["pdianoini"]; ?>
 		</p>
+	</div>
 	<br>
-	<h2>Ano final do Pdi</h2>
-	<br>
-	<p>
+	<div class="text-info">
+		<h2 class="text-center">Ano final do Pdi</h2>
+		<br>
+		<p>
 		<?=$pdi["pdianofim"]; ?>
 		</p>
+	</div>
 	<br>
-	<h2>Unidade SENAC</h2>
-	<br>
-	<p>
-		<?=$unidade["uninome"]; ?>
-		</p>
-	<br>
-	<h2>Política de ensino do Pdi</h2>
-	<br>
-	<pre class="pre-scrollable">
+	<div class="text-info">
+		<h2 class="text-center">Política de ensino do Pdi</h2>
+		<br>
+		<pre class="pre-scrollable">
 		<?=$pdi["pdiensino"]; ?>
 		</pre>
+	</div>
 	<br>
-	<h2>Política de pesquisa do Pdi</h2>
-	<br>
-	<pre class="pre-scrollable">
+	<div class="text-info">
+		<h2 class="text-center">Política de pesquisa do Pdi</h2>
+		<br>
+		<pre class="pre-scrollable">
 		<?=$pdi["pdipesquisa"]; ?>
 		</pre>
+	</div>
 	<br>
-	<h2>Metodologia do Pdi</h2>
-	<br>
-	<pre class="pre-scrollable">
+	<div class="text-info">
+		<h2 class="text-center">Metodologia do Pdi</h2>
+		<br>
+		<pre class="pre-scrollable">
 		<?=$pdi["pdimetodo"]; ?>
 		</pre>
+	</div>
 	<br> <a href="?pagina=pdi&opcao=alterar&pdicod=<?=$pdi['pdicod']; ?>">Alterar
 		conteúdo</a><br> <a
 		href="?pagina=pdi&opcao=excluir&pdicod=<?=$pdi['pdicod']; ?>">excluir
@@ -296,7 +303,9 @@ if ($_GET["opcao"] == "cadastrar") :
     $pdi = buscarPdiPorId($_GET["pdicod"]);
     $unidade = buscarUnidadePorId($pdi["unicod"]);
     ?>
-		<h2>Alteração de Pdi</h2>
+		<h2 class="text-center text-primary bg-primary">
+		Alteração de <abbr class="text-uppercase">pdi</abbr>
+	</h2>
 	<br>
 	<form action="" method="post">
 		<div class="form-group">
@@ -320,9 +329,9 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="pdianoini">Ano inicial do <abbr class="text-uppercase">pdi</abbr>abbr>
+			<label for="pdianoini">Ano inicial do <abbr class="text-uppercase">pdi</abbr>
 				<span>*</span></label> <input type="number" name="pdianoini"
-				id="pdianoini" class="form-control" maxlength="4"
+				id="pdianoini" class="form-control" min="1980" max="2017"
 				value="<?=$pdi['pdianoini']; ?>" style="color: red;" required>
 		</div>
 		<br>
@@ -330,8 +339,8 @@ if ($_GET["opcao"] == "cadastrar") :
 			<label for="pdianofim">Ano de finalização do <abbr
 				class="text-uppercase">pdi</abbr> <span>*</span></label> <input
 				type="number" class="form-control" id="pdianofim" name="pdianofim"
-				maxlength="4" value="<?=$pdi['pdianofim']; ?>" style="color: red;"
-				required>
+				min="1984" max="2030" value="<?=$pdi['pdianofim']; ?>"
+				style="color: red;" required>
 		</div>
 		<br>
 		<div class="form-group">
@@ -400,12 +409,14 @@ if ($_GET["opcao"] == "cadastrar") :
     $pdi = buscarPdiPorId($_GET["pdicod"]);
     $unidade = buscarUnidadePorId($pdi["unicod"]);
     ?>
-		<h2>Exclusão de Pdi</h2>
+		<h2 class="text-center text-primary bg-primary">
+		Exclusão de <abbr class="text-uppercase">pdi</abbr>
+	</h2>
 	<br>
 	<form action="" method="post">
 		<div class="form-group">
 			<p class="text-warning">
-					Você está prestes a excluir o Pdi referente à unidade <?=$unidade["uninome"]; ?>.<br>
+				Você está prestes a excluir o <abbr class="text-uppercase">pdi</abbr> referente à unidade <?=$unidade["uninome"]; ?>.<br>
 				Tem certeza de que deseja executar esta operação?<br> Após a
 				confirmação, a operação não poderá ser desfeita.
 			</p>
