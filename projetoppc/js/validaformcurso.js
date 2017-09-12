@@ -30,3 +30,21 @@ function formatarCampo() {
 		curtit.innerHTML = content;
 	}
 }
+
+function submeterExclusao() {
+	$.post(document.URL, {
+		escolha : "sim"
+	}, function(result) {
+		$(".container").html(result);
+		$("#frm-escolha").hide();
+	});
+}
+
+function negarExclusao() {
+	$.post(document.URL, {
+		escolha : "não"
+	}, function(result) {
+		$(".container").html(result);
+		$("#frm-escolha").hide();
+	});
+}

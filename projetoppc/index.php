@@ -5,5 +5,5 @@ require 'lib/funcs.php';
 require 'paginas/header.php';
 require 'paginas/menu.php';
 rotas($pagina);
-
+require 'paginas/footer.php';
 ?>

@@ -141,4 +141,14 @@ function buscarCursoPorTitulacao($curtit, &$conn = null)
     return $informacoescurso;
 }
 
+function excluirTodos($conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $delcurso = $conn->query("truncate curso");
+    $resultado = $delcurso->execute();
+    desconectarDoBanco($conn);
+    return $resultado;
+}
+
 ?>

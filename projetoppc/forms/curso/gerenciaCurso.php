@@ -12,21 +12,20 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
     <h2 class="text-center text-primary bg-primary">Cadastro de cursos</h2>
 	<br>
-	<p class="text-info">Para cadastrar um curso, preencha os campos
-		marcados com um asterisco e pintados em vermelho.</p>
+	<p class="text-info">Campos com asterisco são obrigatórios.</p>
 	<br>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="curnome">Nome do curso: <span>*</span></label> <input
 				type="text" class="form-control" name="curnome" id="curnome"
-				style="color: red;" placeholder="Nome do curso" required>
+				placeholder="Nome do curso" tabindex="1" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="curtit">Titulação obtida no término do curso: <span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" name="curtit"
 				id="curtit" placeholder="Titulação obtida no término do curso"
-				style="color: red;" required></textarea>
+				tabindex="2" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
@@ -35,8 +34,7 @@ if ($_GET["opcao"] == "cadastrar") :
     if ($totaleixostec > 0) :
         ?>
 				<label for="eixcod">Selecione o eixo tecnológico: <span>*</span></label>
-			<select class="form-control" name="eixcod" id="eixcod"
-				style="color: red;">
+			<select class="form-control" name="eixcod" id="eixcod" tabindex="3">
 				<option value="-1">Selecione</option>
 <?php
         foreach ($eixostec as $eixotec) :
@@ -58,13 +56,14 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 			<br>
 <?php
+        return;
     endif;
     ?>
 			</div>
 		<br>
 		<div class="form-group">
 			<input type="submit" class="btn btn-default" value="salvar"
-				name="bt-form-salvar">
+				name="bt-form-salvar" tabindex="4">
 		</div>
 		<br>
 	</form>
@@ -192,27 +191,25 @@ if ($_GET["opcao"] == "cadastrar") :
 	<h2 class="text-center text-primary bg-primary">Alteração dos dados do
 		curso selecionado</h2>
 	<br>
-	<p class="text-info">Para alterar os dados do curso, altere os valores dos campos
-		marcados com um asterisco, e pintados de vermelho.</p>
+	<p class="text-info">Campos com asterisco são obrigatórios.</p>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="curnome">Nome do curso: <span>*</span></label> <input
 				type="text" class="form-control" name="curnome" id="curnome"
-				value="<?=$curso['curnome']; ?>" style="color: red;" required>
+				value="<?=$curso['curnome']; ?>" tabindex="1" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="curtit">Titulação obtida no término do curso: <span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" name="curtit"
-				id="curtit" style="color: red;" onfocus="formatarCampo()" required>
+				id="curtit" tabindex="2" onfocus="formatarCampo()" required>
 				<?= $curso["curtit"]; ?>
 				</textarea>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="eixcod">Altere o eixo tecnológico: <span>*</span></label>
-			<select class="form-control" name="eixcod" id="eixcod"
-				style="color: red;">
+			<select class="form-control" name="eixcod" id="eixcod" tabindex="3">
 				<option value="<?= $eixotec['eixcod']; ?>" selected="selected">
 	<?=$eixotec["eixdesc"]; ?>
 	</option>
@@ -235,7 +232,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<div class="form-group">
 			<input type="submit" class="btn btn-default" value="alterar"
-				name="bt-form-alterar">
+				name="bt-form-alterar" tabindex="4">
 		</div>
 		<br>
 	</form>
@@ -271,7 +268,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<h2 class="text-center text-primary bg-primary">Exclusão do curso
 		selecionado</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" id="frm-escolha">
 		<div class="form-group">
 			<p class="text-warning">
 				Você está prestes a excluir o Curso <?=$curso["curnome"]; ?>.<br>
@@ -281,13 +278,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" value="sim"
-				class="btn btn-default">
+			<input type="button" name="escolha" class="btn btn-default"
+				tabindex="1" onclick="submeterExclusao()" value="sim">
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" value="não"
-				class="btn btn-default">
+			<input type="button" name="escolha" class="btn btn-default"
+				tabindex="2" onclick="negarExclusao()" value="não">
 		</div>
 		<br>
 	</form>
