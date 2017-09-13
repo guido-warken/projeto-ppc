@@ -34,17 +34,21 @@ function formatarCampo() {
 function submeterExclusao() {
 	$.post(document.URL, {
 		escolha : "sim"
-	}, function(result) {
-		$(".container").html(result);
-		$("#frm-escolha").hide();
+	}, function(result, status) {
+		if (status == "success") {
+			$(".container").html(result);
+			$("#frm-escolha").hide();
+		}
 	});
 }
 
 function negarExclusao() {
 	$.post(document.URL, {
 		escolha : "não"
-	}, function(result) {
-		$(".container").html(result);
-		$("#frm-escolha").hide();
+	}, function(result, status) {
+		if (status == "success") {
+			$(".container").html(result);
+			$("#frm-escolha").hide();
+		}
 	});
 }
