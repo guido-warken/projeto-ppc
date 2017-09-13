@@ -3,7 +3,6 @@ require_once 'c:\wamp64\www\projetoppc\dao\eixoTecDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\cursoDao.php';
 $conn = conectarAoBanco("localhost", "dbdep", "root", "");
 ?>
-<script src="js/redirectcurso.js"></script>
 <script src="js/validaformcurso.js"></script>
 <div class="container">
 <?php
@@ -300,10 +299,8 @@ if ($_GET["opcao"] == "cadastrar") :
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-    else :
-        echo "<p>Ok, o curso não será excluído</p><br>";
-        echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Voltar à tela de consulta de cursos</button><br>";
-    endif;
+        endif;
+    
 endif;
 ?>
 	</div>

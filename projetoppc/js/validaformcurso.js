@@ -43,12 +43,5 @@ function submeterExclusao() {
 }
 
 function negarExclusao() {
-	$.post(document.URL, {
-		escolha : "não"
-	}, function(result, status) {
-		if (status == "success") {
-			$(".container").html(result);
-			$("#frm-escolha").hide();
-		}
-	});
+	location.href = "?pagina=curso&opcao=consultar";
 }
