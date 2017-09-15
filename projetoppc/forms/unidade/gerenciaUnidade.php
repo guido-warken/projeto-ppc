@@ -1,32 +1,30 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\unidadeDao.php';
 ?>
-<script src="js/redirectunidade.js"></script>
+
 <script src="js/validaformunidade.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
     ?>
-	<h2 class="text-center text-primary bg-primary">Cadastro de unidades
-		SENAC</h2>
+	<h2 class="text-center text-primary bg-primary">
+		Cadastro de unidades <abbr class="text-uppercase">senac</abbr>
+	</h2>
 	<br>
-	<p class="text-info">
-		Para cadastrar uma nova unidade do <abbr class="text-uppercase">senac</abbr>,
-		preencha os campos pintados de vermelhos, e marcados com um asterisco.
-	</p>
+	<p class="text-info">Campos com asterisco são obrigatórios</p>
 	<br>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="uninome">Nome da unidade <abbr class="text-uppercase">senac</abbr>:
 				<span>*</span></label> <input type="text" name="uninome"
 				id="uninome" class="form-control"
-				placeholder="nome da unidade SENAC" style="color: red;"
+				placeholder="nome da unidade SENAC" tabindex="1"
 				oninput="formatarValor()" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<input type="submit" value="salvar" class="btn btn-default"
-				name="bt-form-salvar">
+				name="bt-form-salvar" tabindex="2">
 		</div>
 		<br>
 	</form>
@@ -76,7 +74,8 @@ if ($_GET["opcao"] == "cadastrar") :
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
- elseif ($_GET["opcao"] == "consultar") :
+ 
+elseif ($_GET["opcao"] == "consultar") :
     ?>
 		<h2 class="text-center text-primary bg-primary">
 		Consultando as unidades <abbr class="text-uppercase">senac</abbr>
@@ -88,7 +87,8 @@ if ($_GET["opcao"] == "cadastrar") :
     $totalunidades = count($unidades);
     if ($totalunidades > 0) :
         ?>
-				<h2 class="text-center text-info">Número de unidades SENAC encontradas: <?=$totalunidades; ?></h2>
+				<h2 class="text-center text-info">
+		Número de unidades <abbr class="text-uppercase">senac</abbr> encontradas: <?=$totalunidades; ?></h2>
 	<br>
 	<table class="table table-bordered">
 		<thead>
@@ -125,15 +125,18 @@ if ($_GET["opcao"] == "cadastrar") :
 			no momento
 		</h2>
 		<br>
-		<p>Clique no link acima para cadastrar uma nova unidade do SENAC no
-			sistema.</p>
+		<p>
+			Clique no link acima para cadastrar uma nova unidade do <abbr
+				class="text-uppercase">senac</abbr> no sistema.
+		</p>
 	</div>
 	<br>
 				<?php
     endif;
  elseif ($_GET["opcao"] == "alterar") :
     ?>
-	<h2 class="text-center">Alteração da unidade selecionada</h2>
+	<h2 class="text-center text-primary bg-primary">Alteração da unidade
+		selecionada</h2>
 	<br>
 	<?php
     $unidade = buscarUnidadePorId($_GET["unicod"]);
@@ -143,13 +146,13 @@ if ($_GET["opcao"] == "cadastrar") :
 			<label for="uninome">Nome da unidade <abbr class="text-uppercase">senac</abbr>:
 				<span>*</span></label> <input type="text" name="uninome"
 				id="uninome" class="form-control" value="<?=$unidade["uninome"]; ?>"
-				placeholder="Nome da unidade SENAC" style="color: red;"
+				placeholder="Nome da unidade SENAC" tabindex="1"
 				oninput="formatarValor()" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<input type="submit" value="alterar" class="btn btn-default"
-				name="bt-form-alterar">
+				name="bt-form-alterar" tabindex="2">
 		</div>
 		<br>
 	</form>
@@ -197,7 +200,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<?php
     $unidade = buscarUnidadePorId($_GET["unicod"]);
     ?>
-		<form action="" method="post">
+		<form action="" method="post" id="frm-escolha">
 		<div class="form-group">
 			<p class="text-warning">
 				Você está prestes a excluir uma unidade do <abbr
@@ -207,13 +210,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" class="btn btn-default"
-				value="sim">
+			<input type="button" class="btn btn-default" value="sim"
+				onclick="submeterExclusao()">
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" class="btn btn-default"
-				value="não">
+			<input type="button" class="btn btn-default" value="não"
+				onclick="negarExclusao()">
 		</div>
 		<br>
 	</form>
@@ -229,10 +232,8 @@ if ($_GET["opcao"] == "cadastrar") :
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-    } else {
-        echo "<p>Ok, a unidade SENAC não será excluída.</p>";
-        echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Voltar à tela de consulta de unidades SENAC</button><br>";
     }
 endif;
+
 ?>
 	</div>

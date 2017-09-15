@@ -28,3 +28,18 @@ function formatarValor() {
 		uninome.value = contentUninome;
 	}
 }
+
+function submeterExclusao() {
+	$.post(document.URL, {
+		escolha : "sim"
+	}, function(result, status) {
+		if (status == "success") {
+			$(".container").html(result);
+			$("#frm-escolha").hide();
+		}
+	});
+}
+
+function negarExclusao() {
+	location.href = "?pagina=unidade&opcao=consultar";
+}
