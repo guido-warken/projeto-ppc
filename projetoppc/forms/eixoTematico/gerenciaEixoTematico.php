@@ -1,7 +1,6 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\eixoTematicoDao.php';
 ?>
-<script src="js/redirecteixotem.js"></script>
 <script src="js/validaformeixotem.js"></script>
 <div class="container">
 	<?php
@@ -10,20 +9,19 @@ if ($_GET["opcao"] == "cadastrar") :
 	<h2 class="text-center text-primary bg-primary">Cadastro de eixos
 		temáticos</h2>
 	<br>
-	<p class="text-info">Para cadastrar um eixo temático, preencha os
-		campos pintados em vermelho e marcados com um asterisco.</p>
+	<p class="text-info">Campos com asterisco são obrigatórios.</p>
 	<br>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="eixtdes">Eixo temático: <span>*</span></label> <input
 				type="text" name="eixtdes" id="eixtdes" class="form-control"
-				placeholder="Eixo Temático" style="color: red;"
-				oninput="formatarValor()" required>
+				placeholder="Eixo Temático" tabindex="1" oninput="formatarValor()"
+				required>
 		</div>
 		<br>
 		<div class="form-group">
 			<input type="submit" class="btn btn-default" value="salvar"
-				name="bt-form-salvar">
+				name="bt-form-salvar" tabindex="2">
 		</div>
 		<br>
 	</form>
@@ -127,20 +125,19 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
 	<h2>Alteração do eixo temático selecionado</h2>
 	<br>
-	<p class="text-info">Para alterar um eixo temático, preencha os campos
-		pintados em vermelho, e marcados com um asterisco.</p>
+	<p class="text-info">Campos com asterisco são obrigatórios.</p>
 	<br>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="eixtdes">Eixo temático: <span>*</span></label> <input
 				type="text" name="eixtdes" id="eixtdes" class="form-control"
-				value="<?=$eixotematico['eixtdes'] ?>" style="color: red;"
+				value="<?=$eixotematico['eixtdes'] ?>" tabindex="1"
 				oninput="formatarValor()" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<input type="submit" class="btn btn-default" value="alterar"
-				name="bt-form-alterar">
+				name="bt-form-alterar" tabindex="2">
 		</div>
 		<br>
 	</form>
@@ -182,7 +179,7 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
 	<h2>Exclusão de eixo temático</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" id="frm-escolha">
 		<div class="form-group">
 			<p class="text-warning">
 	Você está prestes a excluir o eixo temático <?=$eixotematico["eixtdes"]; ?>.<br>
@@ -192,13 +189,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" value="sim"
-				class="btn btn-default">
+			<input type="button" value="sim" class="btn btn-default" tabindex="1"
+				onclick="submeterExclusao()">
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" value="não"
-				class="btn btn-default">
+			<input type="button" value="não" class="btn btn-default"
+				onclick="negarExclusao()">
 		</div>
 		<br>
 	</form>
@@ -214,12 +211,7 @@ if ($_GET["opcao"] == "cadastrar") :
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-    } else {
-        echo "<p>Ok, o eixo temático não será excluído.</p><br>";
-        echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Voltar à tela de consulta de eixos temáticos</button><br>";
     }
 endif;
 ?>
 	</div>
-</body>
-</html>

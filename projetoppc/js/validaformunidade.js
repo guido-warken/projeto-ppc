@@ -52,3 +52,7 @@ function submeterExclusao() {
 function negarExclusao() {
 	location.href = "?pagina=unidade&opcao=consultar";
 }
+
+function recarregar() {
+	location.href = "?pagina=unidade&opcao=consultar";
+}
