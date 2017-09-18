@@ -20,3 +20,28 @@ function formatarValor() {
 	var contentEixdesc = eixdesc.value;
 	eixdesc.value = contentEixdesc.toUpperCase();
 }
+
+function submeterExclusao() {
+	$
+			.ajax({
+				type : "POST",
+				url : document.URL,
+				data : {
+					escolha : "sim"
+				},
+				success : function(result, status) {
+					if (status == "success") {
+						$(".container").html(result);
+						$("#frm-escolha").hide();
+					}
+				},
+				error : function(xhr, status, error) {
+					alert("Não foi possível completar a ação de excluir o eixo tecnológico.\n Causa do erro: "
+							+ error);
+				}
+			});
+}
+
+function negarExclusao() {
+	location.href = "?pagina=eixotec&opcao=consultar";
+}

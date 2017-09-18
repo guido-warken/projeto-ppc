@@ -76,12 +76,21 @@ function formatarCampo() {
 }
 
 function submeterExclusao() {
-	$.post(document.URL, {
-		escolha : "sim"
-	}, function(result, status) {
-		if (status == "success") {
-			$(".container").html(result);
-			$("#frm-escolha").hide();
+	$.ajax({
+		async : true,
+		type : "POST",
+		url : document.URL,
+		data : {
+			escolha : "sim"
+		},
+		success : function(result, status) {
+			if (status == "success") {
+				$(".container").html(result);
+				$("#frm-escolha").hide();
+			}
+		},
+		error : function(xhr, status, error) {
+			alert("Erro ao processar a requisição.\n Causa do erro: " + error);
 		}
 	});
 }

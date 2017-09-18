@@ -1,7 +1,6 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\eixoTecDao.php';
 ?>
-<script src="js/redirecteixotec.js"></script>
 <script src="js/validaformeixotec.js"></script>
 <div class="container">
 	<?php
@@ -10,20 +9,19 @@ if ($_GET["opcao"] == "cadastrar") :
 	<h2 class="text-center text-primary bg-primary">Cadastro de eixos
 		tecnológicos</h2>
 	<br>
-	<p class="text-info">Para cadastrar um eixo tecnológico, preencha os
-		campos pintados de vermelho e marcados com um asterisco.</p>
+	<p class="text-info">Campos com asterisco são obrigatórios.</p>
 	<br>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="eixdesc">eixo tecnológico: <span>*</span></label> <input
 				type="text" id="eixdesc" name="eixdesc" class="form-control"
-				placeholder="Nome do eixo tecnológico" style="color: red;"
+				placeholder="Nome do eixo tecnológico" tabindex="1"
 				oninput="formatarValor()" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<input type="submit" value="salvar" class="btn btn-default"
-				name="bt-form-salvar">
+				name="bt-form-salvar" tabindex="2">
 		</div>
 		<br>
 	</form>
@@ -128,20 +126,19 @@ if ($_GET["opcao"] == "cadastrar") :
 	<h2 class="text-center text-primary bg-primary">Alteração do eixo
 		tecnológico selecionado</h2>
 	<br>
-	<p class="text-info">Para alterar um eixo tecnológico, preencha os
-		campos pintados em vermelho, e marcados com um asterisco.</p>
+	<p class="text-info">Campos com asterisco são obrigatórios.</p>
 	<br>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="eixdesc">eixo tecnológico</label> <input type="text"
 				id="eixdesc" name="eixdesc" class="form-control"
-				value="<?=$eixotec['eixdesc']; ?>" style="color: red;"
+				value="<?=$eixotec['eixdesc']; ?>" tabindex="1"
 				oninput="formatarValor()" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<input type="submit" value="alterar" class="btn btn-default"
-				name="bt-form-alterar">
+				name="bt-form-alterar" tabindex="2">
 		</div>
 		<br>
 	</form>
@@ -184,7 +181,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<h2 class="text-center text-primary bg-primary">Exclusão do eixo
 		tecnológico selecionado</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" id="frm-escolha">
 		<div class="form-group">
 			<p class="text-warning">
 	Você está prestes a excluir o eixo tecnológico <?=$eixotec["eixdesc"]; ?>.<br>
@@ -194,13 +191,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" value="sim"
-				class="btn btn-default">
+			<input type="button" value="sim" class="btn btn-default"
+				onclick="submeterExclusao()">
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" value="não"
-				class="btn btn-default">
+			<input type="button" value="não" class="btn btn-default"
+				onclick="negarExclusao()">
 		</div>
 		<br>
 	</form>
@@ -216,9 +213,6 @@ if ($_GET["opcao"] == "cadastrar") :
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-    } else {
-        echo "<p>Ok, o eixo tecnológico não será excluído.</p><br>";
-        echo "<button type='button' class='btn btn-default' onclick='redireciona()'>Voltar à tela de consulta de eixos tecnológicos</button>";
     }
 endif;
 ?>
