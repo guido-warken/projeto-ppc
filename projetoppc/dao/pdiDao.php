@@ -34,12 +34,12 @@ function atualizarPdi($pdicod, $unicod, $pdianoini, $pdianofim, $pdipesquisa, $p
     return $resultado;
 }
 
-function excluirPDI($pdianoini, &$conn = null)
+function excluirPDI($pdicod, &$conn = null)
 {
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $delpdi = $conn->prepare("delete from pdi where pdianoini = :pdianoini");
-    $delpdi->bindParam(":pdianoini", $pdianoini);
+    $delpdi = $conn->prepare("delete from pdi where pdicod = :pdicod");
+    $delpdi->bindParam(":pdicod", $pdicod);
     $resultado = $delpdi->execute();
     desconectarDoBanco($conn);
     return $resultado;

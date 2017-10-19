@@ -24,6 +24,7 @@ function formatarValor() {
 function submeterExclusao() {
 	$
 			.ajax({
+				async : true,
 				type : "POST",
 				url : document.URL,
 				data : {

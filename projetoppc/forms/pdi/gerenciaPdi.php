@@ -2,7 +2,7 @@
 require_once 'c:\wamp64\www\projetoppc\dao\pdiDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\unidadeDao.php';
 ?>
-<script src="js/redirectpdi.js"></script>
+<script src="js/validaformpdi.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
@@ -413,7 +413,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		Exclusão de <abbr class="text-uppercase">pdi</abbr>
 	</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" id="frm-escolha">
 		<div class="form-group">
 			<p class="text-warning">
 				Você está prestes a excluir o <abbr class="text-uppercase">pdi</abbr> referente à unidade <?=$unidade["uninome"]; ?>.<br>
@@ -423,13 +423,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="sim" class="btn btn-default"
-				name="escolha">
+			<input type="button" value="sim" class="btn btn-default"
+				onclick="submeterExclusao()">
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="não" class="btn btn-default"
-				name="escolha">
+			<input type="button" value="não" class="btn btn-default"
+				onclick="negarExclusao()">
 		</div>
 		<br>
 	</form>
