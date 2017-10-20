@@ -18,6 +18,11 @@ function validarFormulario() {
 		pdiAnoFim.focus();
 		return false;
 	}
+	if (unicod.value == -1) {
+		alert("Por favor, selecione uma unidade do SENAC");
+		unicod.focus();
+		return false;
+	}
 	if (pdiEnsino.value.length == 0) {
 		alert("O campo Política de ensino do PDI deve ser preenchido corretamente.");
 		pdiEnsino.focus();
@@ -32,6 +37,36 @@ function validarFormulario() {
 		alert("O campo Metodologia do PDI deve ser preenchido corretamente.");
 		pdiMetodo.focus();
 		return false;
+	}
+}
+
+function validarConsulta() {
+	var unicod = document.getElementById("unicod");
+	if (unicod.value == -1) {
+		alert("Por favor, selecione uma unidade do SENAC");
+		unicod.focus();
+		return false;
+	}
+}
+
+function formatarCampo() {
+	var pdiEnsino = document.getElementById("pdiensino");
+	var pdiPesquisa = document.getElementById("pdipesquisa");
+	var pdiMetodo = document.getElementById("pdimetodo");
+	var contentPdiEnsino = pdiEnsino.value;
+	var contentPdiPesquisa = pdiPesquisa.value;
+	var contentPdiMetodo = pdiMetodo.value;
+	if (contentPdiEnsino.search(/\t+/g, 0) != -1) {
+		contentPdiEnsino = contentPdiEnsino.replace(/\t+/g, "");
+		pdiEnsino.value = contentPdiEnsino;
+	}
+	if (contentPdiPesquisa.search(/\t+/g, 0) != -1) {
+		contentPdiPesquisa = contentPdiPesquisa.replace(/\t+/g, "");
+		pdiPesquisa.value = contentPdiPesquisa;
+	}
+	if (contentPdiMetodo.search(/\t+/g, 0) != -1) {
+		contentPdiMetodo = contentPdiMetodo.replace(/\t+/g, "");
+		pdiMetodo.value = contentPdiMetodo;
 	}
 }
 

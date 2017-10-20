@@ -12,12 +12,9 @@ if ($_GET["opcao"] == "cadastrar") :
 		Cadastro de <abbr class="text-uppercase">pdi</abbr>
 	</h2>
 	<br>
-	<p class="text-info">
-		Para cadastrar um <abbr class="text-uppercase">pdi</abbr>, preencha os
-		campos pintados em vermelho, e marcados com um asterisco.
-	</p>
+	<p class="text-info">Campos com asterisco são obrigatórios</p>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 <?php
     $totalunidades = count($unidades);
@@ -26,7 +23,7 @@ if ($_GET["opcao"] == "cadastrar") :
 <label for="unicod">Selecione a unidade <abbr class="text-uppercase">senac</abbr>,
 				a qual será associado o novo <abbr class="text-uppercase">pdi</abbr>:
 				<span>*</span></label> <select class="form-control" id="unicod"
-				name="unicod" style="color: red;">
+				name="unicod">
 				<option value="-1">Selecione</option>
 <?php
         foreach ($unidades as $unidade) :
@@ -51,6 +48,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 			<br>
 				<?php
+        return;
     endif;
     ?>
 			</div>
@@ -58,23 +56,21 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="pdianoini">Ano inicial do <abbr class="text-uppercase">pdi</abbr>:
 				<span>*</span></label> <input type="number" name="pdianoini"
-				id="pdianoini" class="form-control" min="1980" max="2017"
-				style="color: red;" required>
+				id="pdianoini" class="form-control" min="1980" max="2017" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="pdianofim">Ano de finalização do <abbr
 				class="text-uppercase">pdi</abbr>: <span>*</span></label> <input
 				type="number" class="form-control" id="pdianofim" name="pdianofim"
-				min="1984" max="2030" style="color: red;" required>
+				min="1984" max="2030" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="pdiensino">Política de ensino presente no <abbr
 				class="text-uppercase">pdi</abbr>: <span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" id="pdiensino"
-				name="pdiensino" style="color: red;"
-				placeholder="Política de ensino do PDI" required></textarea>
+				name="pdiensino" placeholder="Política de ensino do PDI" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
@@ -82,15 +78,14 @@ if ($_GET["opcao"] == "cadastrar") :
 				PDI</label>
 			<textarea rows="3" cols="3" class="form-control" id="pdipesquisa"
 				name="pdipesquisa" placeholder="Política de pesquisa do PDI"
-				style="color: red;" required></textarea>
+				required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="pdimetodo">Metodologia presente no <abbr
 				class="text-uppercase">pdi</abbr>: <span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" id="pdimetodo"
-				name="pdimetodo" placeholder="Metodologia do PDI"
-				style="color: red;" required></textarea>
+				name="pdimetodo" placeholder="Metodologia do PDI" required></textarea>
 
 		</div>
 		<br>
@@ -109,7 +104,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $pdiensino = isset($_POST["pdiensino"]) ? $_POST["pdiensino"] : "";
     $pdipesquisa = isset($_POST["pdipesquisa"]) ? $_POST["pdipesquisa"] : "";
     $pdimetodo = isset($_POST["pdimetodo"]) ? $_POST["pdimetodo"] : "";
-    $pdis = ! $unicod == - 1 ? buscarPdisPorUnidade($unicod) : [];
+    $pdis = $unicod != - 1 ? buscarPdisPorUnidade($unicod) : [];
     if (! is_numeric($pdianoini) || ! is_numeric($pdianofim) || empty($pdiensino) || empty($pdipesquisa) || empty($pdimetodo)) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -165,7 +160,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	</h2>
 	<br> <a href="?pagina=pdi&opcao=cadastrar">Novo <abbr
 		class="text-uppercase">pdi</abbr></a><br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarConsulta()">
 		<div class="form-group">
 	<?php
     $totalunidades = count($unidades);
@@ -173,7 +168,7 @@ if ($_GET["opcao"] == "cadastrar") :
         ?>
 	<label for="unicod">Selecione a unidade para a visualização do <abbr
 				class="text-uppercase">pdi</abbr>: <span>*</span></label> <select
-				class="form-control" id="unicod" name="unicod" style="color: red;">
+				class="form-control" id="unicod" name="unicod">
 				<option value="-1">selecione</option>
 	<?php
         foreach ($unidades as $unidade) :
@@ -307,7 +302,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		Alteração de <abbr class="text-uppercase">pdi</abbr>
 	</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 <?php
     $unidades = buscarUnidadesExceto($unidade["unicod"]);
@@ -315,7 +310,7 @@ if ($_GET["opcao"] == "cadastrar") :
 <label for="unicod">Selecione a unidade <abbr class="text-uppercase">senac</abbr>,
 				a qual será associado o novo <abbr class="text-uppercase">pdi</abbr>
 				<span>*</span></label> <select class="form-control" id="unicod"
-				name="unicod" style="color: red;">
+				name="unicod">
 				<option value="<?=$unidade['unicod']; ?>" selected="selected"><?=$unidade["uninome"]; ?></option>
 <?php
     foreach ($unidades as $unidade) :
@@ -332,22 +327,21 @@ if ($_GET["opcao"] == "cadastrar") :
 			<label for="pdianoini">Ano inicial do <abbr class="text-uppercase">pdi</abbr>
 				<span>*</span></label> <input type="number" name="pdianoini"
 				id="pdianoini" class="form-control" min="1980" max="2017"
-				value="<?=$pdi['pdianoini']; ?>" style="color: red;" required>
+				value="<?=$pdi['pdianoini']; ?>" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="pdianofim">Ano de finalização do <abbr
 				class="text-uppercase">pdi</abbr> <span>*</span></label> <input
 				type="number" class="form-control" id="pdianofim" name="pdianofim"
-				min="1984" max="2030" value="<?=$pdi['pdianofim']; ?>"
-				style="color: red;" required>
+				min="1984" max="2030" value="<?=$pdi['pdianofim']; ?>" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="pdiensino">Política de ensino do <abbr
 				class="text-uppercase">pdi</abbr> <span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" id="pdiensino"
-				name="pdiensino" style="color: red;" required>
+				name="pdiensino" onfocus="formatarCampo()" required>
 					<?=$pdi["pdiensino"]; ?>
 					</textarea>
 		</div>
@@ -356,7 +350,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			<label for="pdipesquisa">Política de pesquisa e extensão do <abbr
 				class="text-uppercase">pdi</abbr> <span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" id="pdipesquisa"
-				name="pdipesquisa" style="color: red;" required>
+				name="pdipesquisa" required>
 					<?=$pdi["pdipesquisa"]; ?>
 					</textarea>
 		</div>
@@ -365,7 +359,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			<label for="pdimetodo">Metodologia do <abbr class="text-uppercase">pdi</abbr>
 				<span>*</span></label>
 			<textarea rows="3" cols="3" class="form-control" id="pdimetodo"
-				name="pdimetodo" style="color: red;" required>
+				name="pdimetodo" required>
 					<?=$pdi["pdimetodo"]; ?>
 					</textarea>
 		</div>
