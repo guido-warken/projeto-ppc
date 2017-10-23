@@ -118,6 +118,22 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     endif;
     
+    if ($pdianoini < 1980 || $pdianoini > 2017):
+    echo "<div class='text-danger'>";
+    echo "<p>";
+    echo "Por favor, insira um ano de início de <abbr class='text-uppercase'>pdi</abbr> a partir de 1980, até o ano atual.";
+    echo "</p>";
+    echo "</div>";
+    return;
+    endif;
+    if ($pdianofim < 1984 || $pdianofim > 2099):
+    echo "<div class='text-danger'>";
+    echo "<p>";
+    echo "Por favor, insira um ano de término de <abbr class='text-uppercase'>pdi</abbr> a partir de 1984, até o ano de 2099.";
+    echo "</p>";
+    echo "</div>";
+    return;
+    endif;
     if ($unicod == - 1) :
         echo "<div class='text-danger'>";
         echo "<p>";
