@@ -56,14 +56,15 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="pdianoini">Ano inicial do <abbr class="text-uppercase">pdi</abbr>:
 				<span>*</span></label> <input type="number" name="pdianoini"
-				id="pdianoini" class="form-control" min="1980" max="2017" required>
+				id="pdianoini" class="form-control" min="1980"
+				max="<?php echo date("Y"); ?>" required>
 		</div>
 		<br>
 		<div class="form-group">
 			<label for="pdianofim">Ano de finalização do <abbr
 				class="text-uppercase">pdi</abbr>: <span>*</span></label> <input
 				type="number" class="form-control" id="pdianofim" name="pdianofim"
-				min="1984" max="2030" required>
+				min="1984" max="2099" required>
 		</div>
 		<br>
 		<div class="form-group">
@@ -326,8 +327,9 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="pdianoini">Ano inicial do <abbr class="text-uppercase">pdi</abbr>
 				<span>*</span></label> <input type="number" name="pdianoini"
-				id="pdianoini" class="form-control" min="1980" max="2017"
-				value="<?=$pdi['pdianoini']; ?>" required>
+				id="pdianoini" class="form-control" min="1980"
+				max="<?php echo date("Y");?>" value="<?=$pdi['pdianoini']; ?>"
+				required>
 		</div>
 		<br>
 		<div class="form-group">
