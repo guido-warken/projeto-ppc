@@ -1,46 +1,75 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\disciplinaDao.php';
 ?>
-<script src="js/redirectdisciplina.js"></script>
+<script src="js/validaformdisciplina.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
     ?>
-	<h2>Cadastro de disciplinas</h2>
+	<h2 class="text-center text-primary bg-primary">Cadastro de disciplinas</h2>
 	<br>
-	<form action="" method="post">
+	<p>Campos com asterisco são obrigatórios</p>
+	<br>
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
-			<label for="disnome">Nome da disciplina: </label> <input type="text"
-				class="form-control" id="disnome" name="disnome">
+			<label for="disnome">Nome da disciplina: <span>*</span></label> <input
+				type="text" class="form-control" id="disnome" name="disnome"
+				required>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="disobj">Objetivos da disciplina: </label>
+			<label for="disobj">Objetivos da disciplina: <span>*</span></label>
 			<textarea rows="3" cols="3" id="disobj" name="disobj"
-				class="form-control"></textarea>
+				class="form-control" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="disch">Carga horária da disciplina: </label> <input
-				type="number" id="disch" name="disch" class="form-control">
+			<label for="disch">Carga horária da disciplina: <span>*</span></label>
+			<input type="number" id="disch" name="disch" class="form-control"
+				required>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="discementa">Ementa da disciplina: </label>
+			<label for="discementa">Ementa da disciplina: <span>*</span></label>
 			<textarea rows="3" cols="3" id="discementa" name="discementa"
-				class="form-control"></textarea>
+				class="form-control" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="salvar">
+			<input type="submit" class="btn btn-default" value="salvar"
+				name="bt-form-salvar">
 		</div>
 		<br>
 	</form>
 <?php
-    if (! array_key_exists("disnome", $_POST) && ! array_key_exists("disobj", $_POST) && ! array_key_exists("disch", $_POST) && ! array_key_exists("discementa", $_POST))
+    if (! array_key_exists("bt-form-salvar", $_POST))
         return;
+    $disnome = isset($_POST["disnome"]) ? $_POST["disnome"] : "";
+    $disobj = isset($_POST["disobj"]) ? $_POST["disobj"] : "";
+    $disch = isset($_POST["disch"]) ? $_POST["disch"] : "";
+    $discementa = isset($_POST["discementa"]) ? $_POST["discementa"] : "";
+    if (empty($disnome) || empty($disobj) || ! is_numeric($disch) || empty($discementa)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "Um ou mais campos do formulário de cadastro de disciplinas não estão preenchidos corretamente.<br>";
+        echo "Por favor, preencha novamente o formulário, e clique no botão salvar.";
+        echo "</p>";
+        echo "</div>";
+        return;
+        endif;
+    
+    if ($disch <= 0) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Não pode cadastrar uma disciplina com carga horária em 0 ou abaixo de 0 horas.<br>";
+        echo "</p>";
+        echo "</div>";
+        return;
+        endif;
+    
     try {
-        if (inserirDisciplina($_POST["disnome"], $_POST["disobj"], $_POST["disch"], $_POST["discementa"])) {
+        if (inserirDisciplina($disnome, $disobj, $disch, $discementa)) {
             echo "<h1 class= 'text-success'>Disciplina cadastrada com êxito!</h1><br>";
             echo "<a href= '?pagina=disciplina&opcao=consultar'>Clique aqui para consultar as disciplinas cadastradas</a><br>";
         }
@@ -50,7 +79,8 @@ if ($_GET["opcao"] == "cadastrar") :
  elseif ($_GET["opcao"] == "consultar") :
     $disciplinas = buscarDisciplinas();
     ?>
-<h2>Exibição das disciplinas cadastradas</h2>
+<h2 class="text-center text-primary bg-primary">Exibição das disciplinas
+		cadastradas</h2>
 	<br> <a href="?pagina=disciplina&opcao=cadastrar">Nova disciplina</a><br>
 <?php
     if (count($disciplinas) > 0) :
@@ -102,9 +132,10 @@ if ($_GET["opcao"] == "cadastrar") :
  elseif ($_GET["opcao"] == "alterar") :
     $disciplina = buscarDisciplinaPorId($_GET["discod"]);
     ?>
-<h2 class="text-center">Alteração dos dados da disciplina selecionada</h2>
+<h2 class="text-center text-primary bg-primary">Alteração dos dados da
+		disciplina selecionada</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="disnome">Nome da disciplina: </label> <input type="text"
 				class="form-control" id="disnome" name="disnome"
