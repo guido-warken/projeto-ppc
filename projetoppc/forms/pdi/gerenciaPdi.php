@@ -399,6 +399,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $pdiensino = isset($_POST["pdiensino"]) ? $_POST["pdiensino"] : "";
     $pdipesquisa = isset($_POST["pdipesquisa"]) ? $_POST["pdipesquisa"] : "";
     $pdimetodo = isset($_POST["pdimetodo"]) ? $_POST["pdimetodo"] : "";
+    $pdis = $unicod != - 1 ? buscarPdisPorUnidade($unicod) : [];
     if (! is_numeric($pdianoini) || ! is_numeric($pdianofim) || empty($pdiensino) || empty($pdipesquisa) || empty($pdimetodo)) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -427,6 +428,23 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "</p>";
         echo "</div>";
         return;
+        endif;
+    
+    if (! empty($pdis)) :
+        foreach ($pdis as $pdi) :
+            if ($pdi["pdianoini"] == $pdianoini) :
+                echo "<div class='text-danger'>";
+                echo "<p>";
+                echo "Já existe um <abbr class='text-uppercase'>pdi</abbr>cadastrado com este ano de início.<br>";
+                echo "Preencha novamente o formulário e clique no botão salvar.";
+                echo "</p>";
+                echo "</div>";
+                echo "<br>";
+                return;
+        endif;
+            
+        endforeach
+        ;
         endif;
     
     try {
