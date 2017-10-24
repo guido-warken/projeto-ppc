@@ -61,6 +61,26 @@ function buscarDisciplinaPorId($discod, &$conn = null)
     return $informacoesdisciplina;
 }
 
+function buscarDisciplinaPorNome($disnome, &$conn = null)
+{
+    $informacoesdisciplina = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultadisciplina = $conn->prepare("select * from disciplina where disnome = :disnome");
+    $consultadisciplina->bindParam(":disnome", $disnome);
+    if ($consultadisciplina->execute()) {
+        $numregistros = $consultadisciplina->rowCount();
+        if ($numregistros == 1) {
+            $informacoesdisciplina = $consultadisciplina->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesdisciplina;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoesdisciplina;
+}
+
 function buscarDisciplinas(&$conn = null)
 {
     $informacoesdisciplina = [];

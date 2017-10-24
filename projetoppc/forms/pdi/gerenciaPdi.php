@@ -118,22 +118,24 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     endif;
     
-    if ($pdianoini < 1980 || $pdianoini > 2017):
-    echo "<div class='text-danger'>";
-    echo "<p>";
-    echo "Por favor, insira um ano de início de <abbr class='text-uppercase'>pdi</abbr> a partir de 1980, até o ano atual.";
-    echo "</p>";
-    echo "</div>";
-    return;
+    if ($pdianoini < 1980 || $pdianoini > date("Y")) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Por favor, insira um ano de início de <abbr class='text-uppercase'>pdi</abbr> a partir de 1980, até o ano atual.";
+        echo "</p>";
+        echo "</div>";
+        return;
     endif;
-    if ($pdianofim < 1984 || $pdianofim > 2099):
-    echo "<div class='text-danger'>";
-    echo "<p>";
-    echo "Por favor, insira um ano de término de <abbr class='text-uppercase'>pdi</abbr> a partir de 1984, até o ano de 2099.";
-    echo "</p>";
-    echo "</div>";
-    return;
+    
+    if ($pdianofim < 1984 || $pdianofim > 2099) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Por favor, insira um ano de término de <abbr class='text-uppercase'>pdi</abbr> a partir de 1984, até o ano de 2099.";
+        echo "</p>";
+        echo "</div>";
+        return;
     endif;
+    
     if ($unicod == - 1) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -352,7 +354,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			<label for="pdianofim">Ano de finalização do <abbr
 				class="text-uppercase">pdi</abbr> <span>*</span></label> <input
 				type="number" class="form-control" id="pdianofim" name="pdianofim"
-				min="1984" max="2030" value="<?=$pdi['pdianofim']; ?>" required>
+				min="1984" max="2099" value="<?=$pdi['pdianofim']; ?>" required>
 		</div>
 		<br>
 		<div class="form-group">
@@ -406,6 +408,24 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "</p>";
         echo "</div>";
         echo "<br>";
+        return;
+        endif;
+    
+    if ($pdianoini < 1980 || $pdianoini > date("Y")) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Por favor, insira um ano de início de <abbr class='text-uppercase'>pdi</abbr> a partir de 1980, até o ano atual.";
+        echo "</p>";
+        echo "</div>";
+        return;
+        endif;
+    
+    if ($pdianofim < 1984 || $pdianofim > 2099) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Por favor, insira um ano de término de <abbr class='text-uppercase'>pdi</abbr> a partir de 1984, até o ano de 2099.";
+        echo "</p>";
+        echo "</div>";
         return;
         endif;
     

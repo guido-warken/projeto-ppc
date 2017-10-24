@@ -28,3 +28,42 @@ function validarFormulario() {
 		return false;
 	}
 }
+
+function formatarCampo() {
+	var disobj = document.getElementById("disobj");
+	var discementa = document.getElementById("discementa");
+	var contentDisObj = disobj.value;
+	var contentDiscementa = discementa.value;
+	if (contentDisObj.search(/\t+/g, 0) != -1) {
+		contentDisObj = contentDisObj.replace(/\t+/g, "");
+		disobj.value = contentDisObj;
+	}
+	if (contentDiscementa.search(/\t+/g, 0) != -1) {
+		contentDiscementa = contentDiscementa.replace(/\t+/g, "");
+		discementa.value = contentDiscementa;
+	}
+}
+
+function submeterExclusao() {
+	$.ajax({
+		async : true,
+		type : "POST",
+		url : document.URL,
+		data : {
+			escolha : "sim"
+		},
+		success : function(result, status, xhr) {
+			if (status == "success") {
+				$(".container").html(result);
+				$("#frm-escolha").hide();
+			}
+		},
+		error : function(xhr, status, error) {
+			alert("Erro ao processar a requisição. Causa do erro: " + error);
+		}
+	});
+}
+
+function negarExclusao() {
+	location.href = "?pagina=disciplina&opcao=consultar";
+}

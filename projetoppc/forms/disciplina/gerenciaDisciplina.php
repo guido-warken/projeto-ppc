@@ -48,6 +48,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $disobj = isset($_POST["disobj"]) ? $_POST["disobj"] : "";
     $disch = isset($_POST["disch"]) ? $_POST["disch"] : "";
     $discementa = isset($_POST["discementa"]) ? $_POST["discementa"] : "";
+    $disciplina = ! empty($disnome) ? buscarDisciplinaPorNome($disnome) : [];
     if (empty($disnome) || empty($disobj) || ! is_numeric($disch) || empty($discementa)) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -68,6 +69,17 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
         endif;
     
+    if (! empty($disciplina)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Já existe uma disciplina cadastrada com este nome.<br>";
+        echo "Por favor, cadastre a disciplina com outro nome.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+        endif;
+    
     try {
         if (inserirDisciplina($disnome, $disobj, $disch, $discementa)) {
             echo "<h1 class= 'text-success'>Disciplina cadastrada com êxito!</h1><br>";
@@ -78,12 +90,13 @@ if ($_GET["opcao"] == "cadastrar") :
     }
  elseif ($_GET["opcao"] == "consultar") :
     $disciplinas = buscarDisciplinas();
+    $totaldisciplinas = count($disciplinas);
     ?>
 <h2 class="text-center text-primary bg-primary">Exibição das disciplinas
 		cadastradas</h2>
 	<br> <a href="?pagina=disciplina&opcao=cadastrar">Nova disciplina</a><br>
 <?php
-    if (count($disciplinas) > 0) :
+    if ($totaldisciplinas > 0) :
         ?>
 <table class="table table bordered">
 		<caption>Disciplinas</caption>
@@ -119,7 +132,7 @@ if ($_GET["opcao"] == "cadastrar") :
 </tbody>
 	</table>
 <?php
-     elseif (count($disciplinas) == 0) :
+    else :
         ?>
         <div class="text-warning">
 		<h2>Nenhuma disciplina cadastrada no momento</h2>
@@ -145,7 +158,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="disobj">Objetivos da disciplina: </label>
 			<textarea rows="3" cols="3" id="disobj" name="disobj"
-				class="form-control">
+				class="form-control" onfocus="formatarCampo()">
 					<?=$disciplina["disobj"]; ?>
 					</textarea>
 		</div>
@@ -165,15 +178,51 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="alterar">
+			<input type="submit" class="btn btn-default" value="alterar"
+				name="bt-form-alterar">
 		</div>
 		<br>
 	</form>
 		<?php
-    if (! array_key_exists("disnome", $_POST) && ! array_key_exists("disobj", $_POST) && ! array_key_exists("disch", $_POST) && ! array_key_exists("discementa", $_POST))
+    if (! array_key_exists("bt-form-alterar", $_POST))
         return;
+    $disnome = isset($_POST["disnome"]) ? $_POST["disnome"] : "";
+    $disobj = isset($_POST["disobj"]) ? $_POST["disobj"] : "";
+    $disch = isset($_POST["disch"]) ? $_POST["disch"] : "";
+    $discementa = isset($_POST["discementa"]) ? $_POST["discementa"] : "";
+    if (empty($disnome) || empty($disobj) || ! is_numeric($disch) || empty($discementa)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "Um ou mais campos do formulário de alteração de disciplinas não estão preenchidos corretamente.<br>";
+        echo "Por favor, preencha novamente o formulário, e clique no botão salvar.";
+        echo "</p>";
+        echo "</div>";
+        return;
+        endif;
+    
+    if ($disch <= 0) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Não pode alterarr uma disciplina para uma carga horária em 0 ou abaixo de 0 horas.<br>";
+        echo "</p>";
+        echo "</div>";
+        return;
+        endif;
+    
+    if (! empty($disciplina)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Já existe uma disciplina cadastrada com este nome.<br>";
+        echo "Por favor, cadastre a disciplina com outro nome.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+        endif;
+    
     try {
-        if (atualizarDisciplina($disciplina["discod"], $_POST["disnome"], $_POST["disobj"], $_POST["disch"], $_POST["discementa"])) {
+        if (atualizarDisciplina($disciplina["discod"], $disnome, $disobj, $disch, $discementa)) {
             echo "<h1 class= 'text-success'>Disciplina atualizada com êxito!</h1><br>";
             echo "<a href= '?pagina=disciplina&opcao=consultar'>Clique aqui para consultar novamente as disciplinas</a>";
         }
@@ -185,7 +234,7 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
 	<h2>Exclusão da disciplina selecionada</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" id="frm-escolha">
 		<div class="form-group">
 			<p class="text-warning">
 	Você está prestes a excluir a disciplina <?=$disciplina["disnome"]; ?>.<br>
@@ -195,13 +244,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" class="btn btn-default"
-				value="sim">
+			<input type="button" class="btn btn-default" value="sim"
+				onclick="submeterExclusao()">
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" class="btn btn-default"
-				value="não">
+			<input type="button" class="btn btn-default" value="não"
+				onclick="negarExclusao()">
 		</div>
 		<br>
 	</form>
