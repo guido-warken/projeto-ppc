@@ -48,7 +48,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $disobj = isset($_POST["disobj"]) ? $_POST["disobj"] : "";
     $disch = isset($_POST["disch"]) ? $_POST["disch"] : "";
     $discementa = isset($_POST["discementa"]) ? $_POST["discementa"] : "";
-    $disciplina = ! empty($disnome) ? buscarDisciplinaPorNome($disnome) : [];
+    $disciplinapornome = ! empty($disnome) ? buscarDisciplinaPorNome($disnome) : [];
     if (empty($disnome) || empty($disobj) || ! is_numeric($disch) || empty($discementa)) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -69,7 +69,7 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
         endif;
     
-    if (! empty($disciplina)) :
+    if (! empty($disciplinapornome)) :
         echo "<div class='text-danger'>";
         echo "<p>";
         echo "Já existe uma disciplina cadastrada com este nome.<br>";
@@ -190,6 +190,7 @@ if ($_GET["opcao"] == "cadastrar") :
     $disobj = isset($_POST["disobj"]) ? $_POST["disobj"] : "";
     $disch = isset($_POST["disch"]) ? $_POST["disch"] : "";
     $discementa = isset($_POST["discementa"]) ? $_POST["discementa"] : "";
+    $disciplinapornome = ! empty($disnome) ? buscarDisciplinaPorNome($disnome) : [];
     if (empty($disnome) || empty($disobj) || ! is_numeric($disch) || empty($discementa)) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -210,16 +211,19 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
         endif;
     
-    if (! empty($disciplina)) :
-        echo "<div class='text-danger'>";
-        echo "<p>";
-        echo "Já existe uma disciplina cadastrada com este nome.<br>";
-        echo "Por favor, cadastre a disciplina com outro nome.";
-        echo "</p>";
-        echo "</div>";
-        echo "<br>";
-        return;
+    if (! empty($disciplinapornome)) :
+        if ($disciplinapornome["disnome"] != $disciplina["disnome"]) :
+            echo "<div class='text-danger'>";
+            echo "<p>";
+            echo "Já existe uma disciplina cadastrada com este nome.<br>";
+            echo "Por favor, cadastre a disciplina com outro nome.";
+            echo "</p>";
+            echo "</div>";
+            echo "<br>";
+            return;
         endif;
+        endif;
+        
     
     try {
         if (atualizarDisciplina($disciplina["discod"], $disnome, $disobj, $disch, $discementa)) {
