@@ -1,31 +1,58 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\indicadorDao.php';
 ?>
-<script src="js/redirectindicador.js"></script>
+<script src="js/validaformindicador.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
     ?>
-	<h2 class="text-center">Cadastro de indicadores</h2>
+	<h2 class="text-center text-primary bg-primary">Cadastro de indicadores</h2>
 	<br>
-	<form action="" method="post">
+	<p>Campos com asterisco são obrigatórios</p>
+	<br>
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
-			<label for="inddesc">Digite o indicador: </label>
+			<label for="inddesc">Digite o indicador: <span>*</span></label>
 			<textarea rows="3" cols="3" id="inddesc" name="inddesc"
 				class="form-control"></textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="salvar" class="btn btn-default">
+			<input type="submit" value="salvar" class="btn btn-default"
+				name="bt-form-salvar">
 		</div>
 		<br>
 	</form>
 	<?php
-    if (! array_key_exists("inddesc", $_POST))
+    if (! array_key_exists("bt-form-salvar", $_POST))
         return;
+    $inddesc = isset($_POST["inddesc"]) ? $_POST["inddesc"] : "";
+    if (empty($inddesc)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "Preencha o campo de Indicador, e clique no botão salvar.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+        endif;
+    
+    if (preg_match("/[0-9+]/", $inddesc) == 1) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "O campo de Indicador não pode conter números.<br>";
+        echo "Preencha novamente o campo Indicador, e clique no botão salvar.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+        endif;
+    
     try {
-        if (inserirIndicador($_POST["inddesc"])) {
-            echo "<h1 class= 'text-warning'>Indicador cadastrado com êxito!</h1><br>";
+        if (inserirIndicador($inddesc)) {
+            echo "<h1 class= 'text-center text-success'>Indicador cadastrado com êxito!</h1><br>";
             echo "<a href= '?pagina=indicador&opcao=consultar'>Clique aqui para consultar os indicadores</a><br>";
         }
     } catch (PDOException $e) {
@@ -35,12 +62,12 @@ if ($_GET["opcao"] == "cadastrar") :
     $indicadores = buscarIndicadores();
     $totalindicadores = count($indicadores);
     ?>
-	<h2 class="text-center">Consulta de indicadores</h2>
+	<h2 class="text-center text-primary bg-primary">Consulta de indicadores</h2>
 	<br> <a href="?pagina=indicador&opcao=cadastrar">Novo indicador</a><br>
 	<?php
     if ($totalindicadores > 0) :
         ?>
-	<h2>Número de indicadores encontrados: <?=$totalindicadores; ?></h2>
+	<h2 class="text-center">Número de indicadores encontrados: <?=$totalindicadores; ?></h2>
 	<br>
 	<table class="table table-bordered">
 		<caption>Indicadores</caption>
@@ -73,7 +100,7 @@ if ($_GET["opcao"] == "cadastrar") :
     else :
         ?>
         <div class="text-warning">
-		<h1>Nenhum indicador cadastrado no sistema</h1>
+		<h1 class="text-center">Nenhum indicador cadastrado no sistema</h1>
 		<br>
 		<p>Clique no link acima para cadastrar um novo indicador</p>
 	</div>
@@ -83,28 +110,54 @@ if ($_GET["opcao"] == "cadastrar") :
  elseif ($_GET["opcao"] == "alterar") :
     $indicador = buscarIndicadorPorId($_GET["indcod"]);
     ?>
-	<h2 class="text-center">Alteração do indicador selecionado</h2>
+	<h2 class="text-center text-primary bg-primary">Alteração do indicador
+		selecionado</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
 			<label for="inddesc">Digite o indicador: </label>
 			<textarea rows="3" cols="3" id="inddesc" name="inddesc"
-				class="form-control">
+				class="form-control" onfocus="formatarCampo()">
 					<?= $indicador["inddesc"]; ?>
 					</textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="alterar" class="btn btn-default">
+			<input type="submit" value="alterar" class="btn btn-default"
+				name="bt-form-alterar">
 		</div>
 		<br>
 	</form>
 	<?php
-    if (! array_key_exists("inddesc", $_POST))
+    if (! array_key_exists("bt-form-alterar", $_POST))
         return;
+    $inddesc = isset($_POST["inddesc"]) ? $_POST["inddesc"] : "";
+    if (empty($inddesc)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "Preencha o campo de Indicador, e clique no botão salvar.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+        endif;
+    
+    if (preg_match("/[0-9+]/", $inddesc) == 1) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "O campo de Indicador não pode conter números.<br>";
+        echo "Preencha novamente o campo Indicador, e clique no botão salvar.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+        endif;
+    
     try {
-        if (atualizarIndicador($indicador["indcod"], $_POST["inddesc"])) {
-            echo "<h1 class= 'text-success'>Indicador atualizado com êxito!</h1><br>";
+        if (atualizarIndicador($indicador["indcod"], $inddesc)) {
+            echo "<h1 class= 'text-center text-success'>Indicador atualizado com êxito!</h1><br>";
             echo "<a href= '?pagina=indicador&opcao=consultar'>Clique aqui para consultar novamente os indicadores cadastrados</a><br>";
         }
     } catch (PDOException $e) {
@@ -115,7 +168,7 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
 	<h2 class="text-center">Exclusão do indicador selecionado</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" id="frm-escolha">
 		<div class="form-group">
 			<p class="text-warning">
 	Você está prestes a excluir o indicador <?=$indicador["inddesc"]; ?>.<br>
@@ -124,13 +177,13 @@ if ($_GET["opcao"] == "cadastrar") :
 			</p>
 		</div>
 		<div class="form-group">
-			<input type="submit" name="escolha" class="btn btn-default"
-				value="sim">
+			<input type="button" class="btn btn-default" value="sim"
+				onclick="submeterExclusao()">
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" class="btn btn-default"
-				value="não">
+			<input type="button" class="btn btn-default" value="não"
+				onclick="negarExclusao()">
 		</div>
 		<br>
 	</form>
@@ -140,7 +193,7 @@ if ($_GET["opcao"] == "cadastrar") :
     if ($_POST["escolha"] == "sim") {
         try {
             if (excluirIndicador($indicador["indcod"])) {
-                echo "<h1 class= 'text-success'>Indicador excluído com êxito!</h1><br>";
+                echo "<h1 class= 'text-center text-success'>Indicador excluído com êxito!</h1><br>";
                 echo "<a href= '?pagina=indicador&opcao=consultar'>Clique aqui para consultar novamente os indicadores</a><br>";
             }
         } catch (PDOException $e) {
