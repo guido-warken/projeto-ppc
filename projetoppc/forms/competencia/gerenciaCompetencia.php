@@ -15,7 +15,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="compdes">Competência: <span>*</span></label>
 			<textarea rows="3" cols="3" id="compdes" name="compdes"
-				class="form-control"></textarea>
+				class="form-control" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
@@ -102,7 +102,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="compdes">Competência: </label>
 			<textarea rows="3" cols="3" id="compdes" name="compdes"
-				class="form-control" onfocus="formatarCampo()">
+				class="form-control" onfocus="formatarCampo()" required>
 					<?=$competencia["compdes"]; ?>
 					</textarea>
 		</div>

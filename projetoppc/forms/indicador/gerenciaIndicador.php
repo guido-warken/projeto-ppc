@@ -14,7 +14,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="inddesc">Digite o indicador: <span>*</span></label>
 			<textarea rows="3" cols="3" id="inddesc" name="inddesc"
-				class="form-control"></textarea>
+				class="form-control" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
@@ -117,7 +117,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="inddesc">Digite o indicador: </label>
 			<textarea rows="3" cols="3" id="inddesc" name="inddesc"
-				class="form-control" onfocus="formatarCampo()">
+				class="form-control" onfocus="formatarCampo()" required>
 					<?= $indicador["inddesc"]; ?>
 					</textarea>
 		</div>
