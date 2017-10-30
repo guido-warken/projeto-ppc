@@ -1,41 +1,61 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\certificacaoDao.php';
 ?>
-<script src="js/redirectcertificacao.js"></script>
+<script src="js/validaformcertificacao.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
     ?>
-	<h2 class="text-center">Cadastro de certificação</h2>
+	<h2 class="text-center text-primary bg-primary">Cadastro de
+		certificação</h2>
 	<br>
-	<form action="" method="post">
+	<p>Campos com asterisco são obrigatórios</p>
+	<br>
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
-			<label for="cerdes">Descritivo da certificação: </label> <input
-				type="text" id="cerdes" name="cerdes" class="form-control">
+			<label for="cerdes">Descritivo da certificação: <span>*</span></label>
+			<textarea rows="3" cols="3" class="form-control" id="cerdes"
+				name="cerdes" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="cerreq">Requisitos da certificação: </label>
+			<label for="cerreq">Requisitos da certificação: <span>*</span></label>
 			<textarea rows="3" cols="3" id="cerreq" name="cerreq"
-				class="form-control"></textarea>
+				class="form-control" required></textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="cerch">Carga horária da certificação: </label> <input
-				type="number" id="cerch" name="cerch" class="form-control">
+			<label for="cerch">Carga horária da certificação: <span>*</span></label>
+			<input type="number" id="cerch" name="cerch" class="form-control"
+				required>
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="salvar">
+			<input type="submit" class="btn btn-default" value="salvar"
+				name="bt-form-salvar">
 		</div>
 		<br>
 	</form>
 	<?php
-    if (! array_key_exists("cerdes", $_POST) && ! array_key_exists("cerreq", $_POST) && ! array_key_exists("cerch", $_POST))
+    if (! array_key_exists("bt-form-salvar", $_POST))
         return;
+    $cerdes = isset($_POST["cerdes"]) ? $_POST["cerdes"] : "";
+    $cerreq = isset($_POST["cerreq"]) ? $_POST["cerreq"] : "";
+    $cerch = isset($_POST["cerch"]) ? $_POST["cerch"] : "";
+    if (empty($cerdes) || empty($cerreq) || ! is_numeric($cerch)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "Um ou mais campos do formulário de cadastro de certificações não foram preenchidos corretamente.<br>";
+        echo "Preencha novamente o formulário e clique no botão salvar.";
+        echo "</p>";
+        echo "</div>";
+        return;
+        endif;
+    
     try {
-        if (inserirCertificacao($_POST["cerdes"], $_POST["cerreq"], $_POST["cerch"])) {
-            echo "<h1 class= 'text-success'>Certificação cadastrada com êxito!</h1><br>";
+        if (inserirCertificacao($cerdes, $cerreq, $cerch)) {
+            echo "<h1 class= 'text-center text-success'>Certificação cadastrada com êxito!</h1><br>";
             echo "<a href= '?pagina=certificacao&opcao=consultar'>Clique aqui para consultar as certificações cadastradas</a><br>";
         }
     } catch (PDOException $e) {
@@ -45,7 +65,8 @@ if ($_GET["opcao"] == "cadastrar") :
     $certificacoes = buscarCert();
     $totalcerts = count($certificacoes);
     ?>
-	<h2 class="text-center">Consulta de certificações</h2>
+	<h2 class="text-center text-primary bg-primary">Consulta de
+		certificações</h2>
 	<br> <a href="?pagina=certificacao&opcao=cadastrar">Nova certificação</a><br>
 	<?php
     if ($totalcerts > 0) :
@@ -97,40 +118,58 @@ if ($_GET["opcao"] == "cadastrar") :
  elseif ($_GET["opcao"] == "alterar") :
     $certificacao = buscarCertPorId($_GET["cercod"]);
     ?>
-<h2 class="text-center">Alteração de certificação</h2>
+<h2 class="text-center text-primary bg-primary">Alteração de
+		certificação</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
-			<label for="cerdes">Descritivo da certificação: </label> <input
-				type="text" id="cerdes" name="cerdes" class="form-control"
-				value="<?=$certificacao['cerdes']; ?>">
+			<label for="cerdes">Descritivo da certificação: <span>*</span></label>
+			<textarea rows="3" cols="3" id="cerdes" name="cerdes"
+				class="form-control" onfocus="formatarCampo()" required>
+			<?=$certificacao["cerdes"]; ?>
+			</textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="cerreq">Requisitos da certificação: </label>
+			<label for="cerreq">Requisitos da certificação: <span>*</span></label>
 			<textarea rows="3" cols="3" id="cerreq" name="cerreq"
-				class="form-control">
+				class="form-control" onfocus="formatarCampo()" required>
 					<?=$certificacao["cerreq"]; ?>
 					</textarea>
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="cerch">Carga horária da certificação: </label> <input
-				type="number" id="cerch" name="cerch" class="form-control"
-				value="<?=$certificacao['cerch']; ?>">
+			<label for="cerch">Carga horária da certificação: <span>*</span></label>
+			<input type="number" id="cerch" name="cerch" class="form-control"
+				value="<?=$certificacao['cerch']; ?>" required>
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="alterar">
+			<input type="submit" class="btn btn-default" value="alterar"
+				name="bt-form-alterar">
 		</div>
 		<br>
 	</form>
 			<?php
-    if (! array_key_exists("cerdes", $_POST) && ! array_key_exists("cerreq", $_POST) && ! array_key_exists("cerch", $_POST))
+    if (! array_key_exists("bt-form-alterar", $_POST))
         return;
+    $cerdes = isset($_POST["cerdes"]) ? $_POST["cerdes"] : "";
+    $cerreq = isset($_POST["cerreq"]) ? $_POST["cerreq"] : "";
+    $cerch = isset($_POST["cerch"]) ? $_POST["cerch"] : "";
+    if (empty($cerdes) || empty($cerreq) || ! is_numeric($cerch)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Dados incorretos.<br>";
+        echo "Um ou mais campos do formulário de alteração de certificações não foram preenchidos corretamente.<br>";
+        echo "Preencha novamente o formulário e clique no botão salvar.";
+        echo "</p>";
+        echo "</div>";
+        return;
+        endif;
+    
     try {
-        if (atualizarCert($certificacao["cercod"], $_POST["cerdes"], $_POST["cerreq"], $_POST["cerch"])) {
-            echo "<h1 class= 'text-success'>Certificação atualizada com êxito!</h1><br>";
+        if (atualizarCert($certificacao["cercod"], $cerdes, $cerreq, $cerch)) {
+            echo "<h1 class= 'text-center text-success'>Certificação atualizada com êxito!</h1><br>";
             echo "<a href= '?pagina=certificacao&opcao=consultar'>Clique aqui para voltar à tela de consulta de certificações</a><br>";
         }
     } catch (PDOException $e) {
@@ -139,9 +178,10 @@ if ($_GET["opcao"] == "cadastrar") :
  elseif ($_GET["opcao"] == "excluir") :
     $certificacao = buscarCertPorId($_GET["cercod"]);
     ?>
-    <h2 class="text-center">Exclusão da certificação</h2>
+    <h2 class="text-center text-primary bg-primary">Exclusão da
+		certificação</h2>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" id="frm-escolha">
 		<div class="form-group" style="resize: both;">
 			<p class="text-warning">
     Você está prestes a excluir a certificação com o descritivo: <?=$certificacao["cerdes"]; ?>, com <?=$certificacao["cerch"]; ?> horas.<br>
@@ -151,13 +191,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" class="btn btn-default"
-				value="sim">
+			<input type="button" class="btn btn-default" value="sim"
+				onclick="submeterExclusao()">
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" name="escolha" class="btn btn-default"
-				value="não">
+			<input type="button" class="btn btn-default" value="não"
+				onclick="negarExclusao()">
 		</div>
 		<br>
 	</form>

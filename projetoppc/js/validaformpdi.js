@@ -18,7 +18,7 @@ function validarFormulario() {
 		pdiAnoFim.focus();
 		return false;
 	}
-		if (unicod.value == -1) {
+	if (unicod.value == -1) {
 		alert("Por favor, selecione uma unidade do SENAC");
 		unicod.focus();
 		return false;
