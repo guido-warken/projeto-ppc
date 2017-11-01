@@ -8,8 +8,12 @@ function gerenciarFiltro() {
 	var opcao2 = document.getElementById("opt2");
 	if (isChecked(opcao1)) {
 		divPpc.hidden = false;
+		if (divUnidade.hidden == false)
+			divUnidade.hidden = true;
 	} else if (isChecked(opcao2)) {
 		divUnidade.hidden = false;
+		if (divPpc.hidden == false)
+			divPpc.hidden = true;
 	}
 }
 
