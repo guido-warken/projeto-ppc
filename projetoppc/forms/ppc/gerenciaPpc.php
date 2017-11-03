@@ -151,7 +151,7 @@ if ($_GET["opcao"] == "cadastrar") :
     
     try {
         if (inserirPpc($ppcmodal, $ppcobj, $ppcdesc, $ppcestagio, $curcod, $ppcanoini, $conn)) {
-            echo "<h1 class= 'text-success'><abbr class='text-uppercase'>ppc</abbr> cadastrado com êxito!</h1><br>";
+            echo "<h1 class= 'text-center text-success'><abbr class='text-uppercase'>ppc</abbr> cadastrado com êxito!</h1><br>";
             echo "<a href= '?pagina=ppc&opcao=consultar'>Clique aqui para visualizar os Ppcs cadastrados</a><br>";
         } else {
             echo "Não deu pra salvar";
@@ -174,7 +174,8 @@ if ($_GET["opcao"] == "cadastrar") :
         ?>
 				<label for="curcod">Selecione o curso para visualizar os <abbr
 				class="text-uppercase">ppc</abbr>s: <span>*</span>
-			</label> <select class="form-control" name="curcod" id="curcod">
+			</label> <select class="form-control" name="curcod" id="curcod"
+				tabindex="1">
 				<option value="-1">Selecione</option>
 <?php
         foreach ($cursos as $curso) :
@@ -204,7 +205,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<div class="form-group">
 			<input type="submit" class="btn btn-default" value="enviar"
-				name="bt-form-consultar">
+				name="bt-form-consultar" tabindex="2">
 		</div>
 		<br>
 	</form>
@@ -306,13 +307,15 @@ elseif ($_GET["opcao"] == "ler") :
 		</pre>
 	</div>
 	<br>
-	<div style="resize: both;">
-		<a href="?pagina=ppc&opcao=alterar&ppccod=<?=$ppc['ppccod']; ?>">Alterar
-			conteúdo</a>
-	</div>
-	<div style="resize: both;">
-		<a href="?pagina=ppc&opcao=excluir&ppccod=<?=$ppc['ppccod']; ?>">Excluir
-			ppc</a>
+	<div class="row">
+		<div class="col-sm-4">
+			<a href="?pagina=ppc&opcao=alterar&ppccod=<?=$ppc['ppccod']; ?>">Alterar
+				conteúdo</a>
+		</div>
+		<div class="col-sm-4">
+			<a href="?pagina=ppc&opcao=excluir&ppccod=<?=$ppc['ppccod']; ?>">Excluir
+				ppc</a>
+		</div>
 	</div>
 	<br>
 					<?php
@@ -323,10 +326,7 @@ elseif ($_GET["opcao"] == "ler") :
     ?>
 	<h2 class="text-center text-primary bg-primary">Alteração de ppc</h2>
 	<br>
-	<p class="text-info">
-		Para alterar um <abbr class="text-uppercase">ppc</abbr>, preencha os
-		campos pintados em vermelho, e marcados com um asterisco.
-	</p>
+	<p class="text-info">Campos com asterisco são obrigatórios.</p>
 	<br>
 	<form action="" method="post" onsubmit="return validarFormulario()">
 		<div class="form-group">
@@ -444,7 +444,7 @@ elseif ($_GET["opcao"] == "ler") :
     
     try {
         if (atualizarPpc($curcod, $ppcmodal, $ppcobj, $ppcdesc, $ppcestagio, $ppc["ppccod"], $ppcanoini, $conn)) {
-            echo "<h1 class= 'text-success'><abbr class='text-uppercase'>ppc</abbr> alterado com êxito! </h1><br>";
+            echo "<h1 class= 'text-center text-success'><abbr class='text-uppercase'>ppc</abbr> alterado com êxito! </h1><br>";
             echo "<a href= '?pagina=ppc&opcao=consultar'>Voltar à tela de consulta de ppc</a><br>";
         }
     } catch (PDOException $e) {
@@ -482,7 +482,7 @@ elseif ($_GET["opcao"] == "ler") :
     if ($_POST["escolha"] == "sim") {
         try {
             if (excluirPpc($_GET["ppccod"], $conn)) {
-                echo "<h1 class= 'text-success'>Ppc excluído com êxito! </h1><br>";
+                echo "<h1 class= 'text-center text-success'>Ppc excluído com êxito! </h1><br>";
                 echo "<a href= '?pagina=ppc&opcao=consultar'>Clique aqui para voltar à consulta de ppcs</a><br>";
             }
         } catch (PDOException $e) {
