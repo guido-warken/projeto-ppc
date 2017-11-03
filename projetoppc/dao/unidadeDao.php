@@ -81,7 +81,7 @@ function buscarUnidadesPorPdi(&$conn = null)
     $informacoesunidade = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultaunidade = $conn->query("select unidadesenac.unicod, unidadesenac.uninome from unidadesenac inner join pdi on unidadesenac.unicod = pdi.unicod");
+    $consultaunidade = $conn->query("select unidadesenac.unicod, unidadesenac.uninome from unidadesenac inner join pdi on unidadesenac.unicod = pdi.unicod order by unidadesenac.uninome");
     if ($consultaunidade->execute()) {
         $numregistros = $consultaunidade->rowCount();
         if ($numregistros > 0) {

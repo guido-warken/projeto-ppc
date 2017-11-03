@@ -92,7 +92,7 @@ function buscarPpcs(&$conn = null)
     $informacoesppc = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultappc = $conn->query("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod");
+    $consultappc = $conn->query("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod order by ppc.ppcanoini");
     if ($consultappc->execute()) {
         $numregistros = $consultappc->rowCount();
         if ($numregistros > 0) {

@@ -38,7 +38,7 @@ function buscarCursos(&$conn = null)
     $informacoescurso = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultacurso = $conn->query("select * from curso");
+    $consultacurso = $conn->query("select * from curso order by curnome");
     if ($consultacurso->execute()) {
         $numregistros = $consultacurso->rowCount();
         if ($numregistros > 0) {

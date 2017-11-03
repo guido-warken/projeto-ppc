@@ -87,6 +87,17 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
     $ppccod = isset($_POST["ppccod"]) ? $_POST["ppccod"] : "";
     $compcod = isset($_POST["compcod"]) ? $_POST["compcod"] : "";
+    $perfil = buscarPerfilConclusaoPorId($ppccod, $compcod);
+    if (! empty($perfil)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Já existe um perfil de conclusão de curso cadastrado com este <abbr class='text-uppercase'>ppc</abbr> e com esta competência.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
+    
     try {
         if (inserirPerfilConclusao($ppccod, $compcod)) {
             echo "<h1 class= 'text-center text-success'>Perfil de Conclusão cadastrado com êxito!</h1><br>";
