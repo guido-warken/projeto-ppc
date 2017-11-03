@@ -30,7 +30,7 @@ function buscarVinculoPorDisciplina($discod, &$conn = null)
     $informacoesvinculo = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultaavalia = $conn->prepare("select * from avalia where discod = :discod");
+    $consultaavalia = $conn->prepare("select avalia.*, indicador.inddesc from avalia inner join indicador on avalia.indcod = indicador.indcod where avalia.discod = :discod");
     $consultaavalia->bindParam(":discod", $discod);
     if ($consultaavalia->execute()) {
         $numregistros = $consultaavalia->rowCount();
