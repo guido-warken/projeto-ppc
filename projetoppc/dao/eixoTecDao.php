@@ -40,7 +40,7 @@ function buscarEixosTec(&$conn = null)
     $informacoeseixotec = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultaeixotec = $conn->query("select * from eixotec");
+    $consultaeixotec = $conn->query("select * from eixotec order by eixdesc");
     if ($consultaeixotec->execute()) {
         $numregistros = $consultaeixotec->rowCount();
         if ($numregistros > 0) {
