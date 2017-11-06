@@ -1,5 +1,6 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\factory\connectionFactory.php';
+require_once 'c:\wamp64\www\projetoppc\dao\indicadorDao.php';
 
 function vincularIndicador($indcod, $discod, &$conn = null)
 {
@@ -73,13 +74,13 @@ function buscarIndicadoresDesvinculados(&$conn = null)
     $indicadores = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultaavalia = $conn->query("select avalia.*, indicador.inddesc from avalia left join indicador on avalia.indcod = indicador.indcod");
+    $consultaavalia = $conn->query("select indicador.*, avalia.discod from indicador left join avalia on indicador.indcod = avalia.indcod");
     if ($consultaavalia->execute()) {
         $numregistros = $consultaavalia->rowCount();
         if ($numregistros > 0) {
             for ($i = 0; $i < $numregistros; $i ++) {
                 $registro = $consultaavalia->fetch(PDO::FETCH_ASSOC);
-                if (empty($registro["inddesc"])) {
+                if (is_null($registro["discod"])) {
                     $indicador = buscarIndicadorPorId($registro["indcod"]);
                     $indicadores[$i] = $indicador;
                 }
