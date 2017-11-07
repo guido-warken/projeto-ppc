@@ -4,7 +4,6 @@ $discod = isset($_GET["discod"]) ? $_GET["discod"] : "";
 $indicadoresvinculados = ! empty($discod) ? buscarVinculoPorDisciplina($discod) : [];
 if (! empty($indicadoresvinculados)) :
     ?>
-<h2 class="text-center">Indicadores vinculados a esta disciplina:</h2>
 <table class="table table-bordered">
 	<caption>Indicadores vinculados</caption>
 	<thead>
@@ -19,7 +18,7 @@ if (! empty($indicadoresvinculados)) :
         ?>
 <tr>
 			<td><?=$vinculo["inddesc"]; ?></td>
-			<td><a href="?pagina=vinculo&opcao=excluir">Desvincular</a></td>
+			<td><a href="?pagina=vinculo&opcao=excluir&indcod=<?=$vinculo["indcod"]; ?>&discod=<?=$vinculo["discod"]; ?>">Desvincular</a></td>
 		</tr>
 <?php
     endforeach

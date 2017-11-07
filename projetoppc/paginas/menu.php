@@ -2,8 +2,9 @@
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
-							<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#menu">menu</button>
-							<a class="navbar-brand" href="#">Sistema PPC</a>
+			<button type="button" class="btn btn-info" data-toggle="collapse"
+				data-target="#menu">menu</button>
+			<a class="navbar-brand" href="#">Sistema PPC</a>
 		</div>
 		<div class="collapse" id="menu">
 			<ul class="nav navbar-nav">
@@ -86,6 +87,8 @@
 						<li
 							<?php echo active($pagina, $opcao, "indicador", "consultar"); ?>><a
 							href="?pagina=indicador&opcao=consultar">Consultar</a></li>
+						<li <?php echo active($pagina, $opcao, "vinculo", "cadastrar"); ?>><a
+							href="?pagina=vinculo&opcao=cadastrar">Vincular indicador</a></li>
 					</ul></li>
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#">Certificação <span class="caret"></span></a>

@@ -69,29 +69,4 @@ function buscarVinculoPorId($indcod, $discod, &$conn = null)
     return $informacoesvinculo;
 }
 
-function buscarIndicadoresDesvinculados(&$conn = null)
-{
-    $indicadores = [];
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultaavalia = $conn->query("select indicador.*, avalia.discod from indicador left join avalia on indicador.indcod = avalia.indcod");
-    if ($consultaavalia->execute()) {
-        $numregistros = $consultaavalia->rowCount();
-        if ($numregistros > 0) {
-            for ($i = 0; $i < $numregistros; $i ++) {
-                $registro = $consultaavalia->fetch(PDO::FETCH_ASSOC);
-                if (is_null($registro["discod"])) {
-                    $indicador = buscarIndicadorPorId($registro["indcod"]);
-                    $indicadores[$i] = $indicador;
-                }
-            }
-        } else {
-            desconectarDoBanco($conn);
-            return $indicadores;
-        }
-    }
-    desconectarDoBanco($conn);
-    return $indicadores;
-}
-
 ?>

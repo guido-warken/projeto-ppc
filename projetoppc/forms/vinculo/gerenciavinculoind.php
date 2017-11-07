@@ -2,12 +2,12 @@
 require_once 'c:\wamp64\www\projetoppc\dao\disciplinaDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\avaliaDao.php';
 ?>
+<script src="js/vinculaindicador.js"></script>
 <div class="container">
 <?php
 if ($_GET["opcao"] == "cadastrar") :
     $disciplinas = buscarDisciplinas();
     $indicadores = buscarIndicadores();
-    $indnvinc = buscarIndicadoresDesvinculados();
     ?>
 <h2 class="text-center text-primary bg-primary">Vinculação de
 		indicadores com as disciplinas</h2>
@@ -26,7 +26,8 @@ if ($_GET["opcao"] == "cadastrar") :
     if ($totaldisciplinas > 0) :
         ?>
 <label for="discod">Selecione a disciplina a ser vinculada: </label> <select
-				class="form-control" id="discod" name="discod">
+				class="form-control" id="discod" name="discod"
+				onchange="exibirVinculo()">
 				<option value="-1">Selecione</option>
 <?php
         foreach ($disciplinas as $disciplina) :
@@ -53,24 +54,23 @@ if ($_GET["opcao"] == "cadastrar") :
     endif;
     ?>
 		</div>
-		<div class="col-sm-6" id="ind-vinc"></div>
+		<div class="row">
+			<div class="col-sm-5" id="ind-vinc"></div>
+		</div>
 		<br>
 		<div class="form-group">
 		<?php
     $totalindicadores = count($indicadores);
-    $totalindnvinc = count($indnvinc);
     if ($totalindicadores == 0) :
         ?>
-		<div class="text-warning">
+			<div class="text-warning">
 				<h2 class="text-center">Nenhum indicador cadastrado no sistema</h2>
 				<br> <a href="?pagina=indicador&opcao=cadastrar">Clique aqui para
 					cadastrar um novo indicador</a>
 			</div>
 		<?php
         return;
-		endif;
-    
-    if ($totalindnvinc == 0) :
+    else :
         ?>
 		<label for="indcod">Selecione o indicador a ser vinculado:</label> <select
 				class="form-control" id="indcod" name="indcod">
@@ -84,21 +84,7 @@ if ($_GET["opcao"] == "cadastrar") :
         ;
         ?>
 		</select>
-		<?php
-     elseif ($totalindnvinc > 0) :
-        ?>
-				<select class="form-control" id="indcod" name="indcod">
-				<option value="-1">Selecione</option>
-				<?php
-        foreach ($indnvinc as $indicador) :
-            ?>
-				<option value="<?=$indicador['indcod']; ?>"><?=$indicador["inddesc"]; ?></option>
-				<?php
-        endforeach
-        ;
-        ?>
-				</select>
-				<?php
+										<?php
     endif;
     ?>
 		</div>
@@ -106,6 +92,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<input type="submit" value="vincular" name="bt-form-salvar">
 		</div>
+		<br>
 	</form>
 	<?php
     if (! array_key_exists("bt-form-salvar", $_POST))
@@ -134,6 +121,17 @@ if ($_GET["opcao"] == "cadastrar") :
         return;
 	endif;
     
+    $vinculo = buscarVinculoPorId($indcod, $discod);
+    if (! empty($vinculo)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Este vínculo já existe. Por favor, altere uma das seleções.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+	endif;
+    
     try {
         if (vincularIndicador($indcod, $discod)) {
             echo "<h1 class='text-center text-success'>Vinculação realizada com sucesso!</h1><br>";
@@ -143,8 +141,45 @@ if ($_GET["opcao"] == "cadastrar") :
         echo $e->getMessage();
     }
     ?>
-	<?php
-		endif;
-
+	
+    <?php
+ elseif ($_GET["opcao"] == "excluir") :
+    $vinculo = buscarVinculoPorId($_GET["indcod"], $_GET["discod"]);
+    $indicador = buscarIndicadorPorId($vinculo["indcod"]);
+    $disciplina = buscarDisciplinaPorId($vinculo["discod"]);
+    ?>
+<form action="" method="post" id="frm-escolha">
+		<div class="form-group">
+			<p class="text-warning">
+Você está prestes a desvincular o indicador <?=$indicador["inddesc"]; ?> da disciplina <?=$disciplina["disnome"]; ?>.<br>
+				Tem certeza de que deseja executar esta operação?<br> Após a
+				confirmação, esta operação não poderá ser desfeita.
+			</p>
+		</div>
+		<br>
+		<div class="form-group">
+			<input type="button" value="sim" onclick="submeterExclusao()">
+		</div>
+		<br>
+		<div class="form-group">
+			<input type="button" value="não" onclick="negarExclusao()">
+		</div>
+		<br>
+	</form>
+<?php
+    if (! array_key_exists("escolha", $_POST))
+        return;
+    $escolha = $_POST["escolha"];
+    if ($escolha == "sim") {
+        try {
+            if (desvincularIndicador($vinculo["indcod"], $vinculo["discod"])) {
+                echo "<h1 class='text-center text-success'>Indicador desvinculado com sucesso!</h1><br>";
+                echo "<a href='?pagina=vinculo&opcao=cadastrar'>Voltar à tela de vínculo de indicador com disciplina.</a>";
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+endif;
 ?>
 </div>
