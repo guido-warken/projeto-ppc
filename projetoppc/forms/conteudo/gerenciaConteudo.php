@@ -39,12 +39,16 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-	<h1 class="text-warning">
-				Nenhum <abbr class="text-center">ppc</abbr> cadastrado no sistema
-			</h1>
-			<br> <a href="?pagina=ppc&opcao=cadastrar">Clique aqui para cadastrar
-				um ppc</a><br>
+        <div class="text-warning">
+				<h1 class="text-center">
+					Nenhum <abbr class="text-center">ppc</abbr> cadastrado no sistema
+				</h1>
+				<br> <a href="?pagina=ppc&opcao=cadastrar">Clique aqui para
+					cadastrar um ppc</a>
+			</div>
+			<br>
 	<?php
+        return;
     endif;
     ?>
 	</div>
@@ -70,10 +74,14 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-	<h1 class="text-warning">Nenhuma disciplina cadastrada no sistema</h1>
-			<br> <a href="?pagina=disciplina&opcao=cadastrar">Clique aqui para
-				cadastrar uma disciplina</a><br>
+        <div class="text-warning">
+				<h1 class="text-center">Nenhuma disciplina cadastrada no sistema</h1>
+				<br> <a href="?pagina=disciplina&opcao=cadastrar">Clique aqui para
+					cadastrar uma disciplina</a>
+			</div>
+			<br>
 	<?php
+        return;
     endif;
     ?>
 	</div>
@@ -99,10 +107,14 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-	<h1 class="text-warning">Nenhum eixo temático cadastrado no sistema</h1>
-			<br> <a href="?pagina=eixotem&opcao=cadastrar">Clique aqui para
-				cadastrar um eixo temático</a><br>
+        <div class="text-warning">
+				<h1 class="text-center">Nenhum eixo temático cadastrado no sistema</h1>
+				<br> <a href="?pagina=eixotem&opcao=cadastrar">Clique aqui para
+					cadastrar um eixo temático</a>
+			</div>
+			<br>
 	<?php
+        return;
     endif;
     ?>
 	</div>
