@@ -28,6 +28,7 @@ if ($_GET["opcao"] == "cadastrar") :
     if (! array_key_exists("bt-form-salvar", $_POST))
         return;
     $compdes = isset($_POST["compdes"]) ? $_POST["compdes"] : "";
+    $competenciaPorDesc = ! empty($compdes) ? buscarCompetenciaPorDescricao($compdes) : [];
     if (empty($compdes)) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -35,8 +36,20 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "Preencha corretamente o campo de cadastro de competência e clique no botão salvar.";
         echo "</p>";
         echo "</div>";
+        echo "<br>";
         return;
         endif;
+    
+    if (! empty($competenciaPorDesc)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Já existe uma competência cadastrada com esta descrição.<br>";
+        echo "Por favor, selecione outra descrição.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
     
     try {
         if (inserirCompetencia($compdes)) {
@@ -117,6 +130,7 @@ if ($_GET["opcao"] == "cadastrar") :
     if (! array_key_exists("bt-form-alterar", $_POST))
         return;
     $compdes = isset($_POST["compdes"]) ? $_POST["compdes"] : "";
+    $competenciaPorDesc = ! empty($compdes) ? buscarCompetenciaPorDescricao($compdes) : [];
     if (empty($compdes)) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -126,6 +140,20 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "</div>";
         return;
         endif;
+    
+    if (! empty($competenciaPorDesc)) :
+        if ($competencia["compdes"] != $competenciaPorDesc["compdes"]) :
+            echo "<div class='text-danger'>";
+            echo "<p>";
+            echo "Já existe uma competência cadastrada com esta descrição.<br>";
+            echo "Por favor, selecione outra descrição.";
+            echo "</p>";
+            echo "</div>";
+            echo "<br>";
+            return;
+        endif;
+        endif;
+        
     
     try {
         if (atualizarCompetencia($compdes, $competencia["compcod"])) {

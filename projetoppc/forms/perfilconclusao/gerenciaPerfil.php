@@ -37,12 +37,17 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-	<h1 class="text-warning">
-				Nenhum <abbr class="text-uppercase">ppc</abbr> cadastrado no sistema
-			</h1>
-			<br> <a href="?pagina=ppc&opcao=cadastrar">Clique aqui para cadastrar
-				um novo ppc</a><br>
+        <div class="text-warning">
+				<h1 class="text-center">
+					Nenhum <abbr class="text-uppercase">ppc</abbr> cadastrado no
+					sistema
+				</h1>
+				<br> <a href="?pagina=ppc&opcao=cadastrar">Clique aqui para
+					cadastrar um novo ppc</a>
+			</div>
+			<br>
 					<?php
+        return;
     endif;
     ?>
 			</div>
@@ -68,10 +73,14 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-	<h1 class="text-warning">Nenhuma competência cadastrada no sistema</h1>
-			<br> <a href="?pagina=competencia&opcao=cadastrar">Clique aqui para
-				cadastrar uma nova competência</a><br>
+        <div class="text-warning">
+				<h1 class="text-center">Nenhuma competência cadastrada no sistema</h1>
+				<br> <a href="?pagina=competencia&opcao=cadastrar">Clique aqui para
+					cadastrar uma nova competência</a>
+			</div>
+			<br>
 					<?php
+        return;
     endif;
     ?>
 			</div>

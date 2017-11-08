@@ -76,4 +76,24 @@ function buscarCompetencias(&$conn = null)
     return $informacoescomp;
 }
 
+function buscarCompetenciaPorDescricao($compdes, &$conn = null)
+{
+    $informacoescomp = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultacomp = $conn->prepare("select * from competencia where compdes = :compdes");
+    $consultacomp->bindParam(":compdes", $compdes);
+    if ($consultacomp->execute()) {
+        $numregistros = $consultacomp->rowCount();
+        if ($numregistros == 1) {
+            $informacoescomp = $consultacomp->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoescomp;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoescomp;
+}
+
 ?>
