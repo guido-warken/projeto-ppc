@@ -27,6 +27,7 @@ if ($_GET["opcao"] == "cadastrar") :
     if (! array_key_exists("bt-form-salvar", $_POST))
         return;
     $inddesc = isset($_POST["inddesc"]) ? $_POST["inddesc"] : "";
+    $indicadorDesc = ! empty($inddesc) ? buscarIndicadorPorDescricao($inddesc) : [];
     if (empty($inddesc)) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -49,6 +50,17 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "<br>";
         return;
         endif;
+    
+    if (! empty($indicadorDesc)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Já existe um indicador cadastrado com esta descrição.<br>";
+        echo "Por favor, informe outra descrição para o novo indicador.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
     
     try {
         if (inserirIndicador($inddesc)) {
@@ -132,6 +144,8 @@ if ($_GET["opcao"] == "cadastrar") :
     if (! array_key_exists("bt-form-alterar", $_POST))
         return;
     $inddesc = isset($_POST["inddesc"]) ? $_POST["inddesc"] : "";
+    $indicadorDesc = ! empty($inddesc) ? buscarIndicadorPorDescricao($inddesc) : [];
+    
     if (empty($inddesc)) :
         echo "<div class='text-danger'>";
         echo "<p>";
@@ -154,6 +168,20 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "<br>";
         return;
         endif;
+    
+    if (! empty($indicadorDesc)) :
+        if ($indicadorDesc["inddesc"] != $indicador["inddesc"]) :
+            echo "<div class='text-danger'>";
+            echo "<p>";
+            echo "Já existe um indicador cadastrado com esta descrição.<br>";
+            echo "Por favor, informe outra descrição para o indicador a ser alterado.";
+            echo "</p>";
+            echo "</div>";
+            echo "<br>";
+            return;
+        endif;
+        endif;
+        
     
     try {
         if (atualizarIndicador($indicador["indcod"], $inddesc)) {

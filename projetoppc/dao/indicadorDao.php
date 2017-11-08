@@ -76,4 +76,24 @@ function buscarIndicadores(&$conn = null)
     return $informacoesindicador;
 }
 
+function buscarIndicadorPorDescricao($inddesc, &$conn = null)
+{
+    $informacoesindicador = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultaindicador = $conn->prepare("select * from indicador where inddesc = :inddesc");
+    $consultaindicador->bindParam(":inddesc", $inddesc);
+    if ($consultaindicador->execute()) {
+        $numregistros = $consultaindicador->rowCount();
+        if ($numregistros == 1) {
+            $informacoesindicador = $consultaindicador->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesindicador;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoesindicador;
+}
+
 ?>
