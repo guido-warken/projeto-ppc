@@ -36,13 +36,14 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-        <div class="text-warning bg-info">
+        <div class="text-warning">
 				<h1 class="text-center">Não há nenhum ppc cadastrado no sistema</h1>
 				<br> <a href="?pagina=ppc&opcao=cadastrar">Clique aqui para
 					cadastrar um novo ppc</a>
 			</div>
 			<br>
 		<?php
+        return;
     endif;
     ?>
 	</div>
@@ -66,7 +67,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-        <div class="text-warning bg-info">
+        <div class="text-warning">
 				<h1 class="text-center">Não há nenhuma competência cadastrada no
 					sistema</h1>
 				<br> <a href="?pagina=competencia&opcao=cadastrar">Clique aqui para
@@ -74,6 +75,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 			<br>
 	<?php
+        return;
     endif;
     ?>
 	</div>
@@ -97,7 +99,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<?php
     else :
         ?>
-        <div class="text-warning bg-info">
+        <div class="text-warning">
 				<h1 class="text-center">Não há nenhuma certificação cadastrada no
 					sistema</h1>
 				<br> <a href="?pagina=certificacao&opcao=cadastrar">Clique aqui para
@@ -105,6 +107,7 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 			<br>
 	<?php
+        return;
     endif;
     ?>
 	</div>
@@ -121,6 +124,18 @@ if ($_GET["opcao"] == "cadastrar") :
     $ppccod = isset($_POST["ppccod"]) ? $_POST["ppccod"] : "";
     $compcod = isset($_POST["compcod"]) ? $_POST["compcod"] : "";
     $cercod = isset($_POST["cercod"]) ? $_POST["cercod"] : "";
+    $perfil = buscarPerfilCertPorId($ppccod, $compcod, $cercod);
+    if (! empty($perfil)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Já existe um perfil de certificação cadastrado com este <abbr class='text-uppercase'>ppc</abbr>, com esta competência e com esta certificação.<br>";
+        echo "Por favor, faça uma nova seleção.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
+    
     try {
         if (inserirPerfilCert($ppccod, $compcod, $cercod)) {
             echo "<h1 class= 'text-center text-success'>Perfil de certificação de curso cadastrado com êxito!</h1><br>";
