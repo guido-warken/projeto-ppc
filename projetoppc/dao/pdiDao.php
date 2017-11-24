@@ -1,12 +1,11 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\factory\connectionFactory.php';
 
-function inserirPdi($unicod, $pdianoini, $pdianofim, $pdipesquisa, $pdiensino, $pdimetodo, &$conn = null)
+function inserirPdi($pdianoini, $pdianofim, $pdipesquisa, $pdiensino, $pdimetodo, &$conn = null)
 {
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $insercaopdi = $conn->prepare("insert into pdi (unicod, pdianoini, pdianofim, pdiensino, pdipesquisa, pdimetodo) values (:unicod, :pdianoini, :pdianofim, :pdiensino, :pdipesquisa, :pdimetodo)");
-    $insercaopdi->bindParam(":unicod", $unicod);
+    $insercaopdi = $conn->prepare("insert into pdi (pdianoini, pdianofim, pdiensino, pdipesquisa, pdimetodo) values (:pdianoini, :pdianofim, :pdiensino, :pdipesquisa, :pdimetodo)");
     $insercaopdi->bindParam(":pdianoini", $pdianoini);
     $insercaopdi->bindParam(":pdianofim", $pdianofim);
     $insercaopdi->bindParam(":pdiensino", $pdiensino);
@@ -17,12 +16,11 @@ function inserirPdi($unicod, $pdianoini, $pdianofim, $pdipesquisa, $pdiensino, $
     return $resultado;
 }
 
-function atualizarPdi($pdicod, $unicod, $pdianoini, $pdianofim, $pdipesquisa, $pdiensino, $pdimetodo, &$conn = null)
+function atualizarPdi($pdicod, $pdianoini, $pdianofim, $pdipesquisa, $pdiensino, $pdimetodo, &$conn = null)
 {
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $atualizacaopdi = $conn->prepare("update pdi set unicod = :unicod, pdianoini = :pdianoini, pdianofim = :pdianofim, pdiensino = :pdiensino, pdipesquisa = :pdipesquisa, pdimetodo = :pdimetodo where pdicod = :pdicod");
-    $atualizacaopdi->bindParam(":unicod", $unicod);
+    $atualizacaopdi = $conn->prepare("update pdi set pdianoini = :pdianoini, pdianofim = :pdianofim, pdiensino = :pdiensino, pdipesquisa = :pdipesquisa, pdimetodo = :pdimetodo where pdicod = :pdicod");
     $atualizacaopdi->bindParam(":pdianoini", $pdianoini);
     $atualizacaopdi->bindParam(":pdianofim", $pdianofim);
     $atualizacaopdi->bindParam(":pdiensino", $pdiensino);
@@ -86,26 +84,25 @@ function buscarPdis(&$conn = null)
     return $informacoesPdi;
 }
 
-function buscarPdisPorUnidade($unicod, &$conn = null)
+function buscarPdiPorVigencia($pdianoini, $pdianofim, &$conn = null)
 {
-    $informacoesPdi = [];
+    $pdi = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultapdi = $conn->prepare("select pdi.*, unidadesenac.uninome from pdi inner join unidadesenac on pdi.unicod = unidadesenac.unicod where unidadesenac.unicod = :unicod");
-    $consultapdi->bindParam(":unicod", $unicod);
+    $consultapdi = $conn->prepare("select * from pdi where pdianoini = :pdianoini and pdianofim = :pdianofim");
+    $consultapdi->bindParam(":pdianoini", $pdianoini);
+    $consultapdi->bindParam(":pdianofim", $pdianofim);
     if ($consultapdi->execute()) {
         $numregistros = $consultapdi->rowCount();
-        if ($numregistros > 0) {
-            for ($i = 0; $i < $numregistros; $i ++) {
-                $informacoesPdi[$i] = $consultapdi->fetch(PDO::FETCH_ASSOC);
-            }
+        if ($numregistros == 1) {
+            $pdi = $consultapdi->fetch(PDO::FETCH_ASSOC);
         } else {
             desconectarDoBanco($conn);
-            return $informacoesPdi;
+            return $pdi;
         }
     }
     desconectarDoBanco($conn);
-    return $informacoesPdi;
+    return $pdi;
 }
 
 ?>
