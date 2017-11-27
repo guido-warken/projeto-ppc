@@ -56,7 +56,11 @@
 						<li <?php echo active($pagina, $opcao, "pdi", "cadastrar"); ?>><a
 							href="?pagina=pdi&opcao=cadastrar">Cadastrar</a></li>
 						<li <?php echo active($pagina, $opcao, "pdi", "consultar"); ?>><a
-							href="?pagina=pdi&opcao=consultar">Consultar</a></li>
+							href="?pagina=pdi&opcao=consultar">Consultar</a>
+						
+						<li <?php echo active($pagina, $opcao, "pdi", "importar"); ?>><a
+							href="?pagina=pdi&opcao=importar">Novo PDI com dados já
+								existentes</a></li>
 					</ul></li>
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#">Disciplina <span class="caret"></span></a>

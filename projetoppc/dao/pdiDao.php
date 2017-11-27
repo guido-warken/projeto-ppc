@@ -84,14 +84,13 @@ function buscarPdis(&$conn = null)
     return $informacoesPdi;
 }
 
-function buscarPdiPorVigencia($pdianoini, $pdianofim, &$conn = null)
+function buscarPdiPorAnoInicial($pdianoini, &$conn = null)
 {
     $pdi = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultapdi = $conn->prepare("select * from pdi where pdianoini = :pdianoini and pdianofim = :pdianofim");
+    $consultapdi = $conn->prepare("select * from pdi where pdianoini = :pdianoini");
     $consultapdi->bindParam(":pdianoini", $pdianoini);
-    $consultapdi->bindParam(":pdianofim", $pdianofim);
     if ($consultapdi->execute()) {
         $numregistros = $consultapdi->rowCount();
         if ($numregistros == 1) {
