@@ -118,4 +118,22 @@ function buscarUnidadePorNome($uninome, $conn = null)
     return $informacoesunidade;
 }
 
+function vincularPdi($unicods, $pdicod, &$conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $numregistros = 0;
+    $vinc = $conn->prepare("update unidadesenac set pdicod = :pdicod where unicod = :unicod");
+    $vinc->bindParam(":pdicod", $pdicod);
+    if (is_array($unicods)) {
+        foreach ($unicods as $unicod) {
+            $vinc->bindParam(":unicod", $unicod);
+            if ($vinc->execute())
+                $numregistros += 1;
+        }
+        return $numregistros;
+    }
+    return $numregistros;
+}
+
 ?>

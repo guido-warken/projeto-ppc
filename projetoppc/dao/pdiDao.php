@@ -109,7 +109,7 @@ function import(&$conn = null)
     $pdiinfo = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consulta = $conn->query("select pdiensino, pdipesquisa, pdimetodo from pdi where pdicod = (select max(pdicod) from pdi)");
+    $consulta = $conn->query("select * from pdi where pdicod = (select max(pdicod) from pdi)");
     if ($consulta->execute()) {
         $numregistros = $consulta->rowCount();
         if ($numregistros == 1) {

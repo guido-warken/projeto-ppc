@@ -365,8 +365,10 @@ if ($_GET["opcao"] == "cadastrar") :
  elseif ($_GET["opcao"] == "importar") :
     $pdiinfo = import();
     ?>
-<h2 class="text-center text-primary bg-primary">Novo pdi a partir de um
-		já existente</h2>
+<h2 class="text-center text-primary bg-primary">
+		Novo <abbr class="text-uppercase">pdi</abbr> a partir de um já
+		existente
+	</h2>
 	<br>
 	<p>
 		Você poderá cadastrar um novo <abbr class="text-uppercase">pdi</abbr>,
