@@ -233,8 +233,75 @@ elseif ($_GET["opcao"] == "consultar") :
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
+    } else {
+        echo "<p>OK, a unidade do SENAC n�o ser� exclu�da.</p>";
     }
+ elseif ($_GET["opcao"] == "vincular") :
+    $unidades = buscarUnidades();
+    $pdi = import();
+    $totalunidades = count($unidades);
+    ?>
+<h2 class="text-center text-primary bg-primary">
+		Vinculação das unidades do <abbr class="text-uppercase">senac</abbr>
+		ao <abbr class="text-uppercase">pdi</abbr>
+	</h2>
+	<br>
+<?php
+    if ($totalunidades > 0) :
+        ?>
+<p>
+		Para vincular uma ou mais unidades ao <abbr class="text-uppercase">pdi</abbr>,
+		selecione a(s) unidade(s) desejada(s) na lista de unidades no
+		formulário abaixo. Em seguida, clique no botão vincular.
+	</p>
+	<br>
+	<form action="" method="post">
+		<label>Selecione: </label><br>
+<?php
+        foreach ($unidades as $unidade) :
+            ?>
+<div class="form-group">
+			<label><?=$unidade["uninome"]; ?>: <input type="checkbox"
+				name="unicods[]" value="<?=$unidade["unicod"]; ?>"></label>
+		</div>
+		<br>
+<?php
+        endforeach
+        ;
+        ?>
+<div class="form-group">
+			<input type="submit" class="btn btn-default" value="vincular"
+				name="bt-form-vincular">
+		</div>
+	</form>
+<?php
+        if (! array_key_exists("bt-form-vincular", $_POST))
+            return;
+        $unicods = isset($_POST["unicods"]) ? $_POST["unicods"] : [];
+        if (! empty($unicods)) :
+            $numregistros = vincularPdi($unicods, $pdi["pdicod"]);
+            if ($numregistros > 0) :
+                echo "<h1 class='text-center text-success'>Unidade(s) vinculada(s) com êxito!</h1><br>";
+                echo "<a href='?pagina=unidade&opcao=consultar'>Clique aqui para voltar �s unidades cadastradas </a>";
 endif;
-
+endif;
+            
+        
+        ?>
+<?php
+    else :
+        ?>
+<div class="text-warning">
+		<h1 class="text-center">
+			Não h� unidades do <abbr class="text-uppercase">senac</abbr>
+			cadastradas no sistema.
+		</h1>
+		<br> <a href="?pagina=unidade&opcao=cadastrar">Clique aqui para
+			cadastrar uma nova unidade, para a posterior vincula��o.</a>
+	</div>
+	<br>
+<?php
+    endif;
+endif;
 ?>
 	</div>
