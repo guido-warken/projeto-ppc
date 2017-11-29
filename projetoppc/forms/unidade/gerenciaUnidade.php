@@ -95,7 +95,7 @@ elseif ($_GET["opcao"] == "consultar") :
 		<thead>
 			<tr>
 				<th>unidade</th>
-				<th colspan="2">ação</th>
+				<th colspan="3">ação</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -272,7 +272,8 @@ elseif ($_GET["opcao"] == "consultar") :
 <div class="form-group">
 			<input type="submit" class="btn btn-default" value="vincular"
 				name="bt-form-vincular">
-		</div><br>
+		</div>
+		<br>
 	</form>
 <?php
         if (! array_key_exists("bt-form-vincular", $_POST))
@@ -284,14 +285,15 @@ elseif ($_GET["opcao"] == "consultar") :
                 echo "<h1 class='text-center text-success'> $numregistros unidade(s) vinculada(s) com êxito!</h1><br>";
                 echo "<a href='?pagina=unidade&opcao=consultar'>Clique aqui para voltar �s unidades cadastradas </a>";
 endif;
-else:
-     echo "<div class='text-danger'>";
-echo "<p>";
-echo "Selecione uma ou mais unidades do SENAC para serem vinculadas ao PDI.";
-echo "</p>";
-echo "</div>";
-        echo "<br>";
-        return;
+            
+        else :
+            echo "<div class='text-danger'>";
+            echo "<p>";
+            echo "Selecione uma ou mais unidades do SENAC para serem vinculadas ao PDI.";
+            echo "</p>";
+            echo "</div>";
+            echo "<br>";
+            return;
         endif;
         ?>
 <?php

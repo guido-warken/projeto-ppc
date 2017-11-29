@@ -32,6 +32,12 @@
 							href="?pagina=unidade&opcao=cadastrar">Cadastrar</a></li>
 						<li <?php echo active($pagina, $opcao, "unidade", "consultar"); ?>><a
 							href="?pagina=unidade&opcao=consultar">Consultar</a></li>
+						<li <?php echo active($pagina, $opcao, "unidade", "vincular");?>>
+							<a href="?pagina=unidade&opcao=vincular">Vincular unidade <abbr
+								class="text-uppercase">senac</abbr> ao <abbr
+								class="text-uppercase">pdi</abbr> vigente
+						</a>
+						</li>
 					</ul></li>
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#">Eixo Tecnológico <span
