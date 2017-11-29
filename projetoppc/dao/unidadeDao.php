@@ -131,8 +131,10 @@ function vincularPdi($unicods, $pdicod, &$conn = null)
             if ($vinc->execute())
                 $numregistros += 1;
         }
+        desconectarDoBanco($conn);
         return $numregistros;
     }
+    desconectarDoBanco($conn);
     return $numregistros;
 }
 

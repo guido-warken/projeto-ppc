@@ -272,7 +272,7 @@ elseif ($_GET["opcao"] == "consultar") :
 <div class="form-group">
 			<input type="submit" class="btn btn-default" value="vincular"
 				name="bt-form-vincular">
-		</div>
+		</div><br>
 	</form>
 <?php
         if (! array_key_exists("bt-form-vincular", $_POST))
@@ -281,12 +281,18 @@ elseif ($_GET["opcao"] == "consultar") :
         if (! empty($unicods)) :
             $numregistros = vincularPdi($unicods, $pdi["pdicod"]);
             if ($numregistros > 0) :
-                echo "<h1 class='text-center text-success'>Unidade(s) vinculada(s) com êxito!</h1><br>";
+                echo "<h1 class='text-center text-success'> $numregistros unidade(s) vinculada(s) com êxito!</h1><br>";
                 echo "<a href='?pagina=unidade&opcao=consultar'>Clique aqui para voltar �s unidades cadastradas </a>";
 endif;
-endif;
-            
-        
+else:
+     echo "<div class='text-danger'>";
+echo "<p>";
+echo "Selecione uma ou mais unidades do SENAC para serem vinculadas ao PDI.";
+echo "</p>";
+echo "</div>";
+        echo "<br>";
+        return;
+        endif;
         ?>
 <?php
     else :
