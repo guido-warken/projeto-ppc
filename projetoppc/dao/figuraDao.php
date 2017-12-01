@@ -5,30 +5,36 @@ function inserirFigura($figdesc, $figura, &$conn = null)
 {
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $query = "insert into figura (figdesc, figcont) values ('" . $figdesc . "', '" . $figura . "')";
-    $numregistrosins = $conn->exec($query);
+    $query = $conn->prepare("insert into figura (figdesc, figcont) values (:figdesc, :figcont)");
+    $query->bindParam(":figdesc", $figdesc);
+    $query->bindParam(":figcont", $figcont, PDO::PARAM_LOB);
+    $resultado = $query->execute();
     desconectarDoBanco($conn);
-    return $numregistrosins;
+    return $resultado;
 }
 
 function atualizarFigura($figdesc, $figura, $figcod, &$conn = null)
 {
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $query = "update figura set figdesc = '" . $figdesc . "', figcont = '" . $figura . "' where figcod = " . $figcod;
-    $numregistros = $conn->exec($query);
+    $query = $conn->prepare("update figura set figdesc = :figdesc, figcont = :figcont where figcod = :figcod");
+    $query->bindParam(":figdesc", $figdesc);
+    $query->bindParam(":figcont", $figura);
+    $query->bindParam(":figcod", $figcod);
+    $resultado = $query->execute();
     desconectarDoBanco($conn);
-    return $numregistros;
+    return $resultado;
 }
 
 function excluirFigura($figcod, &$conn = null)
 {
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $query = "delete from figura where figcod = " . $figcod;
-    $numregistrosdel = $conn->exec($query);
+    $query = $conn->prepare("delete from figura where figcod = :figcod");
+    $query->bindParam(":figcod", $figcod);
+    $resultado = $query->execute();
     desconectarDoBanco($conn);
-    return $numregistrosdel;
+    return $resultado;
 }
 
 function buscarFiguraPorId($figcod, &$conn = null)
