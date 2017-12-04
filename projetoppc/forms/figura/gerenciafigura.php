@@ -4,7 +4,7 @@
 require_once 'c:\wamp64\www\projetoppc\dao\figuraDao.php';
 if ($_GET["opcao"] == "cadastrar") :
     ?>
-<h2>Cadastro de figuras</h2>
+<h2 class="text-center text-primary bg-primary">Cadastro de figuras</h2>
 	<br>
 	<p>Campos com asterisco são obrigatórios.</p>
 	<br>
@@ -81,7 +81,7 @@ endif;
         return;
 endif;
     
-    if ($imagem["type"] != "jpg" xor $imagem["type"] != "png") :
+    if ($imagem["type"] != "image/jpg" && $imagem["type"] != "image/png") :
         ?>
 <div class="text-danger">
 		<p>Por favor, selecione imagens do tipo JPG ou PNG.</p>
@@ -91,15 +91,27 @@ endif;
         return;
 endif;
     
-    $figcont = file_get_contents($imagem["tmp_name"]);
-    try {
-        if (inserirFigura($figdesc, $figcont)) {
-            echo "<h1 class='text-success text-center'>Figura inserida com êxito!</h1><br>";
-            echo "<a href='?pagina=figura&opcao=consultar'>Clique aqui para consultar as figuras cadastradas</a><br>";
+    $figpath = "C:\\wamp64\\bin\\apache\\apache2.4.23\\userimages\\" . basename($imagem["name"]);
+    
+    if (move_uploaded_file($imagem["tmp_name"], $figpath)) :
+        try {
+            if (inserirFigura($figdesc, $figpath)) {
+                echo "<h1 class='text-success text-center'>Figura inserida com êxito!</h1><br>";
+                echo "<a href='?pagina=figura&opcao=consultar'>Clique aqui para consultar as figuras cadastradas</a><br>";
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
+    else :
+        
+        ?>
+<div class="text-danger">
+		<p>Upload de figura não foi bem sucedido. Tente novamente.</p>
+	</div>
+	<br>
+<?php
+        return;
+    endif;
 endif;
 
 ?>

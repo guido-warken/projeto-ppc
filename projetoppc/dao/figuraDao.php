@@ -1,25 +1,25 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\factory\connectionFactory.php';
 
-function inserirFigura($figdesc, $figura, &$conn = null)
+function inserirFigura($figdesc, $figpath, &$conn = null)
 {
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $query = $conn->prepare("insert into figura (figdesc, figcont) values (:figdesc, :figcont)");
+    $query = $conn->prepare("insert into figura (figdesc, figpath) values (:figdesc, :figpath)");
     $query->bindParam(":figdesc", $figdesc);
-    $query->bindParam(":figcont", $figcont, PDO::PARAM_LOB);
+    $query->bindParam(":figpath", $figpath, PDO::PARAM_LOB);
     $resultado = $query->execute();
     desconectarDoBanco($conn);
     return $resultado;
 }
 
-function atualizarFigura($figdesc, $figura, $figcod, &$conn = null)
+function atualizarFigura($figdesc, $figpath, $figcod, &$conn = null)
 {
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $query = $conn->prepare("update figura set figdesc = :figdesc, figcont = :figcont where figcod = :figcod");
+    $query = $conn->prepare("update figura set figdesc = :figdesc, figpath = :figpath where figcod = :figcod");
     $query->bindParam(":figdesc", $figdesc);
-    $query->bindParam(":figcont", $figura);
+    $query->bindParam(":figpath", $figpath);
     $query->bindParam(":figcod", $figcod);
     $resultado = $query->execute();
     desconectarDoBanco($conn);
