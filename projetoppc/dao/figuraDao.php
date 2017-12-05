@@ -98,4 +98,24 @@ function buscarFiguraPorDescricao($figdesc, &$conn = null)
     return $figura;
 }
 
+function buscarFiguraPorConteudo($figcont, &$conn = null)
+{
+    $figura = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consulta = $conn->prepare("select * from figura where figcont = :figcont");
+    $consulta->bindParam(":figcont", $figcont);
+    if ($consulta->execute()) {
+        $numregistros = $consulta->rowCount();
+        if ($numregistros == 1) {
+            $figura = $consulta->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $figura;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $figura;
+}
+
 ?>
