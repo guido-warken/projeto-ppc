@@ -132,9 +132,9 @@ elseif ($_GET["opcao"] == "consultar") :
             ?>
 <tr>
 				<td><?=$imagem["figdesc"]; ?></td>
-				<td><img alt="<?=$imagem["figdesc"]; ?>"
-					src="http://localhost/projetoppc/uploads/<?=basename($imagem["figpath"]); ?>"
-					class="img-responsive"></td>
+				<td><a
+					href="http://localhost/projetoppc/forms/figura/verfigura.php?figcod=<?=$imagem["figcod"]; ?>">Ver
+						imagem</a></td>
 				<td><a
 					href="?pagina=figura&opcao=alterar&figcod=<?=$imagem["figcod"]; ?>">alterar
 						dados</a></td>

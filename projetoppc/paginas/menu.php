@@ -152,6 +152,14 @@
 						<li <?php echo active($pagina, $opcao, "oferta", "consultar"); ?>><a
 							href="?pagina=oferta&opcao=consultar">Consultar</a></li>
 					</ul></li>
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown" href="#">Figura <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li <?php echo active($pagina, $opcao, "figura", "cadastrar"); ?>><a
+							href="?pagina=figura&opcao=cadastrar">Cadastrar</a></li>
+						<li <?php echo active($pagina, $opcao, "figura", "consultar"); ?>><a
+							href="?pagina=figura&opcao=consultar">Consultar</a></li>
+					</ul></li>
 			</ul>
 		</div>
 	</div>
