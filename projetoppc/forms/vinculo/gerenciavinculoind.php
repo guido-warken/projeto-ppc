@@ -90,7 +90,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="vincular" name="bt-form-salvar">
+			<input type="submit" value="vincular" name="bt-form-salvar" class="btn btn-default">
 		</div>
 		<br>
 	</form>
@@ -158,11 +158,11 @@ Você está prestes a desvincular o indicador <?=$indicador["inddesc"]; ?> da di
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" value="sim" onclick="submeterExclusao()">
+			<input type="button" value="sim" onclick="submeterExclusao()" class="btn btn-default">
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" value="não" onclick="negarExclusao()">
+			<input type="button" value="não" onclick="negarExclusao()" class="btn btn-default">
 		</div>
 		<br>
 	</form>
