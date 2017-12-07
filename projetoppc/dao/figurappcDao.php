@@ -103,4 +103,25 @@ function buscarVinculoPorId($ppccod, $figcod, &$conn = null)
     desconectarDoBanco($conn);
     return $figurappc;
 }
+
+function buscarVinculoPorOrdem($figordem, $ppccod, &$conn = null)
+{
+    $figurappc = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consulta = $conn->prepare("select * from figurappc where ppccod = :ppccod and figordem = :figordem");
+    $consulta->bindParam(":ppccod", $ppccod);
+    $consulta->bindParam(":figordem", $figordem);
+    if ($consulta->execute()) {
+        $numregistros = $consulta->rowCount();
+        if ($numregistros == 1) {
+            $figurappc = $consulta->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $figurappc;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $figurappc;
+}
 ?>

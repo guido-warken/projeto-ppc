@@ -154,6 +154,18 @@ endif;
         return;
 endif;
     
+    $figurappc = buscarVinculoPorOrdem($figordem, $ppccod);
+    if (! empty($figurappc)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Figura já vinculada.<br>";
+        echo "Favor, selecione outra.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
+    
     try {
         if (vincularFiguraAPpc($figcod, $ppccod, $figordem)) {
             echo "<h1 class='text-success'>Figura vinculada com êxito!</h1><br>";
@@ -162,7 +174,50 @@ endif;
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
+ elseif ($_GET["opcao"] == "atualizar") :
+    $figurappc = buscarVinculoPorId($_GET["ppccod"], $_GET["figcod"]);
+    ?>
+<h2 class="text-center text-primary bg-primary">
+		Atualização da ordem da figura no <abbr class="text-uppercase">ppc</abbr>
+	</h2>
+	<br>
+	<form action="" method="post">
+		<div class="form-group">
+			<label for="figordem">Altere a ordem da figura</label> <input
+				type="number" id="figordem" name="figordem" class="form-control">
+		</div>
+		<br>
+		<div class="form-group">
+			<input type="submit" class="btn btn-default" value="alterar"
+				name="bt-form-alterar">
+		</div>
+		<br>
+	</form>
+<?php
+    if (! array_key_exists("bt-form-alterar", $_POST))
+        return;
+    $figordm = isset($_POST["figordem"]) ? $_POST["figordem"] : "";
+    if (! is_numeric($figordem)) :
+        ?>
+<div class="text-danger">
+		<p>
+			Digite em número a ordem em que a figura deve aparecer no <abbr
+				class="text-uppercase">ppc</abbr>.
+		</p>
+	</div>
+	<br>
+<?php
+        return;
 endif;
-
+    
+    try {
+        if (atualizarVinculo($figurappc["ppccod"], $figurappc["figcod"], $figordem)) {
+            echo "<h1 class='text-center text-success'>Figura vinculada atualizada com êxito!</h1><br>";
+            echo "<a href='?pagina=vinculo2&opcao=cadastrar'>Voltar à tela de figuras vinculadas</a><br>";
+        }
+    } catch (PDOException $e) {
+    echo $e->getMessage();
+}
+endif;
 ?>
 </div>
