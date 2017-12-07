@@ -35,6 +35,10 @@ if (! empty($figurasvinculadas)) :
 				src="http://localhost/projetoppc/forms/figura/verfigura.php?figcod=<?=$figura["figcod"]; ?>"
 				class="img-responsive"></td>
 			<td><a
+				href="?pagina=vinculo2&opcao=atualizar&ppccod=<?=$figura["ppccod"]; ?>&figcod=<?=$figura["figcod"]; ?>">Atualizar
+					ordem da figura no <abbr class="text-uppercase">ppc</abbr>
+			</a></td>
+			<td><a
 				href="?pagina=vinculo2&opcao=excluir&ppccod=<?=$figura["ppccod"]; ?>&figcod=<?=$figura["figcod"]; ?>">Desvincular</a></td>
 		</tr>
 <?php
@@ -47,13 +51,11 @@ if (! empty($figurasvinculadas)) :
 else :
     ?>
 <div class="text-warning">
-	<h1 class="text-center">
+	<p>
 		Nenhuma figura vinculada com este <abbr class="text-uppercase">ppc</abbr>
-	</h1>
-	<br> <a href="?pagina=vinculo2&opcao=cadastrar">Clique aqui para
-		vincular uma figura a um <abbr class="text-uppercase">ppc</abbr>
-	</a><br>
+	</p>
 </div>
+<br>
 <?php
 endif;
 ?>

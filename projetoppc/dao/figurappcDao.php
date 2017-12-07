@@ -83,4 +83,24 @@ function buscarVinculosPorFigura($figcod, &$conn = null)
     return $figurappc;
 }
 
+function buscarVinculoPorId($ppccod, $figcod, &$conn = null)
+{
+    $figurappc = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consulta = $conn->prepare("select * from figurappc where ppccod = :ppccod and figcod = :figcod");
+    $consulta->bindParam(":ppccod", $ppccod);
+    $consulta->bindParam(":figcod", $figcod);
+    if ($consulta->execute()) {
+        $numregistros = $consulta->rowCount();
+        if ($numregistros == 1) {
+            $figurappc = $consulta->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $figurappc;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $figurappc;
+}
 ?>

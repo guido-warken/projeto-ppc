@@ -159,6 +159,11 @@
 							href="?pagina=figura&opcao=cadastrar">Cadastrar</a></li>
 						<li <?php echo active($pagina, $opcao, "figura", "consultar"); ?>><a
 							href="?pagina=figura&opcao=consultar">Consultar</a></li>
+						<li <?php echo active($pagina, $opcao, "vinculo2", "cadastrar");?>>
+							<a href="?pagina=vinculo2&opcao=cadastrar">Vincular figura em um
+								<abbr class="text-uppercase">ppc</abbr>
+						</a>
+						</li>
 					</ul></li>
 			</ul>
 		</div>
