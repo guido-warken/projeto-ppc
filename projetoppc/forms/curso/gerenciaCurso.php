@@ -295,6 +295,8 @@ if ($_GET["opcao"] == "cadastrar") :
             if (excluirCurso($curso["curcod"], $conn)) {
                 echo "<h1 class= 'text-success'>Curso excluído com êxito</h1><br>";
                 echo "<a href='?pagina=curso&opcao=consultar'>Consultar novamente os cursos cadastrados</a><br>";
+                ajustarChavesPrimarias();
+                ajustarAutoIncremento();
             }
         } catch (PDOException $e) {
             echo $e->getMessage();

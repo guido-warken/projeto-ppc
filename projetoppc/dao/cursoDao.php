@@ -151,4 +151,32 @@ function excluirTodos($conn = null)
     return $resultado;
 }
 
+function ajustarChavesPrimarias(&$conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $cursos = buscarCursos();
+    $query = $conn->prepare("update curso set curcod = :curcod where curcod = :curcod2");
+    $chave = 0;
+    $numregistros = 0;
+    foreach ($cursos as $curso) {
+        $chave ++;
+        $query->bindParam(":curcod", $chave);
+        $query->bindParam(":curcod2", $curso["curcod"]);
+        if ($query->execute())
+            $numregistros ++;
+    }
+    desconectarDoBanco($conn);
+}
+
+function ajustarAutoIncremento(&$conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $cursos = buscarCursos();
+    $query = $conn->query("alter table curso auto_increment = " . count($cursos));
+    $resultado = $query->execute();
+    desconectarDoBanco($conn);
+    return $resultado;
+}
 ?>
