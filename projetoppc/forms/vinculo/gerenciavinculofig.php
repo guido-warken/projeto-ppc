@@ -158,7 +158,7 @@ endif;
     if (! empty($figurappc)) :
         echo "<div class='text-danger'>";
         echo "<p>";
-        echo "Figura já vinculada.<br>";
+        echo "Figura já vinculada com esta ordem.<br>";
         echo "Favor, selecione outra.";
         echo "</p>";
         echo "</div>";
@@ -168,8 +168,8 @@ endif;
     
     try {
         if (vincularFiguraAPpc($figcod, $ppccod, $figordem)) {
-            echo "<h1 class='text-success'>Figura vinculada com êxito!</h1><br>";
-            echo "<a href='index.php'>Voltar à tela inicial</a><br>";
+            echo "<h1 class='text-success text-center'>Figura vinculada com êxito!</h1><br>";
+            echo "<a href='?pagina=vinculo2&opcao=cadastrar'>Voltar à tela de figuras vinculadas</a><br>";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
@@ -184,7 +184,8 @@ endif;
 	<form action="" method="post">
 		<div class="form-group">
 			<label for="figordem">Altere a ordem da figura</label> <input
-				type="number" id="figordem" name="figordem" class="form-control">
+				type="number" id="figordem" name="figordem" class="form-control"
+				value="<?=$figurappc["figordem"]; ?>">
 		</div>
 		<br>
 		<div class="form-group">
@@ -196,7 +197,7 @@ endif;
 <?php
     if (! array_key_exists("bt-form-alterar", $_POST))
         return;
-    $figordm = isset($_POST["figordem"]) ? $_POST["figordem"] : "";
+    $figordem = isset($_POST["figordem"]) ? $_POST["figordem"] : "";
     if (! is_numeric($figordem)) :
         ?>
 <div class="text-danger">
@@ -210,14 +211,75 @@ endif;
         return;
 endif;
     
+    $vincporordem = buscarVinculoPorOrdem($figordem, $figurappc["ppccod"]);
+    if (! empty($vincporordem)) :
+        if ($vincporordem["figordem"] != $figurappc["figordem"]) :
+            echo "<div class='text-danger'>";
+            echo "<p>";
+            echo "Figura já cadastrada com esta ordem.<br>";
+            echo "Por favor, selecione outra.";
+            echo "</p>";
+            echo "</div>";
+            echo "<br>";
+            return;
+    endif;
+    endif;
+        
+    
     try {
         if (atualizarVinculo($figurappc["ppccod"], $figurappc["figcod"], $figordem)) {
             echo "<h1 class='text-center text-success'>Figura vinculada atualizada com êxito!</h1><br>";
             echo "<a href='?pagina=vinculo2&opcao=cadastrar'>Voltar à tela de figuras vinculadas</a><br>";
         }
     } catch (PDOException $e) {
-    echo $e->getMessage();
-}
+        echo $e->getMessage();
+    }
+ elseif ($_GET["opcao"] == "excluir") :
+    $figurappc = buscarVinculoPorId($_GET["ppccod"], $_GET["figcod"]);
+    $figura = buscarFiguraPorId($figurappc["figcod"]);
+    $ppc = buscarPpcPorId($figurappc["ppccod"]);
+    ?>
+<h2>
+		Desvinculação da figura no <abbr class="text-uppercase">ppc</abbr>
+	</h2>
+	<br>
+	<form action="" method="post" id="frm-escolha">
+		<div class="form-group">
+			<p>Você está prestes a desvincular a <?=$figurappc["figordem"]; ?>ª figura do <abbr
+					class="text-uppercase">ppc</abbr> referente ao <?=$ppc["curnome"]; ?>, do ano de <?=$ppc["ppcanoini"]; ?>.<br>
+				Veja a figura abaixo:<br> <br> <img alt="<?=$figura["figdesc"]; ?>"
+					src="http://localhost/projetoppc/forms/figura/verfigura.php?figcod=<?=$figurappc["figcod"]; ?>"
+					class="img-responsive"><br> Você tem certeza de que deseja executar
+				esta operação?<br> Após a confirmação, esta operação não poderá ser
+				desfeita.
+			</p>
+		</div>
+		<br>
+		<div class="form-group">
+			<input type="button" class="btn btn-default" value="sim"
+				onclick="submeterExclusao()">
+		</div>
+		<br>
+		<div class="form-group">
+			<input type="button" class="btn btn-default" value="não"
+				onclick="negarExclusao()">
+		</div>
+		<br>
+	</form>
+<?php
+    if (! array_key_exists("escolha", $_POST))
+        return;
+    $escolha = $_POST["escolha"];
+    if ($escolha == "sim") {
+        try {
+            if (desvincularFigura($figurappc["ppccod"], $figurappc["figcod"])) {
+                echo "<h1 class='text-center text-success'>Figura desvinculada com êxito!</h1><br>";
+                echo "<a href='?pagina=vinculo2&opcao=cadastrar'>Voltar à tela de figuras vinculadas.</a><br>";
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
 endif;
 ?>
 </div>
