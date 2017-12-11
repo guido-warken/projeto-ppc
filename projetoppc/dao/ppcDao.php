@@ -83,6 +83,8 @@ function excluirPpc($ppccod, &$conn = null)
     $delppc = $conn->prepare("delete from ppc where ppccod = :ppccod");
     $delppc->bindParam(":ppccod", $ppccod);
     $resultado = $delppc->execute();
+    ajustarChavesPrimariasPpc();
+    ajustarAutoIncrementoPpc();
     desconectarDoBanco($conn);
     return $resultado;
 }
@@ -92,7 +94,7 @@ function buscarPpcs(&$conn = null)
     $informacoesppc = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultappc = $conn->query("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod order by ppc.ppcanoini");
+    $consultappc = $conn->query("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod");
     if ($consultappc->execute()) {
         $numregistros = $consultappc->rowCount();
         if ($numregistros > 0) {
@@ -130,4 +132,55 @@ function buscarPpcsExceto($ppccod, &$conn = null)
     return $informacoesppc;
 }
 
+function buscarPpcsOrdenadosPorAno(&$conn = null)
+{
+    $informacoesppc = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultappc = $conn->query("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod order by ppc.ppcanoini");
+    if ($consultappc->execute()) {
+        $numregistros = $consultappc->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoesppc[$i] = $consultappc->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesppc;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoesppc;
+}
+
+function ajustarChavesPrimariasPpc(&$conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $ppcs = buscarPpcs();
+    $query = $conn->prepare("update ppc set ppccod = :ppccod where ppccod = :ppccod2");
+    $chave = 0;
+    $numregistros = 0;
+    foreach ($ppcs as $ppc) {
+        $chave ++;
+        $query->bindParam(":ppccod", $chave);
+        $query->bindParam(":ppccod2", $ppc["ppccod"]);
+        if ($query->execute())
+            $numregistros ++;
+    }
+    desconectarDoBanco($conn);
+    return $numregistros;
+}
+
+function ajustarAutoIncrementoPpc(&$conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $ppcs = buscarPpcs();
+    $autoincrement = count($ppcs) + 1;
+    $query = $conn->query("alter table ppc auto_increment = " . $autoincrement);
+    $resultado = $query->execute();
+    desconectarDoBanco($conn);
+    return $resultado;
+}
 ?>
