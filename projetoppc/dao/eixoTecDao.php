@@ -31,11 +31,34 @@ function excluirEixoTec($eixcod, &$conn = null)
     $deleixotec = $conn->prepare("delete from eixotec where eixcod = :eixcod");
     $deleixotec->bindParam(":eixcod", $eixcod);
     $resultado = $deleixotec->execute();
+    ajustarChavesPrimariasEixotec();
+    ajustarAutoIncrementoEixotec();
     desconectarDoBanco($conn);
     return $resultado;
 }
 
 function buscarEixosTec(&$conn = null)
+{
+    $informacoeseixotec = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultaeixotec = $conn->query("select * from eixotec");
+    if ($consultaeixotec->execute()) {
+        $numregistros = $consultaeixotec->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoeseixotec[$i] = $consultaeixotec->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoeseixotec;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoeseixotec;
+}
+
+function buscarEixosTecOrdenadosPorDescricao(&$conn = null)
 {
     $informacoeseixotec = [];
     if (is_null($conn))
@@ -118,4 +141,34 @@ function buscarEixoTecPorDescricao($eixdesc, &$conn = null)
     return $informacoeseixotec;
 }
 
+function ajustarChavesPrimariasEixotec(&$conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $eixostec = buscarEixosTec();
+    $query = $conn->prepare("update eixotec set eixcod = :eixcod where eixcod = :eixcod2");
+    $chave = 0;
+    $numregistros = 0;
+    foreach ($eixostec as $eixotec) {
+        $chave ++;
+        $query->bindParam(":eixcod", $chave);
+        $query->bindParam(":eixcod2", $eixotec["eixcod"]);
+        if ($query->execute())
+            $numregistros ++;
+    }
+    desconectarDoBanco($conn);
+    return $numregistros;
+}
+
+function ajustarAutoIncrementoEixotec(&$conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $eixostec = buscarEixosTec();
+    $autoincrement = count($eixostec) + 1;
+    $query = $conn->query("alter table eixotec auto_increment = " . $autoincrement);
+    $resultado = $query->execute();
+    desconectarDoBanco($conn);
+    return $resultado;
+}
 ?>

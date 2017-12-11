@@ -7,7 +7,7 @@ $conn = conectarAoBanco("localhost", "dbdep", "root", "");
 <div class="container">
 <?php
 if ($_GET["opcao"] == "cadastrar") :
-    $eixostec = buscarEixosTec();
+    $eixostec = buscarEixosTecOrdenadosPorDescricao();
     ?>
     <h2 class="text-center text-primary bg-primary">Cadastro de cursos</h2>
 	<br>

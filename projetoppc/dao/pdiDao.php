@@ -39,6 +39,8 @@ function excluirPDI($pdicod, &$conn = null)
     $delpdi = $conn->prepare("delete from pdi where pdicod = :pdicod");
     $delpdi->bindParam(":pdicod", $pdicod);
     $resultado = $delpdi->execute();
+    ajustarChavesPrimariasPdi();
+    ajustarAutoIncrementopdi();
     desconectarDoBanco($conn);
     return $resultado;
 }
@@ -123,4 +125,34 @@ function import(&$conn = null)
     return $pdiinfo;
 }
 
+function ajustarChavesPrimariasPdi(&$conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $pdis = buscarPdis();
+    $query = $conn->prepare("update pdi set pdicod = :pdicod where pdicod = :pdicod2");
+    $chave = 0;
+    $numregistros = 0;
+    foreach ($pdis as $pdi) {
+        $chave ++;
+        $query->bindParam(":pdicod", $chave);
+        $query->bindParam(":pdicod2", $pdi["pdicod"]);
+        if ($query->execute())
+            $numregistros ++;
+    }
+    desconectarDoBanco($conn);
+    return $numregistros;
+}
+
+function ajustarAutoIncrementopdi(&$conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $pdis = buscarPdis();
+    $autoincrement = count($pdis) + 1;
+    $query = $conn->query("alter table pdi auto_increment = " . $autoincrement);
+    $resultado = $query->execute();
+    desconectarDoBanco($conn);
+    return $resultado;
+}
 ?>

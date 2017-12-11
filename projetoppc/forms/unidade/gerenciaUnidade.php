@@ -84,7 +84,7 @@ elseif ($_GET["opcao"] == "consultar") :
 	</h2>
 	<br> <a href="?pagina=unidade&opcao=cadastrar">Nova unidade SENAC</a><br>
 							<?php
-    $unidades = buscarUnidades();
+    $unidades = buscarUnidadesOrdenadasPorNome();
     $totalunidades = count($unidades);
     if ($totalunidades > 0) :
         ?>
@@ -237,7 +237,7 @@ elseif ($_GET["opcao"] == "consultar") :
         echo "<p>OK, a unidade do SENAC n�o ser� exclu�da.</p>";
     }
  elseif ($_GET["opcao"] == "vincular") :
-    $unidades = buscarUnidades();
+    $unidades = buscarUnidadesOrdenadasPorNome();
     $pdi = import();
     $totalunidades = count($unidades);
     ?>
