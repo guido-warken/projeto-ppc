@@ -31,8 +31,6 @@ function excluirUnidade($unicod, &$conn = null)
     $delunidade = $conn->prepare("delete from unidadesenac where unicod = :unicod");
     $delunidade->bindParam(":unicod", $unicod);
     $resultado = $delunidade->execute();
-    ajustarChavesPrimariasUnidade();
-    ajustarAutoIncrementoUnidade();
     desconectarDoBanco($conn);
     return $resultado;
 }
@@ -161,34 +159,4 @@ function vincularPdi($unicods, $pdicod, &$conn = null)
     return $numregistros;
 }
 
-function ajustarChavesPrimariasUnidade(&$conn = null)
-{
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $unidades = buscarUnidades();
-    $query = $conn->prepare("update unidadesenac set unicod = :unicod where unicod = :unicod2");
-    $chave = 0;
-    $numregistros = 0;
-    foreach ($unidades as $unidade) {
-        $chave ++;
-        $query->bindParam(":unicod", $chave);
-        $query->bindParam(":unicod2", $unidade["unicod"]);
-        if ($query->execute())
-            $numregistros ++;
-    }
-    desconectarDoBanco($conn);
-    return $numregistros;
-}
-
-function ajustarAutoIncrementoUnidade(&$conn = null)
-{
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $unidades = buscarUnidades();
-    $autoincrement = count($unidades) + 1;
-    $query = $conn->query("alter table unidadesenac auto_increment = " . $autoincrement);
-    $resultado = $query->execute();
-    desconectarDoBanco($conn);
-    return $resultado;
-}
 ?>

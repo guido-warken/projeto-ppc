@@ -75,8 +75,6 @@ function excluirCurso($curcod, &$conn = null)
     $delcurso = $conn->prepare("delete from curso where curcod = :curcod");
     $delcurso->bindParam(":curcod", $curcod);
     $resultado = $delcurso->execute();
-    ajustarChavesPrimariasCurso();
-    ajustarAutoIncrementoCurso();
     desconectarDoBanco($conn);
     return $resultado;
 }
@@ -141,37 +139,6 @@ function buscarCursoPorTitulacao($curtit, &$conn = null)
     }
     desconectarDoBanco($conn);
     return $informacoescurso;
-}
-
-function ajustarChavesPrimariasCurso(&$conn = null)
-{
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $cursos = buscarCursos();
-    $query = $conn->prepare("update curso set curcod = :curcod where curcod = :curcod2");
-    $chave = 0;
-    $numregistros = 0;
-    foreach ($cursos as $curso) {
-        $chave ++;
-        $query->bindParam(":curcod", $chave);
-        $query->bindParam(":curcod2", $curso["curcod"]);
-        if ($query->execute())
-            $numregistros ++;
-    }
-    desconectarDoBanco($conn);
-    return $numregistros;
-}
-
-function ajustarAutoIncrementoCurso(&$conn = null)
-{
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $cursos = buscarCursos();
-    $autoincrement = count($cursos) + 1;
-    $query = $conn->query("alter table curso auto_increment = " . $autoincrement);
-    $resultado = $query->execute();
-    desconectarDoBanco($conn);
-    return $resultado;
 }
 
 function buscarCursosOrdenadosPorNome(&$conn = null)
