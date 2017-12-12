@@ -60,7 +60,7 @@ if ($_GET["opcao"] == "cadastrar") :
         echo $e->getMessage();
     }
  elseif ($_GET["opcao"] == "consultar") :
-    $competencias = buscarCompetencias();
+    $competencias = buscarCompetenciasOrdenadasPorDescricao();
     $totalcompetencias = count($competencias);
     ?>
 		<h2 class="text-center text-primary bg-primary">Consulta de

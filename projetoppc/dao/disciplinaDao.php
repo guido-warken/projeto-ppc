@@ -37,6 +37,8 @@ function excluirDisciplina($discod, &$conn = null)
     $deldisciplina = $conn->prepare("delete from disciplina where discod = :discod");
     $deldisciplina->bindParam(":discod", $discod);
     $resultado = $deldisciplina->execute();
+    ajustarChavesPrimariasDisciplina();
+    ajustarAutoIncrementoDisciplina();
     desconectarDoBanco($conn);
     return $resultado;
 }
@@ -102,6 +104,27 @@ function buscarDisciplinas(&$conn = null)
     return $informacoesdisciplina;
 }
 
+function buscarDisciplinasOrdenadasPorNome(&$conn = null)
+{
+    $informacoesdisciplina = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consultadisciplina = $conn->query("select * from disciplina order by disnome");
+    if ($consultadisciplina->execute()) {
+        $numregistros = $consultadisciplina->rowCount();
+        if ($numregistros > 0) {
+            for ($i = 0; $i < $numregistros; $i ++) {
+                $informacoesdisciplina[$i] = $consultadisciplina->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $informacoesdisciplina;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $informacoesdisciplina;
+}
+
 function buscarDisciplinasExceto($discod, &$conn = null)
 {
     $informacoesdisciplina = [];
@@ -122,6 +145,37 @@ function buscarDisciplinasExceto($discod, &$conn = null)
     }
     desconectarDoBanco($conn);
     return $informacoesdisciplina;
+}
+
+function ajustarChavesPrimariasDisciplina(&$conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $disciplinas = buscarDisciplinas();
+    $query = $conn->prepare("update disciplina set discod = :discod where discod = :discod2");
+    $chave = 0;
+    $numregistros = 0;
+    foreach ($disciplinas as $disciplina) {
+        $chave ++;
+        $query->bindParam(":discod", $chave);
+        $query->bindParam(":discod2", $disciplina["discod"]);
+        if ($query->execute())
+            $numregistros ++;
+    }
+    desconectarDoBanco($conn);
+    return $numregistros;
+}
+
+function ajustarAutoIncrementoDisciplina(&$conn = null)
+{
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $disciplinas = buscarDisciplinas();
+    $autoincrement = count($disciplinas) + 1;
+    $query = $conn->query("alter table disciplina auto_increment = " . $autoincrement);
+    $resultado = $query->execute();
+    desconectarDoBanco($conn);
+    return $resultado;
 }
 
 ?>

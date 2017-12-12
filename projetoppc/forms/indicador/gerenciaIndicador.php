@@ -71,7 +71,7 @@ if ($_GET["opcao"] == "cadastrar") :
         echo $e->getMessage();
     }
  elseif ($_GET["opcao"] == "consultar") :
-    $indicadores = buscarIndicadores();
+    $indicadores = buscarIndicadoresOrdenadosPorDescricao();
     $totalindicadores = count($indicadores);
     ?>
 	<h2 class="text-center text-primary bg-primary">Consulta de indicadores</h2>

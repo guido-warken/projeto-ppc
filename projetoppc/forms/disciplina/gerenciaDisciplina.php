@@ -89,7 +89,7 @@ if ($_GET["opcao"] == "cadastrar") :
         echo $e->getMessage();
     }
  elseif ($_GET["opcao"] == "consultar") :
-    $disciplinas = buscarDisciplinas();
+    $disciplinas = buscarDisciplinasOrdenadasPorNome();
     $totaldisciplinas = count($disciplinas);
     ?>
 <h2 class="text-center text-primary bg-primary">Exibição das disciplinas
@@ -98,7 +98,9 @@ if ($_GET["opcao"] == "cadastrar") :
 <?php
     if ($totaldisciplinas > 0) :
         ?>
-<table class="table table bordered">
+        <h2 class="text-center text-info">Número de disciplinas encontradas: <?=$totaldisciplinas; ?></h2>
+	<br>
+	<table class="table table bordered">
 		<caption>Disciplinas</caption>
 		<thead>
 			<tr>

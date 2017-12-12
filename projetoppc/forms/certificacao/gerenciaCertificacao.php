@@ -50,8 +50,21 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "Preencha novamente o formulário e clique no botão salvar.";
         echo "</p>";
         echo "</div>";
+        echo "<br>";
         return;
         endif;
+    
+    $certificacao = ! empty($cerdes) ? buscarCertPorDescricao($cerdes) : [];
+    if (! empty($certificacao)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Já existe uma certificação cadastrada com esta descrição.<br>";
+        echo "Por favor, digite uma nova descrição.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
     
     try {
         if (inserirCertificacao($cerdes, $cerreq, $cerch)) {
@@ -166,6 +179,21 @@ if ($_GET["opcao"] == "cadastrar") :
         echo "</div>";
         return;
         endif;
+    
+    $certpordesc = ! empty($cerdes) ? buscarCertPorDescricao($cerdes) : [];
+    if (! empty($certpordesc)) :
+        if ($certpordesc["cerdes"] != $certificacao["cerdes"]) :
+            echo "<div class='text-danger'>";
+            echo "<p>";
+            echo "Já existe uma certificação cadastrada com esta descrição.<br>";
+            echo "Por favor, digite uma nova descrição.";
+            echo "</p>";
+            echo "</div>";
+            echo "<br>";
+            return;
+        endif;
+        endif;
+        
     
     try {
         if (atualizarCert($certificacao["cercod"], $cerdes, $cerreq, $cerch)) {
