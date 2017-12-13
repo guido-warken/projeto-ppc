@@ -92,7 +92,7 @@ function buscarPpcs(&$conn = null)
     $informacoesppc = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultappc = $conn->query("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod");
+    $consultappc = $conn->query("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod order by ppc.ppcanoini");
     if ($consultappc->execute()) {
         $numregistros = $consultappc->rowCount();
         if ($numregistros > 0) {
@@ -115,27 +115,6 @@ function buscarPpcsExceto($ppccod, &$conn = null)
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultappc = $conn->prepare("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod where ppc.ppccod <> :ppccod");
     $consultappc->bindParam(":ppccod", $ppccod);
-    if ($consultappc->execute()) {
-        $numregistros = $consultappc->rowCount();
-        if ($numregistros > 0) {
-            for ($i = 0; $i < $numregistros; $i ++) {
-                $informacoesppc[$i] = $consultappc->fetch(PDO::FETCH_ASSOC);
-            }
-        } else {
-            desconectarDoBanco($conn);
-            return $informacoesppc;
-        }
-    }
-    desconectarDoBanco($conn);
-    return $informacoesppc;
-}
-
-function buscarPpcsOrdenadosPorAno(&$conn = null)
-{
-    $informacoesppc = [];
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultappc = $conn->query("select ppc.*, curso.* from ppc inner join curso on ppc.curcod = curso.curcod order by ppc.ppcanoini");
     if ($consultappc->execute()) {
         $numregistros = $consultappc->rowCount();
         if ($numregistros > 0) {

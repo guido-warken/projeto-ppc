@@ -89,7 +89,7 @@ if ($_GET["opcao"] == "cadastrar") :
         echo $e->getMessage();
     }
  elseif ($_GET["opcao"] == "consultar") :
-    $disciplinas = buscarDisciplinasOrdenadasPorNome();
+    $disciplinas = buscarDisciplinas();
     $totaldisciplinas = count($disciplinas);
     ?>
 <h2 class="text-center text-primary bg-primary">Exibição das disciplinas

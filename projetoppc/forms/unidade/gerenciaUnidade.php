@@ -84,7 +84,7 @@ elseif ($_GET["opcao"] == "consultar") :
 	</h2>
 	<br> <a href="?pagina=unidade&opcao=cadastrar">Nova unidade SENAC</a><br>
 							<?php
-    $unidades = buscarUnidadesOrdenadasPorNome();
+    $unidades = buscarUnidades();
     $totalunidades = count($unidades);
     if ($totalunidades > 0) :
         ?>

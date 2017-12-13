@@ -40,27 +40,6 @@ function buscarEixosTec(&$conn = null)
     $informacoeseixotec = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultaeixotec = $conn->query("select * from eixotec");
-    if ($consultaeixotec->execute()) {
-        $numregistros = $consultaeixotec->rowCount();
-        if ($numregistros > 0) {
-            for ($i = 0; $i < $numregistros; $i ++) {
-                $informacoeseixotec[$i] = $consultaeixotec->fetch(PDO::FETCH_ASSOC);
-            }
-        } else {
-            desconectarDoBanco($conn);
-            return $informacoeseixotec;
-        }
-    }
-    desconectarDoBanco($conn);
-    return $informacoeseixotec;
-}
-
-function buscarEixosTecOrdenadosPorDescricao(&$conn = null)
-{
-    $informacoeseixotec = [];
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consultaeixotec = $conn->query("select * from eixotec order by eixdesc");
     if ($consultaeixotec->execute()) {
         $numregistros = $consultaeixotec->rowCount();

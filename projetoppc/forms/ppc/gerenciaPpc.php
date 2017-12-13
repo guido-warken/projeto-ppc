@@ -7,7 +7,7 @@ $conn = conectarAoBanco("localhost", "dbdep", "root", "");
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :
-    $cursos = buscarCursosOrdenadosPorNome($conn);
+    $cursos = buscarCursos($conn);
     ?>
     <h2 class="text-center text-primary bg-primary">
 		Cadastro de <abbr class="text-uppercase">ppc</abbr>
@@ -160,7 +160,7 @@ if ($_GET["opcao"] == "cadastrar") :
         echo $e->getMessage();
     }
  elseif ($_GET["opcao"] == "consultar") :
-    $cursos = buscarCursosOrdenadosPorNome($conn);
+    $cursos = buscarCursos($conn);
     ?>
 		<h2 class="text-center text-primary bg-primary">
 		Consultando os <abbr class="text-uppercase">ppc</abbr>s cadastrados

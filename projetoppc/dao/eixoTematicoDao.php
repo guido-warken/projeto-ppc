@@ -31,8 +31,6 @@ function excluirEixoTem($eixtcod, &$conn = null)
     $deleixotematico = $conn->prepare("delete from eixotematico where eixtcod = :eixtcod");
     $deleixotematico->bindParam(":eixtcod", $eixtcod);
     $resultado = $deleixotematico->execute();
-    ajustarChavesPrimariasEixotem();
-    ajustarAutoIncrementoEixotem();
     desconectarDoBanco($conn);
     return $resultado;
 }
@@ -62,7 +60,7 @@ function buscarEixosTem(&$conn = null)
     $informacoeseixotematico = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultaeixotematico = $conn->query("select * from eixotematico");
+    $consultaeixotematico = $conn->query("select * from eixotematico order by eixtdes");
     if ($consultaeixotematico->execute()) {
         $numregistros = $consultaeixotematico->rowCount();
         if ($numregistros > 0) {
@@ -120,34 +118,4 @@ function buscarEixoTemPorDescricao($eixtdes, &$conn = null)
     return $informacoeseixotematico;
 }
 
-function ajustarChavesPrimariasEixotem(&$conn = null)
-{
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $eixostem = buscarEixosTem();
-    $query = $conn->prepare("update eixotematico set eixtcod = :eixtcod where eixtcod = :eixtcod2");
-    $chave = 0;
-    $numregistros = 0;
-    foreach ($eixostem as $eixotematico) {
-        $chave ++;
-        $query->bindParam(":eixtcod", $chave);
-        $query->bindParam(":eixtcod2", $eixotematico["eixtcod"]);
-        if ($query->execute())
-            $numregistros ++;
-    }
-    desconectarDoBanco($conn);
-    return $numregistros;
-}
-
-function ajustarAutoIncrementoEixotem(&$conn = null)
-{
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $eixostem = buscarEixosTem();
-    $autoincrement = count($eixostem) + 1;
-    $query = $conn->query("alter table eixotematico auto_increment = " . $autoincrement);
-    $resultado = $query->execute();
-    desconectarDoBanco($conn);
-    return $resultado;
-}
 ?>

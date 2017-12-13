@@ -35,8 +35,6 @@ function excluirCert($cercod, &$conn = null)
     $delcert = $conn->prepare("delete from certificacao where cercod = :cercod");
     $delcert->bindParam(":cercod", $cercod);
     $resultado = $delcert->execute();
-    ajustarChavesPrimariasCert();
-    ajustarAutoIncrementoCert();
     desconectarDoBanco($conn);
     return $resultado;
 }
@@ -86,7 +84,7 @@ function buscarCert(&$conn = null)
     $certificacao = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultacert = $conn->query("select * from certificacao");
+    $consultacert = $conn->query("select * from certificacao order by cerdes");
     if ($consultacert->execute()) {
         $numregistros = $consultacert->rowCount();
         if ($numregistros > 0) {
@@ -100,37 +98,6 @@ function buscarCert(&$conn = null)
     }
     desconectarDoBanco($conn);
     return $certificacao;
-}
-
-function ajustarChavesPrimariasCert(&$conn = null)
-{
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $certificacoes = buscarCert();
-    $query = $conn->prepare("update certificacao set cercod = :cercod where cercod = :cercod2");
-    $chave = 0;
-    $numregistros = 0;
-    foreach ($certificacoes as $cert) {
-        $chave ++;
-        $query->bindParam(":cercod", $chave);
-        $query->bindParam(":cercod2", $cert["cercod"]);
-        if ($query->execute())
-            $numregistros ++;
-    }
-    desconectarDoBanco($conn);
-    return $numregistros;
-}
-
-function ajustarAutoIncrementoCert(&$conn = null)
-{
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $certificacoes = buscarCert();
-    $autoincrement = count($certificacoes) + 1;
-    $query = $conn->query("alter table certificacao auto_increment = " . $autoincrement);
-    $resultado = $query->execute();
-    desconectarDoBanco($conn);
-    return $resultado;
 }
 
 ?>

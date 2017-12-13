@@ -38,7 +38,7 @@ function buscarCursos(&$conn = null)
     $informacoescurso = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultacurso = $conn->query("select * from curso");
+    $consultacurso = $conn->query("select * from curso order by curnome");
     if ($consultacurso->execute()) {
         $numregistros = $consultacurso->rowCount();
         if ($numregistros > 0) {
@@ -141,24 +141,4 @@ function buscarCursoPorTitulacao($curtit, &$conn = null)
     return $informacoescurso;
 }
 
-function buscarCursosOrdenadosPorNome(&$conn = null)
-{
-    $informacoescurso = [];
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultacurso = $conn->query("select * from curso order by curnome");
-    if ($consultacurso->execute()) {
-        $numregistros = $consultacurso->rowCount();
-        if ($numregistros > 0) {
-            for ($i = 0; $i < $numregistros; $i ++) {
-                $informacoescurso[$i] = $consultacurso->fetch(PDO::FETCH_ASSOC);
-            }
-        } else {
-            desconectarDoBanco($conn);
-            return $informacoescurso;
-        }
-    }
-    desconectarDoBanco($conn);
-    return $informacoescurso;
-}
 ?>

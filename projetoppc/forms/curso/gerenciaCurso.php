@@ -7,7 +7,7 @@ $conn = conectarAoBanco("localhost", "dbdep", "root", "");
 <div class="container">
 <?php
 if ($_GET["opcao"] == "cadastrar") :
-    $eixostec = buscarEixosTecOrdenadosPorDescricao();
+    $eixostec = buscarEixosTec();
     ?>
     <h2 class="text-center text-primary bg-primary">Cadastro de cursos</h2>
 	<br>
@@ -133,7 +133,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<br> <a href="?pagina=curso&opcao=cadastrar">Cadastrar mais um curso</a>
 	<br> <br>
 	<?php
-    $cursos = buscarCursosOrdenadosPorNome($conn);
+    $cursos = buscarCursos($conn);
     $totalcursos = count($cursos);
     if ($totalcursos > 0) :
         ?>

@@ -60,7 +60,7 @@ function buscarUnidades(&$conn = null)
     $informacoesunidade = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultaunidade = $conn->query("select * from unidadesenac");
+    $consultaunidade = $conn->query("select * from unidadesenac order by uninome");
     if ($consultaunidade->execute()) {
         $numregistros = $consultaunidade->rowCount();
         if ($numregistros > 0) {
@@ -109,27 +109,6 @@ function buscarUnidadePorNome($uninome, $conn = null)
         $numregistros = $consultaunidade->rowCount();
         if ($numregistros == 1) {
             $informacoesunidade = $consultaunidade->fetch(PDO::FETCH_ASSOC);
-        } else {
-            desconectarDoBanco($conn);
-            return $informacoesunidade;
-        }
-    }
-    desconectarDoBanco($conn);
-    return $informacoesunidade;
-}
-
-function buscarUnidadesOrdenadasPorNome(&$conn = null)
-{
-    $informacoesunidade = [];
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultaunidade = $conn->query("select * from unidadesenac order by uninome");
-    if ($consultaunidade->execute()) {
-        $numregistros = $consultaunidade->rowCount();
-        if ($numregistros > 0) {
-            for ($i = 0; $i < $numregistros; $i ++) {
-                $informacoesunidade[$i] = $consultaunidade->fetch(PDO::FETCH_ASSOC);
-            }
         } else {
             desconectarDoBanco($conn);
             return $informacoesunidade;

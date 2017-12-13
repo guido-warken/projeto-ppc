@@ -31,8 +31,6 @@ function excluirCompetencia($compcod, &$conn = null)
     $delcompetencia = $conn->prepare("delete from competencia where compcod = :compcod");
     $delcompetencia->bindParam(":compcod", $compcod);
     $resultado = $delcompetencia->execute();
-    ajustarChavesPrimariasCompetencia();
-    ajustarAutoIncrementoCompetencia();
     desconectarDoBanco($conn);
     return $resultado;
 }
@@ -78,27 +76,6 @@ function buscarCompetencias(&$conn = null)
     return $informacoescomp;
 }
 
-function buscarCompetenciasOrdenadasPorDescricao(&$conn = null)
-{
-    $informacoescomp = [];
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultacomp = $conn->query("select * from competencia order by compdes");
-    if ($consultacomp->execute()) {
-        $numregistros = $consultacomp->rowCount();
-        if ($numregistros > 0) {
-            for ($i = 0; $i < $numregistros; $i ++) {
-                $informacoescomp[$i] = $consultacomp->fetch(PDO::FETCH_ASSOC);
-            }
-        } else {
-            desconectarDoBanco($conn);
-            return $informacoescomp;
-        }
-    }
-    desconectarDoBanco($conn);
-    return $informacoescomp;
-}
-
 function buscarCompetenciaPorDescricao($compdes, &$conn = null)
 {
     $informacoescomp = [];
@@ -117,37 +94,6 @@ function buscarCompetenciaPorDescricao($compdes, &$conn = null)
     }
     desconectarDoBanco($conn);
     return $informacoescomp;
-}
-
-function ajustarChavesPrimariasCompetencia(&$conn = null)
-{
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $competencias = buscarCompetencias();
-    $query = $conn->prepare("update competencia set compcod = :compcod where compcod = :compcod2");
-    $chave = 0;
-    $numregistros = 0;
-    foreach ($competencias as $competencia) {
-        $chave ++;
-        $query->bindParam(":compcod", $chave);
-        $query->bindParam(":compcod2", $competencia["compcod"]);
-        if ($query->execute())
-            $numregistros ++;
-    }
-    desconectarDoBanco($conn);
-    return $numregistros;
-}
-
-function ajustarAutoIncrementoCompetencia(&$conn = null)
-{
-    if (is_null($conn))
-        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $competencias = buscarCompetencias();
-    $autoincrement = count($competencias) + 1;
-    $query = $conn->query("alter table competencia auto_increment = " . $autoincrement);
-    $resultado = $query->execute();
-    desconectarDoBanco($conn);
-    return $resultado;
 }
 
 ?>

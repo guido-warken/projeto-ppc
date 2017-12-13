@@ -71,7 +71,7 @@ if ($_GET["opcao"] == "cadastrar") :
         echo $e->getMessage();
     }
  elseif ($_GET["opcao"] == "consultar") :
-    $eixostec = buscarEixosTecOrdenadosPorDescricao();
+    $eixostec = buscarEixosTec();
     $totaleixostec = count($eixostec);
     ?>
 	<h2 class="text-center text-primary bg-primary">Consulta de eixos
