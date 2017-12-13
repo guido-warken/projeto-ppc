@@ -60,7 +60,7 @@ function buscarCompetencias(&$conn = null)
     $informacoescomp = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consultacomp = $conn->query("select * from competencia");
+    $consultacomp = $conn->query("select * from competencia order by compdes");
     if ($consultacomp->execute()) {
         $numregistros = $consultacomp->rowCount();
         if ($numregistros > 0) {

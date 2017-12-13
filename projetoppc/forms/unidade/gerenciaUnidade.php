@@ -237,7 +237,7 @@ elseif ($_GET["opcao"] == "consultar") :
         echo "<p>OK, a unidade do SENAC n�o ser� exclu�da.</p>";
     }
  elseif ($_GET["opcao"] == "vincular") :
-    $unidades = buscarUnidadesOrdenadasPorNome();
+    $unidades = buscarUnidades();
     $pdi = import();
     $totalunidades = count($unidades);
     ?>
