@@ -17,7 +17,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<div class="form-group">
 			<label for="figcont">Selecione o arquivo de imagem a ser inserido: <span>*</span></label>
-			<input type="hidden" name="max_file_size" value="30000"> <input
+			<input type="hidden" name="max_file_size" value="9999999999"> <input
 				type="file" id="figcont" name="figcont" class="form-control">
 		</div>
 		<br>
