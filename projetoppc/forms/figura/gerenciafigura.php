@@ -94,6 +94,18 @@ endif;
         return;
 endif;
     
+    $imageinfo = [];
+    $imageinfo = getimagesize($imagem["tmp_name"], $imageinfo);
+    if ($imageinfo[0] > 2000 && $imageinfo[1] > 2000) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "A figura pode conter no máximo 2000 píxeis de largura e altura.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
+    
     $arquivo = fopen($imagem["tmp_name"], "rb");
     $tamanho = $imagem["size"];
     $figcont = fread($arquivo, $tamanho);
@@ -187,7 +199,7 @@ elseif ($_GET["opcao"] == "consultar") :
 		<br>
 		<div class="form-group">
 			<label for="figcont">Selecione o arquivo de imagem a ser inserido: <span>*</span></label>
-			<input type="hidden" name="max_file_size" value="30000"> <input
+			<input type="hidden" name="max_file_size" value="99999999999"> <input
 				type="file" id="figcont" name="figcont" class="form-control">
 		</div>
 		<br>
@@ -265,6 +277,18 @@ endif;
 	</div>
 	<br>
 <?php
+        return;
+endif;
+    
+    $imageinfo = [];
+    $imageinfo = getimagesize($imagem["tmp_name"], $imageinfo);
+    if ($imageinfo[0] > 2000 && $imageinfo[1] > 2000) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "A figura pode conter no máximo 2000 píxeis de largura e altura.";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
         return;
 endif;
     
