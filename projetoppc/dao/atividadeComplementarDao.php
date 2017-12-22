@@ -59,6 +59,7 @@ function buscarAtividadeComplementarPorId($atccod, &$conn = null)
 
 function buscarAtividadeComplementarPorDescricao($atcdesc, &$conn = null)
 {
+    $atividade = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $query = $conn->prepare("select * from atividadecomplementar where atcdesc = :atcdesc");

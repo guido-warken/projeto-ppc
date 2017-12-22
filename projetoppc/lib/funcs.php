@@ -3,6 +3,9 @@
 function rotas($pagina)
 {
     switch ($pagina) {
+        case "atividade":
+            require_once 'c:\wamp64\www\projetoppc\forms\atividade\gerenciaatividade.php';
+            break;
         case "curso":
             require_once 'c:\wamp64\www\projetoppc\forms\curso\gerenciaCurso.php';
             break;

@@ -10,6 +10,16 @@
 			<ul class="nav navbar-nav">
 				<li <?php echo active($pagina, $opcao); ?>><a href="index.php">Home</a></li>
 				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown" href="#">Atividade complementar <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li
+							<?php echo active($pagina, $opcao, "atividade", "cadastrar"); ?>><a
+							href="?pagina=atividade&opcao=cadastrar">Cadastrar</a></li>
+						<li
+							<?php echo active($pagina, $opcao, "atividade", "consultar"); ?>><a
+							href="?pagina=atividade&opcao=consultar">Consultar</a></li>
+					</ul></li>
+				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#">Curso <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li <?php echo active($pagina, $opcao, "curso", "cadastrar"); ?>><a
