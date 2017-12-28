@@ -29,7 +29,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<div class="form-group">
 			<label for="ppccod">Selecione o <abbr class="text-uppercase">ppc</abbr>:
 				<span>*</span></label> <select class="form-control" id="ppccod"
-				name="ppccod" tabindex="1">
+				name="ppccod" tabindex="1" onchange="exibirVinculo()">
 				<option value="-1">Selecione:</option>
 <?php
     foreach ($ppcs as $ppc) :
