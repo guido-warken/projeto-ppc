@@ -54,6 +54,9 @@ function rotas($pagina)
         case "vinculo2":
             require_once 'c:\wamp64\www\projetoppc\forms\vinculo\gerenciavinculofig.php';
             break;
+        case "vinculo3":
+            require_once 'c:\wamp64\www\projetoppc\forms\vinculo\gerenciavinculoatc.php';
+            break;
         case "figura":
             require_once 'c:\wamp64\www\projetoppc\forms\figura\gerenciafigura.php';
             break;
