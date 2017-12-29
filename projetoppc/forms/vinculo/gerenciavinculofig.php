@@ -53,12 +53,19 @@ if ($_GET["opcao"] == "cadastrar") :
 					cadastrar um novo <abbr class="text-uppercase">ppc</abbr>
 				</a>
 			</div>
+			<br>
 <?php
+        return;
     endif;
     ?>
 </div>
 		<br>
-		<div class="form-group" id="fig-vinc"></div>
+		<div class="form-group" id="fig-vinc">
+			<p class="text-warning">
+				Selecione um <abbr class="text-uppercase">ppc</abbr> para ver as
+				figuras vinculadas
+			</p>
+		</div>
 		<br>
 		<div class="form-group">
 <?php
@@ -84,7 +91,9 @@ if ($_GET["opcao"] == "cadastrar") :
 				<br> <a href="?pagina=figura&opcao=cadastrar">Clique aqui para
 					cadastrar uma nova figura</a>
 			</div>
+			<br>
 <?php
+        return;
     endif;
     ?>
 </div>
@@ -169,7 +178,7 @@ endif;
     try {
         if (vincularFiguraAPpc($figcod, $ppccod, $figordem)) {
             echo "<h1 class='text-success text-center'>Figura vinculada com êxito!</h1><br>";
-            echo "<a href='?pagina=vinculo2&opcao=cadastrar'>Voltar à tela de figuras vinculadas</a><br>";
+            echo "<a href='index.php'>Voltar à tela inicial</a><br>";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
@@ -229,7 +238,7 @@ endif;
     try {
         if (atualizarVinculo($figurappc["ppccod"], $figurappc["figcod"], $figordem)) {
             echo "<h1 class='text-center text-success'>Figura vinculada atualizada com êxito!</h1><br>";
-            echo "<a href='?pagina=vinculo2&opcao=cadastrar'>Voltar à tela de figuras vinculadas</a><br>";
+            echo "<a href='index.php'>Voltar à tela inicial</a><br>";
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
@@ -274,7 +283,7 @@ endif;
         try {
             if (desvincularFigura($figurappc["ppccod"], $figurappc["figcod"])) {
                 echo "<h1 class='text-center text-success'>Figura desvinculada com êxito!</h1><br>";
-                echo "<a href='?pagina=vinculo2&opcao=cadastrar'>Voltar à tela de figuras vinculadas.</a><br>";
+                echo "<a href='index.php'>Voltar à tela inicial</a><br>";
             }
         } catch (PDOException $e) {
             echo $e->getMessage();

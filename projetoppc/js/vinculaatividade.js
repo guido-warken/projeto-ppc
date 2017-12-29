@@ -15,7 +15,9 @@ function exibirVinculo() {
 			}
 		});
 	} else {
-		$("#atc-vinc").html(null);
+		$("#atc-vinc")
+				.html(
+						"<p class='text-warning'>Selecione um PPC e uma disciplina</p>");
 	}
 }
 

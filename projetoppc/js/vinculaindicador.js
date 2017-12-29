@@ -5,8 +5,9 @@
 function exibirVinculo() {
 	var discod = document.getElementById("discod");
 	if (discod.value == "-1") {
-		alert("Por favor, selecione uma disciplina.");
-		$("#ind-vinc").html(null);
+		$("#ind-vinc")
+				.html(
+						"<p class='text-warning'>Selecione uma disciplina para ver os indicadores vinculados</p>");
 		return;
 	}
 	$.get("http://localhost/projetoppc/forms/vinculo/indvinc.php", {

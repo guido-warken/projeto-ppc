@@ -5,8 +5,9 @@
 function exibirFigurasVinculadas() {
 	var ppccod = document.getElementById("ppccod");
 	if (ppccod.value == "-1") {
-		alert("Por favor, selecione um PPC.");
-		$("#fig-vinc").html(null);
+		$("#fig-vinc")
+				.html(
+						"<p class='text-warning'>Selecione um PPC para ver as figuras vinculadas</p>");
 		return;
 	}
 	$.get("http://localhost/projetoppc/forms/vinculo/figvinc.php", {

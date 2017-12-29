@@ -11,6 +11,9 @@ if ($_GET["opcao"] == "cadastrar") :
     $ppcs = buscarPpcs();
     $disciplinas = buscarDisciplinas();
     $atividades = buscarAtividadesComplementares();
+    $totalppcs = count($ppcs);
+    $totaldisciplinas = count($disciplinas);
+    $totalatividades = count($atividades);
     ?>
 <h2 class="text-center text-primary bg-primary">Vinculação de atividade
 		complementar em um conteúdo curricular</h2>
@@ -27,52 +30,110 @@ if ($_GET["opcao"] == "cadastrar") :
 	<br>
 	<form action="" method="post">
 		<div class="form-group">
+		<?php
+    if ($totalppcs > 0) :
+        ?>
 			<label for="ppccod">Selecione o <abbr class="text-uppercase">ppc</abbr>:
 				<span>*</span></label> <select class="form-control" id="ppccod"
 				name="ppccod" tabindex="1" onchange="exibirVinculo()">
 				<option value="-1">Selecione:</option>
 <?php
-    foreach ($ppcs as $ppc) :
-        ?>
+        foreach ($ppcs as $ppc) :
+            ?>
 <option value="<?=$ppc["ppccod"]; ?>"><?=$ppc["ppcanoini"]; ?> - <?=$ppc["curnome"]; ?></option>
 <?php
-    endforeach
-    ;
-    ?>
+        endforeach
+        ;
+        ?>
 </select>
+<?php
+    else :
+        ?>
+<div class="text-warning">
+				<h1 class="text-center">
+					Nenhum <abbr class="text-uppercase">ppc</abbr> cadastrado no
+					sistema
+				</h1>
+				<br> <a href="?pagina=ppc&opcao=cadastrar">Clique aqui para
+					cadastrar um novo <abbr class="text-uppercase">ppc</abbr>
+				</a>
+			</div>
+			<br>
+<?php
+        return;
+    endif;
+    ?>
 		</div>
 		<br>
 		<div class="form-group">
+		<?php
+    if ($totaldisciplinas > 0) :
+        ?>
 			<label for="discod">Selecione a disciplina: <span>*</span></label> <select
 				class="form-control" id="discod" name="discod" tabindex="2"
 				onchange="exibirVinculo()">
 				<option value="-1">Selecione:</option>
 <?php
-    foreach ($disciplinas as $disciplina) :
-        ?>
+        foreach ($disciplinas as $disciplina) :
+            ?>
 <option value="<?=$disciplina["discod"]; ?>"><?=$disciplina["disnome"]; ?></option>
 <?php
-    endforeach
-    ;
-    ?>
+        endforeach
+        ;
+        ?>
 </select>
+<?php
+    else :
+        ?>
+<div class="text-warning">
+				<h1 class="text-center">Nenhuma disciplina cadastrada no sistema</h1>
+				<br> <a href="?pagina=disciplina&opcao=cadastrar">Clique aqui para
+					cadastrar uma nova disciplina</a>
+			</div>
+			<br>
+<?php
+        return;
+    endif;
+    ?>
 		</div>
 		<br>
-		<div class="form-group" id="atc-vinc"></div>
+		<div class="form-group" id="atc-vinc">
+			<p class="text-warning">
+				Selecione um <abbr class="text-uppercase">ppc</abbr> e uma
+				disciplina
+			</p>
+		</div>
 		<br>
 		<div class="form-group">
+		<?php
+    if ($totalatividades > 0) :
+        ?>
 			<label for="atccod">Selecione a atividade complementar: <span>*</span></label>
 			<select class="form-control" id="atccod" name="atccod" tabindex="3">
 				<option value="-1">Selecione:</option>
 <?php
-    foreach ($atividades as $atividade) :
-        ?>
+        foreach ($atividades as $atividade) :
+            ?>
 <option value="<?=$atividade["atccod"]; ?>"><?=$atividade["atcdesc"]; ?></option>
 <?php
-    endforeach
-    ;
-    ?>
+        endforeach
+        ;
+        ?>
 </select>
+<?php
+    else :
+        ?>
+<div class="text-warning">
+				<h1 class="text-center">Nenhuma atividade complementar cadastrada no
+					sistema</h1>
+				<br> <a href="?pagina=atividade&opcao=cadastrar">Clique aqui para
+					cadastrar uma nova atividade complementar</a>
+			</div>
+			<br>
+<?php
+        return;
+    endif;
+    ?>
 		</div>
 		<br>
 		<div class="form-group">

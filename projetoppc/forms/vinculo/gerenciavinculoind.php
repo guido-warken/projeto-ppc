@@ -44,8 +44,8 @@ if ($_GET["opcao"] == "cadastrar") :
     else :
         ?>
 <div class="text-warning">
-				<h1 class="text-center">Não há disciplinas cadastradas</h1>
-				<a href="?pagina=disciplina&opcao=cadastrar">Clique aqui para
+				<h1 class="text-center">Não há disciplinas cadastradas no sistema</h1>
+				<br> <a href="?pagina=disciplina&opcao=cadastrar">Clique aqui para
 					cadastrar uma nova disciplina</a>
 			</div>
 			<br>
@@ -54,8 +54,12 @@ if ($_GET["opcao"] == "cadastrar") :
     endif;
     ?>
 		</div>
+		<br>
 		<div class="row">
-			<div class="col-sm-5" id="ind-vinc"></div>
+			<div class="col-sm-5" id="ind-vinc">
+				<p class="text-warning">Selecione uma disciplina para ver os
+					indicadores vinculados</p>
+			</div>
 		</div>
 		<br>
 		<div class="form-group">
@@ -90,7 +94,8 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" value="vincular" name="bt-form-salvar" class="btn btn-default">
+			<input type="submit" value="vincular" name="bt-form-salvar"
+				class="btn btn-default">
 		</div>
 		<br>
 	</form>
@@ -158,11 +163,13 @@ Você está prestes a desvincular o indicador <?=$indicador["inddesc"]; ?> da di
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" value="sim" onclick="submeterExclusao()" class="btn btn-default">
+			<input type="button" value="sim" onclick="submeterExclusao()"
+				class="btn btn-default">
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" value="não" onclick="negarExclusao()" class="btn btn-default">
+			<input type="button" value="não" onclick="negarExclusao()"
+				class="btn btn-default">
 		</div>
 		<br>
 	</form>
@@ -174,7 +181,7 @@ Você está prestes a desvincular o indicador <?=$indicador["inddesc"]; ?> da di
         try {
             if (desvincularIndicador($vinculo["indcod"], $vinculo["discod"])) {
                 echo "<h1 class='text-center text-success'>Indicador desvinculado com sucesso!</h1><br>";
-                echo "<a href='?pagina=vinculo&opcao=cadastrar'>Voltar à tela de vínculo de indicador com disciplina.</a>";
+                echo "<a href='?pagina=home'>Voltar à tela inicial</a>";
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
