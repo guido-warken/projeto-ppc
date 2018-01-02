@@ -25,6 +25,21 @@
 								complementar a um conteúdo curricular</a></li>
 					</ul></li>
 				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown" href="#">Atividade de nivelamento <span
+						class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li
+							<?php echo active($pagina, $opcao, "nivelamento", "cadastrar"); ?>><a
+							href="?pagina=nivelamento&opcao=cadastrar">Cadastrar</a></li>
+						<li
+							<?php echo active($pagina, $opcao, "nivelamento", "consultar"); ?>><a
+							href="?pagina=nivelamento&opcao=consultar">Consultar</a></li>
+						<li
+							<?php echo active($pagina, $opcao, "vinculo4", "cadastrar"); ?>><a
+							href="?pagina=vinculo4&opcao=cadastrar">Vincular atividade de
+								nivelamento a uma oferta de curso</a></li>
+					</ul></li>
+				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#">Curso <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li <?php echo active($pagina, $opcao, "curso", "cadastrar"); ?>><a

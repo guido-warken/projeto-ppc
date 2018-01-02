@@ -60,6 +60,9 @@ function rotas($pagina)
         case "figura":
             require_once 'c:\wamp64\www\projetoppc\forms\figura\gerenciafigura.php';
             break;
+        case "nivelamento":
+            require_once 'c:\wamp64\www\projetoppc\forms\nivelamento\gerencianivelamento.php';
+            break;
         default:
             require_once 'c:\wamp64\www\projetoppc\paginas\home.php';
             break;
