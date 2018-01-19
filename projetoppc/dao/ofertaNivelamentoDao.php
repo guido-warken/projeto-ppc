@@ -27,15 +27,18 @@ function desvincularOfertaDeNivelamento($ppccod, $unicod, $nivcod, &$conn = null
     return $resultado;
 }
 
-function buscarVinculos($ppccod, &$conn = null)
+function buscarVinculosPorOferta($ppccod, $unicod, &$conn = null)
 {
     $vinculos = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
     $consulta = $conn->prepare("
-SELECT p.ppcanoini,
+SELECT p.ppccod,
+p.ppcanoini,
 c.curnome,
+u.unicod,
 u.uninome,
+n.nivcod,
 n.nivdes
 from ppc p
 INNER JOIN curso c 
@@ -48,8 +51,9 @@ INNER JOIN unidadesenac u
 ON o.unicod = u.unicod and o2.unicod = u.unicod
 INNER join nivelamento n 
 ON o2.nivcod = n.nivcod
-WHERE p.ppccod = :ppccod");
+WHERE p.ppccod = :ppccod and u.unicod = :unicod");
     $consulta->bindParam(":ppccod", $ppccod);
+    $consulta->bindParam(":unicod", $unicod);
     if ($consulta->execute()) {
         $numregistros = $consulta->rowCount();
         if ($numregistros > 0) {
@@ -63,6 +67,28 @@ WHERE p.ppccod = :ppccod");
     }
     desconectarDoBanco($conn);
     return $vinculos;
+}
+
+function buscarVinculoPorId($ppccod, $unicod, $nivcod, &$conn = null)
+{
+    $vinculo = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consulta = $conn->prepare("select * from ofertanivelamento where ppccod = :ppccod and unicod = :unicod and nivcod = :nivcod");
+    $consulta->bindParam(":ppccod", $ppccod);
+    $consulta->bindParam(":unicod", $unicod);
+    $consulta->bindParam(":nivcod", $nivcod);
+    if ($consulta->execute()) {
+        $numregistros = $consulta->rowCount();
+        if ($numregistros == 1) {
+            $vinculo = $consulta->fetch(PDO::FETCH_ASSOC);
+        } else {
+            desconectarDoBanco($conn);
+            return $vinculo;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $vinculo;
 }
 
 ?>
