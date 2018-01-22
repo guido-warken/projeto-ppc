@@ -181,6 +181,10 @@
 							href="?pagina=oferta&opcao=cadastrar">Cadastrar</a></li>
 						<li <?php echo active($pagina, $opcao, "oferta", "consultar"); ?>><a
 							href="?pagina=oferta&opcao=consultar">Consultar</a></li>
+						<li
+							<?php echo active($pagina, $opcao, "vinculo4", "cadastrar"); ?>><a
+							href="?pagina=vinculo4&opcao=cadastrar">Vincular oferta a uma
+								atividade de nivelamento</a></li>
 					</ul></li>
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#">Figura <span class="caret"></span></a>

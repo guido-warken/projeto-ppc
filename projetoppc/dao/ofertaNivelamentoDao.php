@@ -69,6 +69,32 @@ WHERE p.ppccod = :ppccod and u.unicod = :unicod");
     return $vinculos;
 }
 
+function buscarNivelamentosDesvinculados($ppccod, $unicod, &$conn = null)
+{
+    $nivelamentos = [];
+    if (is_null($conn))
+        $conn = conectarAoBanco("localhost", "dbdep", "root", "");
+    $consulta = $conn->prepare("
+SELECT n.* FROM nivelamento n where NOT EXISTS(
+    SELECT o.* from ofertanivelamento o WHERE o.nivcod = n.nivcod and o.ppccod = :ppccod and o.unicod = :unicod
+)");
+    $consulta->bindParam(":ppccod", $ppccod);
+    $consulta->bindParam(":unicod", $unicod);
+    if ($consulta->execute()) {
+        $numregistros = $consulta->rowCount();
+        if ($numregistros > 0) {
+            for ($contador = 0; $contador < $numregistros; $contador ++) {
+                $vinculos[$contador] = $consulta->fetch(PDO::FETCH_ASSOC);
+            }
+        } else {
+            desconectarDoBanco($conn);
+            return $vinculos;
+        }
+    }
+    desconectarDoBanco($conn);
+    return $vinculos;
+}
+
 function buscarVinculoPorId($ppccod, $unicod, $nivcod, &$conn = null)
 {
     $vinculo = [];

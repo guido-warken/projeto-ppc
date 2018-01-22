@@ -57,6 +57,9 @@ function rotas($pagina)
         case "vinculo3":
             require_once 'c:\wamp64\www\projetoppc\forms\vinculo\gerenciavinculoatc.php';
             break;
+        case "vinculo4":
+            require_once 'c:\wamp64\www\projetoppc\forms\vinculo\gerenciavinculoofe.php';
+            break;
         case "figura":
             require_once 'c:\wamp64\www\projetoppc\forms\figura\gerenciafigura.php';
             break;
@@ -75,6 +78,18 @@ function active($pagina, $opcao, $link = "", $selecionada = "")
         return 'class= "active"';
     }
     return '';
+}
+
+function loadScript($pagina) {
+    switch ($pagina) {
+        case "vinculo4":
+        echo "<script src='js/vinculaoferta.js'></script>";
+        break;
+        
+        default:
+            ;
+        break;
+    }
 }
 
 ?>
