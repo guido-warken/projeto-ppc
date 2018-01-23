@@ -97,7 +97,9 @@ if ($_GET["opcao"] == "cadastrar") :
     ?>
 </div>
 		<br>
-		<div class="form-group" id="div-niv"></div>
+		<div class="form-group" id="nivelamentos-vinculados"></div>
+		<br>
+		<div class="form-group" id="nivelamentos-nao-vinculados"></div>
 		<br>
 		<div class="form-group">
 			<input type="submit" name="bt-form-salvar" class="btn btn-primary"

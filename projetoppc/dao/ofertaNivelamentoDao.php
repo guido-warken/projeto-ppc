@@ -48,8 +48,8 @@ on p.ppccod = o.ppccod
 INNER JOIN ofertanivelamento o2 
 on p.ppccod = o2.ppccod
 INNER JOIN unidadesenac u
-ON o.unicod = u.unicod and o2.unicod = u.unicod
-INNER join nivelamento n 
+ON o2.unicod = u.unicod
+ INNER join nivelamento n 
 ON o2.nivcod = n.nivcod
 WHERE p.ppccod = :ppccod and u.unicod = :unicod");
     $consulta->bindParam(":ppccod", $ppccod);
