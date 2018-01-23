@@ -1,18 +1,18 @@
-var formulario = document.getElementById("frm-salvar");
-formulario.addEventListener("change", event => {
+var formulario = $("#frm-salvar");
+formulario.on("change", function (event) {
     if (event.target.id == "nivcod") {
         return;
     }
-    var ppccod = formulario.ppccod.value;
-    var unicod = formulario.unicod.value;
-    var divNivelamentosVinculados = document.getElementById("nivelamentos-vinculados");
-    var divNivelamentosNaoVinculados = document.getElementById("nivelamentos-nao-vinculados");
+    var ppccod = $("#ppccod").val();
+    var unicod = $("#unicod").val();
+    var divNivelamentosVinculados = $("#nivelamentos-vinculados");
+    var divNivelamentosNaoVinculados = $("#nivelamentos-nao-vinculados");
     if (ppccod == "-1" && unicod == "-1") {
-        divNivelamentosVinculados.innerHTML = "<span>Selecione um PPC e uma unidade do SENAC</span>";
+        divNivelamentosVinculados.html("<span>Selecione um PPC e uma unidade do SENAC</span>");
     } else if (ppccod != "-1" && unicod == "-1") {
-        divNivelamentosVinculados.innerHTML = "<span>Selecione uma unidade do SENAC</span>";
+        divNivelamentosVinculados.html("<span>Selecione uma unidade do SENAC</span>");
     } else if (ppccod == "-1" && unicod != "-1") {
-        divNivelamentosVinculados.innerHTML = "<span>Selecione um PPC</span>";
+        divNivelamentosVinculados.html("<span>Selecione um PPC</span>");
     } else {
         listarNivelamentosVinculados(ppccod, unicod, divNivelamentosVinculados);
         listarNivelamentosNaoVinculados(ppccod, unicod, divNivelamentosNaoVinculados);
