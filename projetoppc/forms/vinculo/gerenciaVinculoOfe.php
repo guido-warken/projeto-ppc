@@ -147,6 +147,17 @@ endif;
         return;
 endif;
     
+    $vinculo = buscarVinculoPorId($ppccod, $unicod, $nivcod);
+    if (! empty($vinculo)) :
+        echo "<div class='text-danger'>";
+        echo "<p>";
+        echo "Atividade de nivelamento já vinculada com a oferta de curso";
+        echo "</p>";
+        echo "</div>";
+        echo "<br>";
+        return;
+    endif;
+    
     try {
         if (vincularOfertaComNivelamento($ppccod, $unicod, $nivcod)) {
             echo "<h1 class='text-center text-success'>Oferta vinculada com êxito!</h1><br>";
