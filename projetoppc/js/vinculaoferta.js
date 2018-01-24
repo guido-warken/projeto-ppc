@@ -20,29 +20,25 @@ formulario.on("change", function (event) {
 });
 
 function listarNivelamentosVinculados(ppccod = 0, unicod = 0, element) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost/projetoppc/forms/vinculo/ofevinc.php?ppccod=" + ppccod + "&unicod=" + unicod);
-    xhr.addEventListener("load", function () {
-        if (this.status == 200) {
-            element.innerHTML = this.responseText;
-        } else {
-            element.innerHTML = "<span>Falha na requisição</span>";
-            console.log(this.responseText);
-        }
-    });
-    xhr.send();
+    $.get("http://localhost/projetoppc/forms/vinculo/ofevinc.php", {
+        ppccod: ppccod,
+        unicod: unicod
+    },
+        function (resultado, textStatus, jqXHR) {
+            if (textStatus == "success") {
+                element.html(resultado);
+            }
+        });
 }
 
 function listarNivelamentosNaoVinculados(ppccod = 0, unicod = 0, element) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost/projetoppc/forms/vinculo/ofenvinc.php?ppccod=" + ppccod + "&unicod=" + unicod);
-    xhr.addEventListener("load", function () {
-        if (this.status == 200) {
-            element.innerHTML = this.responseText;
-        } else {
-            element.innerHTML = "<span>Falha na requisição</span>";
-            console.log(this.responseText);
-        }
-    });
-    xhr.send();
+    $.get("http://localhost/projetoppc/forms/vinculo/ofenvinc.php", {
+        ppccod: ppccod,
+        unicod: unicod
+    },
+        function (resultado, textStatus, jqXHR) {
+            if (textStatus == "success") {
+                element.html(resultado);
+            }
+        });
 }
