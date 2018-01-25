@@ -175,7 +175,7 @@ endif;
 	<form action="" method="post" id="frm-escolha">
 		<div class="form-group">
 			<p>
-Você está prestes a desvincular a atividade de nivelamento <?=$vinculo["nivdes"]; ?>, do curso <?=$vinculo["curnome"]; ?>, oferecido na unidade <?=$vinculo["uninome"]; ?>, com ano inicial de vicência em <?=$vinculo["ppcanoini"]; ?>.<br>
+Você está prestes a desvincular a atividade de nivelamento <?=$vinculo["nivdes"]; ?>, do curso <?=$vinculo["curnome"]; ?>, oferecido na unidade <?=$vinculo["uninome"]; ?>, com ano inicial de vigência em <?=$vinculo["ppcanoini"]; ?>.<br>
 				Você tem certeza de que deseja executar esta operação?<br> Após a
 				confirmação, esta operação não poderá ser desfeita.
 			</p>
@@ -198,6 +198,7 @@ Você está prestes a desvincular a atividade de nivelamento <?=$vinculo["nivdes
         try {
             if (desvincularOfertaDeNivelamento($vinculo["ppccod"], $vinculo["unicod"], $vinculo["nivcod"])) {
                 echo "<h1 class='text-center text-success'>Atividade de nivelamento desvinculada com êxito!</h1><br>";
+                echo "<a href='index.php'>Voltar à tela inicial</a><br>";
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -206,4 +207,3 @@ Você está prestes a desvincular a atividade de nivelamento <?=$vinculo["nivdes
 endif;
 ?>
 </div>
-<script src="js/vinculaoferta.js"></script>
