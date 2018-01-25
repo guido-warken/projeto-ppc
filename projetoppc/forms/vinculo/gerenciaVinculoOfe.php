@@ -166,8 +166,44 @@ endif;
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
+ elseif ($_GET["opcao"] == "excluir") :
+    $vinculo = buscarVinculoPorId($_GET["ppccod"], $_GET["unicod"], $_GET["nivcod"]);
+    ?>
+<h2 class="text-center text-primary bg-primary">Desvincular atividade de
+		nivelamento de uma oferta</h2>
+	<br>
+	<form action="" method="post" id="frm-escolha">
+		<div class="form-group">
+			<p>
+Você está prestes a desvincular a atividade de nivelamento <?=$vinculo["nivdes"]; ?>, do curso <?=$vinculo["curnome"]; ?>, oferecido na unidade <?=$vinculo["uninome"]; ?>, com ano inicial de vicência em <?=$vinculo["ppcanoini"]; ?>.<br>
+				Você tem certeza de que deseja executar esta operação?<br> Após a
+				confirmação, esta operação não poderá ser desfeita.
+			</p>
+		</div>
+		<br>
+		<div class="form-group">
+			<button class="btn btn-default" id="btn-sim">sim</button>
+		</div>
+		<br>
+		<div class="form-group">
+			<button class="btn btn-default" id="btn-nao">não</button>
+		</div>
+		<br>
+	</form>
+<?php
+    if (! array_key_exists("escolha", $_POST))
+        return;
+    $escolha = $_POST["escolha"];
+    if ($escolha == "sim") {
+        try {
+            if (desvincularOfertaDeNivelamento($vinculo["ppccod"], $vinculo["unicod"], $vinculo["nivcod"])) {
+                echo "<h1 class='text-center text-success'>Atividade de nivelamento desvinculada com êxito!</h1><br>";
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
 endif;
-
 ?>
 </div>
 <script src="js/vinculaoferta.js"></script>

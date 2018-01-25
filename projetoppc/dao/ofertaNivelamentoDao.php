@@ -100,7 +100,24 @@ function buscarVinculoPorId($ppccod, $unicod, $nivcod, &$conn = null)
     $vinculo = [];
     if (is_null($conn))
         $conn = conectarAoBanco("localhost", "dbdep", "root", "");
-    $consulta = $conn->prepare("select * from ofertanivelamento where ppccod = :ppccod and unicod = :unicod and nivcod = :nivcod");
+    $consulta = $conn->prepare("
+SELECT p.ppccod,
+p.ppcanoini,
+c.curnome,
+u.unicod,
+u.uninome,
+n.nivcod,
+n.nivdes
+from ppc p
+INNER JOIN curso c
+ON p.curcod = c.curcod
+INNER JOIN ofertanivelamento o
+on p.ppccod = o.ppccod
+INNER JOIN unidadesenac u
+on o.unicod = u.unicod
+INNER join nivelamento n
+ON n.nivcod = o.nivcod
+where o.ppccod = :ppccod and o.unicod = :unicod and o.nivcod = :nivcod");
     $consulta->bindParam(":ppccod", $ppccod);
     $consulta->bindParam(":unicod", $unicod);
     $consulta->bindParam(":nivcod", $nivcod);
