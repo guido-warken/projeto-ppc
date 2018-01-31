@@ -4,8 +4,6 @@ require_once 'c:\wamp64\www\projetoppc\dao\ppcDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\competenciaDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\certificacaoDao.php';
 ?>
-<script src="js/validaformperfilcert.js"></script>
-<script src="js/filtroperfilcert.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :

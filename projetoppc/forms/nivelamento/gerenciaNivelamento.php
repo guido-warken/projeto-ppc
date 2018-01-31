@@ -1,7 +1,6 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\nivelamentoDao.php';
 ?>
-<script src="js/validaformnivelamento.js"></script>
 <div class="container">
 <?php
 if ($_GET["opcao"] == "cadastrar") :

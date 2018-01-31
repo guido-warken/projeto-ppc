@@ -2,7 +2,6 @@
 require_once 'c:\wamp64\www\projetoppc\dao\disciplinaDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\avaliaDao.php';
 ?>
-<script src="js/vinculaindicador.js"></script>
 <div class="container">
 <?php
 if ($_GET["opcao"] == "cadastrar") :

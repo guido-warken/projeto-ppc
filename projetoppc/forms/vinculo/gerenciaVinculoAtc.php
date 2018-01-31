@@ -4,7 +4,6 @@ require_once 'c:\wamp64\www\projetoppc\dao\atividadeComplementarDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\disciplinaDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\ppcDao.php';
 ?>
-<script src="js/vinculaatividade.js"></script>
 <div class="container">
 <?php
 if ($_GET["opcao"] == "cadastrar") :

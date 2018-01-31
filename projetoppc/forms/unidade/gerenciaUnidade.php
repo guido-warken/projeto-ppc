@@ -3,7 +3,6 @@ require_once 'c:\wamp64\www\projetoppc\dao\unidadeDao.php';
 require_once 'c:\wamp64\www\projetoppc\dao\pdiDao.php';
 ?>
 
-<script src="js/validaformunidade.js"></script>
 <div class="container">
 	<?php
 if ($_GET["opcao"] == "cadastrar") :

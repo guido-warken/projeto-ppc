@@ -1,4 +1,3 @@
-<script src="js/vinculafigura.js"></script>
 <div class="container">
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\figuradao.php';

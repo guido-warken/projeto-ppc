@@ -1,7 +1,6 @@
 <?php
 require_once 'c:\wamp64\www\projetoppc\dao\atividadecomplementardao.php';
 ?>
-<script src="js/validaformatividade.js"></script>
 <div class="container">
 <?php
 if ($_GET["opcao"] == "cadastrar") :
