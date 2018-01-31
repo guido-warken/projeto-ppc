@@ -27,14 +27,14 @@ if ($_GET["opcao"] == "cadastrar") :
 	<br>
 	<p>Campos com asterisco são obrigatórios</p>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" id="frm-vincular">
 		<div class="form-group">
 		<?php
     if ($totalppcs > 0) :
         ?>
 			<label for="ppccod">Selecione o <abbr class="text-uppercase">ppc</abbr>:
 				<span>*</span></label> <select class="form-control" id="ppccod"
-				name="ppccod" tabindex="1" onchange="exibirVinculo()">
+				name="ppccod" tabindex="1">
 				<option value="-1">Selecione:</option>
 <?php
         foreach ($ppcs as $ppc) :
@@ -97,10 +97,9 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group" id="atc-vinc">
-			<p class="text-warning">
-				Selecione um <abbr class="text-uppercase">ppc</abbr> e uma
+			<span> Selecione um <abbr class="text-uppercase">ppc</abbr> e uma
 				disciplina
-			</p>
+			</span>
 		</div>
 		<br>
 		<div class="form-group">
