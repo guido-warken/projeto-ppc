@@ -22,14 +22,14 @@ if ($_GET["opcao"] == "cadastrar") :
 	<br>
 	<p class="text-info">Campos com asterisco são obrigatórios.</p>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" id="frm-vincular">
 		<div class="form-group">
 <?php
     if ($totalppcs > 0) :
         ?>
 <label for="ppccod">Selecione o <abbr class="text-uppercase">ppc</abbr>:
 				<span>*</span></label> <select class="form-control" id="ppccod"
-				name="ppccod" onchange="exibirFigurasVinculadas()">
+				name="ppccod">
 				<option value="-1">Selecione</option>
 <?php
         foreach ($ppcs as $ppc) :
@@ -60,10 +60,9 @@ if ($_GET["opcao"] == "cadastrar") :
 </div>
 		<br>
 		<div class="form-group" id="fig-vinc">
-			<p class="text-warning">
-				Selecione um <abbr class="text-uppercase">ppc</abbr> para ver as
-				figuras vinculadas
-			</p>
+			<span> Selecione um <abbr class="text-uppercase">ppc</abbr> para ver
+				as figuras vinculadas
+			</span>
 		</div>
 		<br>
 		<div class="form-group">
@@ -264,13 +263,11 @@ endif;
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" class="btn btn-default" value="sim"
-				onclick="submeterExclusao()">
+			<button class="btn btn-default" id="btn-sim">sim</button>
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" class="btn btn-default" value="não"
-				onclick="negarExclusao()">
+			<button class="btn btn-default" id="btn-nao">não</button>
 		</div>
 		<br>
 	</form>

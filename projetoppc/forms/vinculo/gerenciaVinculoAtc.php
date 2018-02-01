@@ -217,11 +217,11 @@ Você está prestes a excluir o vínculo entre a atividade complementar <?=$ativ
 		</div>
 		<br>
 		<div class="form-group">
-			<button id="btn-sim">sim</button>
+			<button id="btn-sim" class="btn btn-default">sim</button>
 		</div>
 		<br>
 		<div class="form-group">
-			<button id="btn-nao">não</button>
+			<button id="btn-nao" class="btn btn-default">não</button>
 		</div>
 		<br>
 	</form>
