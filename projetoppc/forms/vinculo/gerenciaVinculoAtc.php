@@ -69,8 +69,7 @@ if ($_GET["opcao"] == "cadastrar") :
     if ($totaldisciplinas > 0) :
         ?>
 			<label for="discod">Selecione a disciplina: <span>*</span></label> <select
-				class="form-control" id="discod" name="discod" tabindex="2"
-				onchange="exibirVinculo()">
+				class="form-control" id="discod" name="discod" tabindex="2">
 				<option value="-1">Selecione:</option>
 <?php
         foreach ($disciplinas as $disciplina) :
@@ -218,11 +217,11 @@ Você está prestes a excluir o vínculo entre a atividade complementar <?=$ativ
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" value="sim" onclick="submeterExclusao()">
+			<button id="btn-sim">sim</button>
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" value="não" onclick="negarExclusao()">
+			<button id="btn-nao">não</button>
 		</div>
 		<br>
 	</form>

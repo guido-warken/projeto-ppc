@@ -168,8 +168,7 @@ function loadScript($pagina)
             js/vinculafigura.js'></script>";
             break;
         case "vinculo3":
-            echo "<script src='
-            js/vinculaatividade.js'></script>";
+            echo "<script src='js/vinculaatividade.js'></script>";
             break;
         case "vinculo4":
             echo "<script src='js/vinculaoferta.js'></script>";
