@@ -10,14 +10,17 @@ function exibirFigurasVinculadas() {
 		$("#fig-vinc").html("<span>Selecione um PPC para ver as figuras vinculadas</span>");
 		return;
 	}
-	$.get("http://localhost/projetoppc/forms/vinculo/figvinc.php", {
-		ppccod: ppccod
-	}, function (result, status, xhr) {
-		if (status == "success") {
-			$("#fig-vinc").html(result);
-		}
-	});
+	listarFigurasVinculadas(ppccod);
 }
+
+$("button").click(function (event) {
+	event.preventDefault();
+	if (event.target.id == "btn-sim") {
+		submeterExclusao();
+	} else {
+		negarExclusao();
+	}
+});
 
 function submeterExclusao() {
 	$.ajax({
@@ -43,3 +46,15 @@ function submeterExclusao() {
 function negarExclusao() {
 	location.href = "?pagina=vinculo2&opcao=cadastrar";
 }
+
+function listarFigurasVinculadas(ppccod = 0) {
+	$.get("http://localhost/projetoppc/forms/vinculo/figvinc.php", {
+		ppccod: ppccod
+	},
+		function (resultado, status, xhr) {
+			if (status == "success") {
+				$("#fig-vinc").html(resultado);
+			}
+		});
+}
+

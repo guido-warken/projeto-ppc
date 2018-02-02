@@ -18,15 +18,14 @@ if ($_GET["opcao"] == "cadastrar") :
 		caso haja.
 	</p>
 	<br>
-	<form action="" method="post">
+	<form action="" method="post" id="frm-vincular">
 		<div class="form-group">
 <?php
     $totaldisciplinas = count($disciplinas);
     if ($totaldisciplinas > 0) :
         ?>
 <label for="discod">Selecione a disciplina a ser vinculada: </label> <select
-				class="form-control" id="discod" name="discod"
-				onchange="exibirVinculo()">
+				class="form-control" id="discod" name="discod">
 				<option value="-1">Selecione</option>
 <?php
         foreach ($disciplinas as $disciplina) :
@@ -56,8 +55,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		<br>
 		<div class="row">
 			<div class="col-sm-5" id="ind-vinc">
-				<p class="text-warning">Selecione uma disciplina para ver os
-					indicadores vinculados</p>
+				<span>Selecione uma disciplina para ver os indicadores vinculados</span>
 			</div>
 		</div>
 		<br>
@@ -162,13 +160,11 @@ Você está prestes a desvincular o indicador <?=$indicador["inddesc"]; ?> da di
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" value="sim" onclick="submeterExclusao()"
-				class="btn btn-default">
+			<button class="btn btn-default" id="btn-sim">sim</button>
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" value="não" onclick="negarExclusao()"
-				class="btn btn-default">
+			<button class="btn btn-default" id="btn-nao">não</button>
 		</div>
 		<br>
 	</form>
