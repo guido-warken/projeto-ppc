@@ -2,17 +2,20 @@
  * 
  */
 
+$("#frm-salvar").on("submit", validarFormulario);
+$("#frm-alterar").on("submit", validarFormulario);
+
 function validarFormulario() {
-	var atcdesc = document.getElementById("atcdesc");
-	var atcch = document.getElementById("atcch");
-	if (atcdesc.value.length == 0) {
+	var atcdesc = $("#atcdesc").val();
+	var atcch = $("#atcch").val();
+	if (atcdesc.length == 0) {
 		alert("O campo descrição da atividade complementar deve ser preenchido corretamente.");
-		atcdesc.focus();
+		$("#atcdesc").focus();
 		return false;
 	}
-	if (isNaN(atcch.value)) {
+	if (isNaN(atcch) || atcch.length == 0) {
 		alert("Preencha o campo carga horária da atividade complementar com apenas números");
-		atcch.focus();
+		$("#atcch").focus();
 		return false;
 	}
 }
@@ -25,13 +28,13 @@ function submeterExclusao() {
 		data: {
 			escolha: "sim"
 		},
-		success: function(result, status, xhr) {
+		success: function (result, status, xhr) {
 			if (status == "success") {
 				$(".container").html(result);
 				$("#frm-escolha").hide();
 			}
 		},
-		error: function(xhr, status, error) {
+		error: function (xhr, status, error) {
 			alert("Erro ao processar a requisição.\n Causa do erro: " + error);
 		}
 	});

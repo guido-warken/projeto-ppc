@@ -10,7 +10,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<br>
 	<p>Campos com asterisco são obrigatórios</p>
 	<br>
-	<form action="" method="post" onsubmit="return validarFormulario()">
+	<form action="" method="post" id="frm-salvar">
 		<div class="form-group">
 			<label for="atcdesc">Descrição da atividade complementar: <span>*</span></label>
 			<input type="text" id="atcdesc" name="atcdesc" class="form-control"
@@ -24,8 +24,9 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="salvar"
-				tabindex="3" name="bt-form-salvar">
+			<input type="submit" class="btn btn-default" tabindex="3"
+				value="salvar" name="bt-form-salvar">
+
 		</div>
 		<br>
 	</form>
@@ -143,7 +144,7 @@ endif;
 	<br>
 	<p>Campos com asterisco são obrigatórios</p>
 	<br>
-	<form action="" method="post" onsubmit="return validarFormulario()">
+	<form action="" method="post" id="frm-alterar">
 		<div class="form-group">
 			<label for="atcdesc">Descrição da atividade complementar: <span>*</span></label>
 			<input type="text" id="atcdesc" name="atcdesc" class="form-control"
@@ -157,8 +158,9 @@ endif;
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="alterar"
-				tabindex="3" name="bt-form-alterar">
+			<input class="btn btn-default" tabindex="3" value="alterar"
+				name="bt-form-alterar">
+
 		</div>
 		<br>
 	</form>
