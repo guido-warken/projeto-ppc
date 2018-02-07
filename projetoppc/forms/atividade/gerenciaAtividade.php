@@ -234,13 +234,13 @@ endif;
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" class="btn btn-default" value="sim"
-				onclick="submeterExclusao()">
+			<button class="btn btn-default" id="btn-sim">sim</button>
+
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" class="btn btn-default" value="não"
-				onclick="negarExclusao()">
+			<button class="btn btn-default" id="btn-nao">não</button>
+
 		</div>
 		<br>
 	</form>

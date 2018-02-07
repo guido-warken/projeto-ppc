@@ -4,6 +4,8 @@
 
 $("#frm-salvar").on("submit", validarFormulario);
 $("#frm-alterar").on("submit", validarFormulario);
+$("#btn-sim").click(submeterExclusao);
+$("#btn-nao").click(negarExclusao);
 
 function validarFormulario(event) {
 	event.preventDefault();
@@ -22,7 +24,8 @@ function validarFormulario(event) {
 	submeterFormulario(atcdesc, atcch, event.target.id);
 }
 
-function submeterExclusao() {
+function submeterExclusao(event) {
+	event.preventDefault();
 	$.ajax({
 		async: true,
 		type: "POST",
@@ -42,7 +45,8 @@ function submeterExclusao() {
 	});
 }
 
-function negarExclusao() {
+function negarExclusao(event) {
+	event.preventDefault();
 	location.href = "?pagina=atividade&opcao=consultar";
 }
 
