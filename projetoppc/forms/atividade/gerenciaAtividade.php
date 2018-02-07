@@ -24,14 +24,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" tabindex="3"
-				value="salvar" name="bt-form-salvar">
+			<button class="btn btn-default" tabindex="3">salvar</button>
 
 		</div>
 		<br>
 	</form>
 <?php
-    if (! array_key_exists("bt-form-salvar", $_POST))
+    if (! array_key_exists("bt_form_salvar", $_POST))
         return;
     $atcdesc = isset($_POST["atcdesc"]) ? $_POST["atcdesc"] : "";
     $atcch = isset($_POST["atcch"]) ? $_POST["atcch"] : "";
@@ -158,14 +157,13 @@ endif;
 		</div>
 		<br>
 		<div class="form-group">
-			<input class="btn btn-default" tabindex="3" value="alterar"
-				name="bt-form-alterar">
+			<button class="btn btn-default" tabindex="3">alterar</button>
 
 		</div>
 		<br>
 	</form>
 <?php
-    if (! array_key_exists("bt-form-alterar", $_POST))
+    if (! array_key_exists("bt_form_alterar", $_POST))
         return;
     $atcdesc = isset($_POST["atcdesc"]) ? $_POST["atcdesc"] : "";
     $atcch = isset($_POST["atcch"]) ? $_POST["atcch"] : "";
