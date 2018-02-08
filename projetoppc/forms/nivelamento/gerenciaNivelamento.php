@@ -10,7 +10,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<br>
 	<p>Campos com asterisco são obrigatórios</p>
 	<br>
-	<form action="" method="post" onsubmit="return validarFormulario()">
+	<form action="" method="post" id="frm-salvar">
 		<div class="form-group">
 			<label for="nivdes">Atividade de nivelamento: <span>*</span></label>
 			<input type="text" id="nivdes" name="nivdes" class="form-control"
@@ -24,13 +24,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="salvar"
-				name="bt-form-salvar" tabindex="3">
+			<button class="btn btn-default" tabindex="3">salvar</button>
+
 		</div>
 		<br>
 	</form>
 <?php
-    if (! array_key_exists("bt-form-salvar", $_POST))
+    if (! array_key_exists("bt_form_salvar", $_POST))
         return;
     $nivdes = isset($_POST["nivdes"]) ? $_POST["nivdes"] : "";
     $nivch = isset($_POST["nivch"]) ? $_POST["nivch"] : "";
@@ -144,7 +144,7 @@ endif;
 	<br>
 	<p>Campos com asterisco são obrigatórios</p>
 	<br>
-	<form action="" method="post" onsubmit="return validarFormulario()">
+	<form action="" method="post" id="frm-alterar">
 		<div class="form-group">
 			<label for="nivdes">Atividade de nivelamento: <span>*</span></label>
 			<input type="text" id="nivdes" name="nivdes" class="form-control"
@@ -158,13 +158,13 @@ endif;
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="alterar"
-				name="bt-form-alterar" tabindex="3">
+			<button class="btn btn-default" tabindex="3">alterar</button>
+
 		</div>
 		<br>
 	</form>
 <?php
-    if (! array_key_exists("bt-form-alterar", $_POST))
+    if (! array_key_exists("bt_form_alterar", $_POST))
         return;
     $nivdes = isset($_POST["nivdes"]) ? $_POST["nivdes"] : "";
     $nivch = isset($_POST["nivch"]) ? $_POST["nivch"] : "";
@@ -233,13 +233,13 @@ Você está prestes a excluir a atividade de nivelamento <?=$nivelamento["nivdes
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" class="btn btn-default" value="sim"
-				onclick="submeterExclusao()">
+			<button class="btn btn-default" id="btn-sim" tabindex="1">sim</button>
+
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" class="btn btn-default" value="não"
-				onclick="negarExclusao()">
+			<button class="btn btn-default" id="btn-nao" tabindex="2">não</button>
+
 		</div>
 		<br>
 	</form>

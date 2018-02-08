@@ -153,7 +153,7 @@ endif;
 		<div class="form-group">
 			<label for="atcch">Carga horária da atividade complementar: <span>*</span></label>
 			<input type="number" id="atcch" name="atcch" class="form-control"
-				tabindex="2" value="<?=$atividade["atcch"]; ?>">
+				tabindex="2" value="<?=$atividade["atcch"]; ?>" required>
 		</div>
 		<br>
 		<div class="form-group">

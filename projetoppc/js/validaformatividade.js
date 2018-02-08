@@ -68,7 +68,10 @@ function submeterFormulario(atcdesc = "", atcch = 0, idFormulario = "") {
 			function (resultado, textStatus, xhr) {
 				if (textStatus == "success") {
 					$(".container").html(resultado);
+					$("#atcdesc").val("");
+					$("#atcch").val("");
 				}
 			});
 	}
 }
+
