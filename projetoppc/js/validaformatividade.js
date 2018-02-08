@@ -1,6 +1,3 @@
-/**
- * 
- */
 
 $("#frm-salvar").on("submit", validarFormulario);
 $("#frm-alterar").on("submit", validarFormulario);
