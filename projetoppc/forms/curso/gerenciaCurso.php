@@ -12,7 +12,7 @@ if ($_GET["opcao"] == "cadastrar") :
 	<br>
 	<p class="text-info">Campos com asterisco são obrigatórios.</p>
 	<br>
-	<form action="" method="post" onsubmit="return validarFormulario()">
+	<form action="" method="post" id="frm-salvar">
 		<div class="form-group">
 			<label for="curnome">Nome do curso: <span>*</span></label> <input
 				type="text" class="form-control" name="curnome" id="curnome"
@@ -60,13 +60,13 @@ if ($_GET["opcao"] == "cadastrar") :
 			</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="salvar"
-				name="bt-form-salvar" tabindex="4">
+			<button class="btn btn-default" tabindex="4">salvar</button>
+
 		</div>
 		<br>
 	</form>
 <?php
-    if (! array_key_exists("bt-form-salvar", $_POST))
+    if (! array_key_exists("bt_form_salvar", $_POST))
         return;
     $curnome = isset($_POST["curnome"]) ? $_POST["curnome"] : "";
     $curtit = isset($_POST["curtit"]) ? $_POST["curtit"] : "";
@@ -190,7 +190,7 @@ if ($_GET["opcao"] == "cadastrar") :
 		curso selecionado</h2>
 	<br>
 	<p class="text-info">Campos com asterisco são obrigatórios.</p>
-	<form action="" method="post" onsubmit="return validarFormulario()">
+	<form action="" method="post" id="frm-alterar">
 		<div class="form-group">
 			<label for="curnome">Nome do curso: <span>*</span></label> <input
 				type="text" class="form-control" name="curnome" id="curnome"
@@ -229,13 +229,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="submit" class="btn btn-default" value="alterar"
-				name="bt-form-alterar" tabindex="4">
+			<button class="btn btn-default" tabindex="4">alterar</button>
+
 		</div>
 		<br>
 	</form>
 	<?php
-    if (! array_key_exists("bt-form-alterar", $_POST))
+    if (! array_key_exists("bt_form_alterar", $_POST))
         return;
     $curnome = isset($_POST["curnome"]) ? $_POST["curnome"] : "";
     $curtit = isset($_POST["curtit"]) ? $_POST["curtit"] : "";
@@ -276,13 +276,13 @@ if ($_GET["opcao"] == "cadastrar") :
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" name="escolha" class="btn btn-default"
-				tabindex="1" onclick="submeterExclusao()" value="sim">
+			<button class="btn btn-default" tabindex="1" id="btn-sim">sim</button>
+
 		</div>
 		<br>
 		<div class="form-group">
-			<input type="button" name="escolha" class="btn btn-default"
-				tabindex="2" onclick="negarExclusao()" value="não">
+			<button class="btn btn-default" tabindex="2" id="btn-nao">não</button>
+
 		</div>
 		<br>
 	</form>
